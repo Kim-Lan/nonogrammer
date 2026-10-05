@@ -19,6 +19,10 @@ export default defineNuxtConfig({
     '/': { prerender: true }
   },
 
+  future: {
+    compatibilityVersion: 5
+  },
+
   compatibilityDate: '2026-06-30',
 
   eslint: {
@@ -30,7 +34,10 @@ export default defineNuxtConfig({
     }
   },
 
-  future: {
-    compatibilityVersion: 5
+  i18n: {
+    defaultLocale: 'en',
+    locales: [
+      { code: 'en', name: 'English', file: 'en.json' }
+    ]
   }
 })
