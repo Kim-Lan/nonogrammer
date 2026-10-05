@@ -8,27 +8,27 @@ export default defineConfig({
       {
         test: {
           name: 'unit',
-          include: ['test/unit/*.{test,spec}.ts'],
-          environment: 'node',
-        },
+          include: ['tests/unit/*.{test,spec}.ts'],
+          environment: 'node'
+        }
       },
       await defineVitestProject({
         test: {
           name: 'nuxt',
-          include: ['test/nuxt/*.{test,spec}.ts'],
+          include: ['tests/nuxt/*.{test,spec}.ts'],
           environment: 'nuxt',
           environmentOptions: {
             nuxt: {
               rootDir: fileURLToPath(new URL('.', import.meta.url)),
-              domEnvironment: 'happy-dom',
-            },
-          },
-        },
-      }),
+              domEnvironment: 'happy-dom'
+            }
+          }
+        }
+      })
     ],
     coverage: {
       enabled: true,
-      provider: 'v8',
-    },
-  },
+      provider: 'v8'
+    }
+  }
 })
