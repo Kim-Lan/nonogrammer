@@ -8,6 +8,7 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "typecheck": "nuxt typecheck",
     "test": "vitest",
     "test:watch": "vitest --watch",
@@ -34,7 +35,7 @@
     "@playwright/test": "^1.63.0",
     "@vitest/coverage-v8": "^5.0.3",
     "@vue/test-utils": "^2.5.1",
-    "eslint": "^10.11.0",
+    "eslint": "^10.12.0",
     "eslint-plugin-better-tailwindcss": "^4.7.0",
     "happy-dom": "^20.14.5",
     "playwright-core": "^1.63.0",
@@ -42,5 +43,5 @@
     "vitest": "^5.0.3",
     "vue-tsc": "^3.3.11"
   },
-  "packageManager": "pnpm@12.6.0"
+  "packageManager": "pnpm@12.9.1"
 }
