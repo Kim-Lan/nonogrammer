@@ -1,9 +1,9 @@
-import { fileURLToPath } from 'node:url'
-import { defineConfig, devices } from '@playwright/test'
-import type { ConfigOptions } from '@nuxt/test-utils/playwright'
+import type { ConfigOptions } from '@nuxt/test-utils/playwright';
+import { fileURLToPath } from 'node:url';
+import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig<ConfigOptions>({
-  testDir: './tests',
+  testDir: './tests/e2e',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -12,13 +12,13 @@ export default defineConfig<ConfigOptions>({
   use: {
     trace: 'on-first-retry',
     nuxt: {
-      rootDir: fileURLToPath(new URL('.', import.meta.url))
-    }
+      rootDir: fileURLToPath(new URL('.', import.meta.url)),
+    },
   },
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] }
-    }
-  ]
-})
+      use: { ...devices['Desktop Chrome'] },
+    },
+  ],
+});

@@ -6,38 +6,43 @@ export default defineNuxtConfig({
     '@nuxt/a11y',
     '@nuxt/test-utils',
     '@nuxtjs/better-auth',
-    '@nuxtjs/i18n'
+    '@nuxtjs/i18n',
   ],
 
   devtools: {
-    enabled: true
+    enabled: true,
   },
 
   css: ['~/assets/css/main.css'],
 
   routeRules: {
-    '/': { prerender: true }
+    '/': { prerender: true },
   },
 
   future: {
-    compatibilityVersion: 5
+    compatibilityVersion: 5,
   },
 
   compatibilityDate: '2026-06-30',
 
+  nitro: {
+    cloudflare: {
+      wrangler: {
+        previews: {},
+      },
+    },
+  },
+
   eslint: {
     config: {
-      stylistic: {
-        commaDangle: 'never',
-        braceStyle: '1tbs'
-      }
-    }
+      standalone: false,
+    },
   },
 
   i18n: {
     defaultLocale: 'en',
     locales: [
-      { code: 'en', name: 'English', file: 'en.json' }
-    ]
-  }
-})
+      { code: 'en', name: 'English', file: 'en.json' },
+    ],
+  },
+});
