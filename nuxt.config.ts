@@ -1,45 +1,40 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	modules: [
-		'@nuxt/eslint',
-		'@nuxt/ui',
-		'@nuxt/a11y',
-		'@nuxt/test-utils',
-		'@nuxtjs/better-auth',
-		'@nuxtjs/i18n',
-	],
+  modules: [
+    '@nuxt/eslint',
+    '@nuxt/ui',
+    '@nuxt/a11y',
+    '@nuxt/test-utils',
+    '@nuxtjs/better-auth',
+    '@nuxtjs/i18n',
+  ],
 
-	devtools: {
-		enabled: true,
-	},
+  devtools: {
+    enabled: true,
+  },
 
-	css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/main.css'],
 
-	routeRules: {
-		'/': { prerender: true },
-	},
+  routeRules: {
+    '/': { prerender: true },
+  },
 
-	future: {
-		compatibilityVersion: 5,
-	},
+  future: {
+    compatibilityVersion: 5,
+  },
 
-	compatibilityDate: '2026-06-30',
+  compatibilityDate: '2026-06-30',
 
-	eslint: {
-		config: {
-			stylistic: {
-				semi: true,
-				quotes: 'single',
-				commaDangle: 'always-multiline',
-				indent: 'tab',
-			},
-		},
-	},
+  eslint: {
+    config: {
+      standalone: false,
+    },
+  },
 
-	i18n: {
-		defaultLocale: 'en',
-		locales: [
-			{ code: 'en', name: 'English', file: 'en.json' },
-		],
-	},
+  i18n: {
+    defaultLocale: 'en',
+    locales: [
+      { code: 'en', name: 'English', file: 'en.json' },
+    ],
+  },
 });
