@@ -9,6 +9,11 @@ on:
 jobs:
   ci:
     runs-on: ${{ matrix.os }}
+    environment: Build
+    env:
+      NODE_ENV: development
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_URL_UNPOOLED: ${{ secrets.DATABASE_URL_UNPOOLED }}
 
     strategy:
       matrix:
