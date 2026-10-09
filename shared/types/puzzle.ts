@@ -13,6 +13,7 @@ export type PuzzleClues = number[][];
 
 export type PublicPuzzle = {
   id: number;
+  slug: string;
   height: number;
   width: number;
   rowClues: PuzzleClues;
