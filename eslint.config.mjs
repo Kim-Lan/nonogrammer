@@ -10,6 +10,7 @@ export default withNuxt(
       semi: true,
       braceStyle: '1tbs',
     },
+    ignores: ['**/migrations/*'],
   }, {
     rules: {
       'ts/no-redeclare': 'off',

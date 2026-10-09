@@ -1,0 +1,524 @@
+{
+  "version": "8",
+  "dialect": "postgres",
+  "id": "7c26d96f-4069-4e4d-8e91-a1f6f2aa81cf",
+  "prevIds": [
+    "00000000-0000-0000-0000-000000000000"
+  ],
+  "ddl": [
+    {
+      "values": [
+        "normal",
+        "hard"
+      ],
+      "name": "puzzle_difficulty",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "draft",
+        "published",
+        "unpublished"
+      ],
+      "name": "puzzle_publication_status",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "simple",
+        "four"
+      ],
+      "name": "puzzle_solver_method",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "system",
+        "daily",
+        "community"
+      ],
+      "name": "puzzle_type",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "pending",
+        "valid",
+        "invalid"
+      ],
+      "name": "puzzle_validation_status",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "isRlsEnabled": false,
+      "name": "puzzles",
+      "entityType": "tables",
+      "schema": "public"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "always",
+        "name": "puzzles_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "name": "id",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "type": "varchar(128)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "slug",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "type": "puzzle_type",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "type",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "type": "smallint",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "height",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "type": "smallint",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "width",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "row_clues",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "column_clues",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "solution_bits",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "solution_hash",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "type": "puzzle_difficulty",
+      "typeSchema": "public",
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "difficulty",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "type": "puzzle_solver_method",
+      "typeSchema": "public",
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "solver_method",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "simple_solver_sweep_count",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "four_solver_intersection_count",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "type": "smallint",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": {
+        "as": "length(replace(\"solution_bits\", '0', ''))",
+        "type": "stored"
+      },
+      "identity": null,
+      "name": "filled_cell_count",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "type": "puzzle_publication_status",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'draft'",
+      "generated": null,
+      "identity": null,
+      "name": "publication_status",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "type": "puzzle_validation_status",
+      "typeSchema": "public",
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'pending'",
+      "generated": null,
+      "identity": null,
+      "name": "validation_status",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "created_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "name": "updated_at",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "lower(\"slug\")",
+          "isExpression": true,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": null,
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "puzzles_slug_unique",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "height",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "width",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "solution_hash",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": "\"type\" = 'system'",
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "puzzles_system_puzzle_solution_unique",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "height",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "width",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "difficulty",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "id",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": false,
+      "where": "\n    \"type\" = 'system' AND \"publication_status\" = 'published'\n  ",
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "puzzles_selection_index",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "name": "puzzles_pkey",
+      "schema": "public",
+      "table": "puzzles",
+      "entityType": "pks"
+    },
+    {
+      "value": "\"slug\" ~* '^[a-z0-9]([a-z0-9_-]*[a-z0-9])?$'",
+      "name": "slug_format",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "value": "char_length(\"slug\") >= 3",
+      "name": "slug_min_length",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "value": "\"height\" BETWEEN 5 AND 30",
+      "name": "height_range",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "value": "\"width\" BETWEEN 5 AND 30",
+      "name": "width_range",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "value": "length(\"solution_bits\") = \"height\" * \"width\"",
+      "name": "solution_length",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "value": "\"solution_bits\" ~ '^[01]+$'",
+      "name": "binary_solution",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "value": "jsonb_typeof(\"row_clues\") = 'array'",
+      "name": "row_clues_array",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "value": "jsonb_typeof(\"column_clues\") = 'array'",
+      "name": "column_clues_array",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "value": "jsonb_array_length(\"row_clues\") = \"height\" AND jsonb_array_length(\"column_clues\") = \"width\"",
+      "name": "clue_dimensions",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "value": "\n    (\"difficulty\" IS NULL AND \"solver_method\" IS NULL)\n    OR (\n      \"difficulty\" IS NOT NULL\n      AND \"solver_method\" IS NOT NULL\n      AND (\n        (\"difficulty\" = 'normal' AND \"solver_method\" = 'simple')\n        OR (\"difficulty\" = 'hard' AND \"solver_method\" = 'four')\n      )\n    )\n  ",
+      "name": "difficulty_solver_consistency",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "value": "\"simple_solver_sweep_count\" >= 0",
+      "name": "simple_solver_sweep_count_nonnegative",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "value": "\"four_solver_intersection_count\" >= 0",
+      "name": "four_solver_intersection_count_nonnegative",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "value": "\"publication_status\" <> 'published' OR \"validation_status\" = 'valid'",
+      "name": "published_puzzle_valid",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "value": "\n    \"solver_method\" IS NULL\n    OR (\n      \"solver_method\" = 'simple'\n      AND \"simple_solver_sweep_count\" > 0\n      AND \"four_solver_intersection_count\" = 0\n    )\n    OR (\n      \"solver_method\" = 'four'\n      AND \"simple_solver_sweep_count\" >= 0\n      AND \"four_solver_intersection_count\" > 0\n    )\n  ",
+      "name": "solver_sweep_intersection_consistency",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "value": "\n    (\n      \"validation_status\" <> 'valid'\n      AND \"difficulty\" IS NULL\n      AND \"solver_method\" IS NULL\n      AND \"simple_solver_sweep_count\" IS NULL\n      AND \"four_solver_intersection_count\" IS NULL\n    )\n    OR (\n      \"validation_status\" = 'valid'\n      AND \"difficulty\" IS NOT NULL\n      AND \"solver_method\" IS NOT NULL\n      AND \"simple_solver_sweep_count\" IS NOT NULL\n      AND \"four_solver_intersection_count\" IS NOT NULL\n    )\n  ",
+      "name": "validation_solver_consistency",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "puzzles"
+    }
+  ],
+  "renames": []
+}
