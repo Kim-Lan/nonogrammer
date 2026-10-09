@@ -6,6 +6,8 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
@@ -23,14 +25,17 @@
   "dependencies": {
     "@iconify-json/lucide": "^1.2.137",
     "@iconify-json/simple-icons": "^1.2.97",
+    "@neondatabase/serverless": "^1.2.0",
     "@nuxt/a11y": "1.0.0-alpha.1",
     "@nuxt/test-utils": "4.3.2",
     "@nuxt/ui": "^4.11.2",
     "@nuxtjs/better-auth": "0.3.6",
     "@nuxtjs/i18n": "10.6.0",
     "better-auth": "^1.7.3",
+    "drizzle-orm": "1.0.0-rc.4",
     "nuxt": "^4.5.2",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^9.5.1",
@@ -38,12 +43,14 @@
     "@playwright/test": "^1.63.0",
     "@vitest/coverage-v8": "^5.0.3",
     "@vue/test-utils": "^2.5.1",
+    "drizzle-kit": "1.0.0-rc.4",
     "eslint": "^9.39.5",
     "eslint-plugin-better-tailwindcss": "^4.7.0",
     "happy-dom": "^20.14.5",
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
     "playwright-core": "^1.63.0",
+    "tsx": "^4.23.15",
     "typescript": "^6.0.3",
     "vitest": "^5.0.3",
     "vue-tsc": "^3.3.11"
