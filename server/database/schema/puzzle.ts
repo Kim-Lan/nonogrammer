@@ -1,7 +1,7 @@
 import type { PuzzleClues } from '../../../shared/types/puzzle';
 import { randomBytes } from 'node:crypto';
 import { sql } from 'drizzle-orm';
-import { check, index, integer, jsonb, pgEnum, pgTable, smallint, text, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
+import { check, index, integer, jsonb, pgEnum, smallint, snakeCase, text, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
 import { puzzleDifficulties, puzzlePublicationStatuses, puzzleSolverMethods, puzzleTypes, puzzleValidationStatuses } from '../../../shared/types/puzzle';
 
 export const puzzleTypeEnum = pgEnum('puzzle_type', puzzleTypes);
@@ -14,7 +14,7 @@ function generatePuzzleSlug(): string {
   return randomBytes(12).toString('hex');
 }
 
-export const puzzles = pgTable('puzzles', {
+export const puzzles = snakeCase.table('puzzles', {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
   slug: varchar({ length: 128 }).$defaultFn(generatePuzzleSlug).notNull(),
 
@@ -23,26 +23,26 @@ export const puzzles = pgTable('puzzles', {
   height: smallint().notNull(),
   width: smallint().notNull(),
 
-  rowClues: jsonb('row_clues').$type<PuzzleClues>().notNull(),
-  columnClues: jsonb('column_clues').$type<PuzzleClues>().notNull(),
+  rowClues: jsonb().$type<PuzzleClues>().notNull(),
+  columnClues: jsonb().$type<PuzzleClues>().notNull(),
 
-  solutionBits: text('solution_bits').notNull(),
-  solutionHash: text('solution_hash').notNull(),
+  solutionBits: text().notNull(),
+  solutionHash: text().notNull(),
 
   difficulty: puzzleDifficultyEnum(),
-  solverMethod: puzzleSolverMethodEnum('solver_method'),
-  simpleSolverSweepCount: integer('simple_solver_sweep_count'),
-  fourSolverIntersectionCount: integer('four_solver_intersection_count'),
+  solverMethod: puzzleSolverMethodEnum(),
+  simpleSolverSweepCount: integer(),
+  fourSolverIntersectionCount: integer(),
 
-  filledCellCount: smallint('filled_cell_count').generatedAlwaysAs(
+  filledCellCount: smallint().generatedAlwaysAs(
     sql`length(replace("solution_bits", '0', ''))`,
   ),
 
-  publicationStatus: puzzlePublicationStatusEnum('publication_status').default('draft').notNull(),
-  validationStatus: puzzleValidationStatusEnum('validation_status').default('pending').notNull(),
+  publicationStatus: puzzlePublicationStatusEnum().default('draft').notNull(),
+  validationStatus: puzzleValidationStatusEnum().default('pending').notNull(),
 
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull().$onUpdate(() => new Date()),
+  createdAt: timestamp({ withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp({ withTimezone: true }).defaultNow().notNull().$onUpdate(() => new Date()),
 }, t => [
   uniqueIndex('puzzles_slug_unique').on(sql`lower(${t.slug})`),
   uniqueIndex('puzzles_system_puzzle_solution_unique').on(t.height, t.width, t.solutionHash).where(sql`${t.type} = 'system'`),

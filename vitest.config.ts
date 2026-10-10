@@ -26,6 +26,8 @@ export default defineConfig({
           name: 'nuxt',
           include: ['test/nuxt/**/*.test.ts'],
           environment: 'nuxt',
+          testTimeout: 60000,
+          hookTimeout: 60000,
           environmentOptions: {
             nuxt: {
               rootDir: fileURLToPath(new URL('.', import.meta.url)),

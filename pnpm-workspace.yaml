@@ -13,3 +13,4 @@ allowBuilds:
   ssh2: false
   unrs-resolver: false
   vue-demi: false
+  workerd: false

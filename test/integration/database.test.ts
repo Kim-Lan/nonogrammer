@@ -3,13 +3,12 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { dockerAvailable, startTestDatabase } from './helper/database';
 
 const hasDocker = await dockerAvailable();
-const suite = hasDocker ? describe : describe.skip;
 
 if (!hasDocker) {
   console.warn('Docker not available. Skipping integration tests.');
 }
 
-suite('database integration', () => {
+describe.runIf(hasDocker)('database integration', () => {
   let testDatabase: TestDatabase;
 
   beforeAll(async () => {

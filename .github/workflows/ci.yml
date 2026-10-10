@@ -1,6 +1,10 @@
 name: ci
 
 on:
+  push:
+    branches:
+      - main
+      - dev
   pull_request:
     branches:
       - main
@@ -39,8 +43,8 @@ jobs:
       - name: Lint
         run: pnpm run lint
 
-      # - name: Typecheck
-      #   run: pnpm run typecheck
+      - name: Typecheck
+        run: pnpm run typecheck
 
       - name: Test
         run: pnpm run test
