@@ -54,3 +54,13 @@ export async function startTestDatabase(): Promise<TestDatabase> {
     throw error;
   }
 }
+
+export async function dockerAvailable(): Promise<boolean> {
+  try {
+    const { execSync } = await import('node:child_process');
+    execSync('docker info', { stdio: 'ignore', timeout: 10000 });
+    return true;
+  } catch {
+    return false;
+  }
+}
