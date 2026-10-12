@@ -1,6 +1,6 @@
-import type { TestDatabase } from './helper/database';
+import type { TestDatabase } from '../helper/database';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { dockerAvailable, startTestDatabase } from './helper/database';
+import { dockerAvailable, startTestDatabase } from '../helper/database';
 
 const hasDocker = await dockerAvailable();
 

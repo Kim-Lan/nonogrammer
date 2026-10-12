@@ -1,6 +1,7 @@
 CREATE TYPE "puzzle_difficulty" AS ENUM('normal', 'hard');--> statement-breakpoint
+CREATE TYPE "puzzle_generator" AS ENUM('batenburg', 'tatham');--> statement-breakpoint
 CREATE TYPE "puzzle_publication_status" AS ENUM('draft', 'published', 'unpublished');--> statement-breakpoint
-CREATE TYPE "puzzle_solver_method" AS ENUM('simple', 'four');--> statement-breakpoint
+CREATE TYPE "puzzle_solver" AS ENUM('simple', 'four');--> statement-breakpoint
 CREATE TYPE "puzzle_type" AS ENUM('system', 'daily', 'community');--> statement-breakpoint
 CREATE TYPE "puzzle_validation_status" AS ENUM('pending', 'valid', 'invalid');--> statement-breakpoint
 CREATE TABLE "puzzles" (
@@ -14,7 +15,8 @@ CREATE TABLE "puzzles" (
 	"solution_bits" text NOT NULL,
 	"solution_hash" text NOT NULL,
 	"difficulty" "puzzle_difficulty",
-	"solver_method" "puzzle_solver_method",
+	"generator" "puzzle_generator",
+	"solver" "puzzle_solver",
 	"simple_solver_sweep_count" integer,
 	"four_solver_intersection_count" integer,
 	"filled_cell_count" smallint GENERATED ALWAYS AS (length(replace("solution_bits", '0', ''))) STORED,
@@ -31,14 +33,18 @@ CREATE TABLE "puzzles" (
 	CONSTRAINT "row_clues_array" CHECK (jsonb_typeof("row_clues") = 'array'),
 	CONSTRAINT "column_clues_array" CHECK (jsonb_typeof("column_clues") = 'array'),
 	CONSTRAINT "clue_dimensions" CHECK (jsonb_array_length("row_clues") = "height" AND jsonb_array_length("column_clues") = "width"),
+	CONSTRAINT "generator_consistency" CHECK (
+    "type" NOT IN ('system', 'daily')
+    OR "generator" IS NOT NULL
+  ),
 	CONSTRAINT "difficulty_solver_consistency" CHECK (
-    ("difficulty" IS NULL AND "solver_method" IS NULL)
+    ("difficulty" IS NULL AND "solver" IS NULL)
     OR (
       "difficulty" IS NOT NULL
-      AND "solver_method" IS NOT NULL
+      AND "solver" IS NOT NULL
       AND (
-        ("difficulty" = 'normal' AND "solver_method" = 'simple')
-        OR ("difficulty" = 'hard' AND "solver_method" = 'four')
+        ("difficulty" = 'normal' AND "solver" = 'simple')
+        OR ("difficulty" = 'hard' AND "solver" = 'four')
       )
     )
   ),
@@ -46,14 +52,14 @@ CREATE TABLE "puzzles" (
 	CONSTRAINT "four_solver_intersection_count_nonnegative" CHECK ("four_solver_intersection_count" >= 0),
 	CONSTRAINT "published_puzzle_valid" CHECK ("publication_status" <> 'published' OR "validation_status" = 'valid'),
 	CONSTRAINT "solver_sweep_intersection_consistency" CHECK (
-    "solver_method" IS NULL
+    "solver" IS NULL
     OR (
-      "solver_method" = 'simple'
+      "solver" = 'simple'
       AND "simple_solver_sweep_count" > 0
       AND "four_solver_intersection_count" = 0
     )
     OR (
-      "solver_method" = 'four'
+      "solver" = 'four'
       AND "simple_solver_sweep_count" >= 0
       AND "four_solver_intersection_count" > 0
     )
@@ -62,14 +68,14 @@ CREATE TABLE "puzzles" (
     (
       "validation_status" <> 'valid'
       AND "difficulty" IS NULL
-      AND "solver_method" IS NULL
+      AND "solver" IS NULL
       AND "simple_solver_sweep_count" IS NULL
       AND "four_solver_intersection_count" IS NULL
     )
     OR (
       "validation_status" = 'valid'
       AND "difficulty" IS NOT NULL
-      AND "solver_method" IS NOT NULL
+      AND "solver" IS NOT NULL
       AND "simple_solver_sweep_count" IS NOT NULL
       AND "four_solver_intersection_count" IS NOT NULL
     )

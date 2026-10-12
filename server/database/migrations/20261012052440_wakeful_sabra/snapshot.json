@@ -1,7 +1,7 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "7c26d96f-4069-4e4d-8e91-a1f6f2aa81cf",
+  "id": "655aaf01-5b04-4459-9eb1-d96754aa0f24",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
@@ -12,6 +12,15 @@
         "hard"
       ],
       "name": "puzzle_difficulty",
+      "entityType": "enums",
+      "schema": "public"
+    },
+    {
+      "values": [
+        "batenburg",
+        "tatham"
+      ],
+      "name": "puzzle_generator",
       "entityType": "enums",
       "schema": "public"
     },
@@ -30,7 +39,7 @@
         "simple",
         "four"
       ],
-      "name": "puzzle_solver_method",
+      "name": "puzzle_solver",
       "entityType": "enums",
       "schema": "public"
     },
@@ -200,14 +209,27 @@
       "table": "puzzles"
     },
     {
-      "type": "puzzle_solver_method",
+      "type": "puzzle_generator",
       "typeSchema": "public",
       "notNull": false,
       "dimensions": 0,
       "default": null,
       "generated": null,
       "identity": null,
-      "name": "solver_method",
+      "name": "generator",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "type": "puzzle_solver",
+      "typeSchema": "public",
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "name": "solver",
       "entityType": "columns",
       "schema": "public",
       "table": "puzzles"
@@ -478,7 +500,14 @@
       "table": "puzzles"
     },
     {
-      "value": "\n    (\"difficulty\" IS NULL AND \"solver_method\" IS NULL)\n    OR (\n      \"difficulty\" IS NOT NULL\n      AND \"solver_method\" IS NOT NULL\n      AND (\n        (\"difficulty\" = 'normal' AND \"solver_method\" = 'simple')\n        OR (\"difficulty\" = 'hard' AND \"solver_method\" = 'four')\n      )\n    )\n  ",
+      "value": "\n    \"type\" NOT IN ('system', 'daily')\n    OR \"generator\" IS NOT NULL\n  ",
+      "name": "generator_consistency",
+      "entityType": "checks",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "value": "\n    (\"difficulty\" IS NULL AND \"solver\" IS NULL)\n    OR (\n      \"difficulty\" IS NOT NULL\n      AND \"solver\" IS NOT NULL\n      AND (\n        (\"difficulty\" = 'normal' AND \"solver\" = 'simple')\n        OR (\"difficulty\" = 'hard' AND \"solver\" = 'four')\n      )\n    )\n  ",
       "name": "difficulty_solver_consistency",
       "entityType": "checks",
       "schema": "public",
@@ -506,14 +535,14 @@
       "table": "puzzles"
     },
     {
-      "value": "\n    \"solver_method\" IS NULL\n    OR (\n      \"solver_method\" = 'simple'\n      AND \"simple_solver_sweep_count\" > 0\n      AND \"four_solver_intersection_count\" = 0\n    )\n    OR (\n      \"solver_method\" = 'four'\n      AND \"simple_solver_sweep_count\" >= 0\n      AND \"four_solver_intersection_count\" > 0\n    )\n  ",
+      "value": "\n    \"solver\" IS NULL\n    OR (\n      \"solver\" = 'simple'\n      AND \"simple_solver_sweep_count\" > 0\n      AND \"four_solver_intersection_count\" = 0\n    )\n    OR (\n      \"solver\" = 'four'\n      AND \"simple_solver_sweep_count\" >= 0\n      AND \"four_solver_intersection_count\" > 0\n    )\n  ",
       "name": "solver_sweep_intersection_consistency",
       "entityType": "checks",
       "schema": "public",
       "table": "puzzles"
     },
     {
-      "value": "\n    (\n      \"validation_status\" <> 'valid'\n      AND \"difficulty\" IS NULL\n      AND \"solver_method\" IS NULL\n      AND \"simple_solver_sweep_count\" IS NULL\n      AND \"four_solver_intersection_count\" IS NULL\n    )\n    OR (\n      \"validation_status\" = 'valid'\n      AND \"difficulty\" IS NOT NULL\n      AND \"solver_method\" IS NOT NULL\n      AND \"simple_solver_sweep_count\" IS NOT NULL\n      AND \"four_solver_intersection_count\" IS NOT NULL\n    )\n  ",
+      "value": "\n    (\n      \"validation_status\" <> 'valid'\n      AND \"difficulty\" IS NULL\n      AND \"solver\" IS NULL\n      AND \"simple_solver_sweep_count\" IS NULL\n      AND \"four_solver_intersection_count\" IS NULL\n    )\n    OR (\n      \"validation_status\" = 'valid'\n      AND \"difficulty\" IS NOT NULL\n      AND \"solver\" IS NOT NULL\n      AND \"simple_solver_sweep_count\" IS NOT NULL\n      AND \"four_solver_intersection_count\" IS NOT NULL\n    )\n  ",
       "name": "validation_solver_consistency",
       "entityType": "checks",
       "schema": "public",

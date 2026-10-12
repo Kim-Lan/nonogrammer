@@ -3,8 +3,7 @@ import env from './lib/env';
 
 export default defineConfig({
   out: './server/database/migrations',
-  schema: './server/database/schema',
-  casing: 'snake_case',
+  schema: './server/database/schema/index.ts',
   dialect: 'postgresql',
   dbCredentials: {
     url: env.DATABASE_URL_UNPOOLED,

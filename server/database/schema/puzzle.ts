@@ -2,11 +2,12 @@ import type { PuzzleClues } from '../../../shared/types/puzzle';
 import { randomBytes } from 'node:crypto';
 import { sql } from 'drizzle-orm';
 import { check, index, integer, jsonb, pgEnum, smallint, snakeCase, text, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
-import { puzzleDifficulties, puzzlePublicationStatuses, puzzleSolverMethods, puzzleTypes, puzzleValidationStatuses } from '../../../shared/types/puzzle';
+import { puzzleDifficulties, puzzleGenerators, puzzlePublicationStatuses, puzzleSolvers, puzzleTypes, puzzleValidationStatuses } from '../../../shared/types/puzzle';
 
 export const puzzleTypeEnum = pgEnum('puzzle_type', puzzleTypes);
+export const puzzleGeneratorEnum = pgEnum('puzzle_generator', puzzleGenerators);
 export const puzzleDifficultyEnum = pgEnum('puzzle_difficulty', puzzleDifficulties);
-export const puzzleSolverMethodEnum = pgEnum('puzzle_solver_method', puzzleSolverMethods);
+export const puzzleSolverEnum = pgEnum('puzzle_solver', puzzleSolvers);
 export const puzzlePublicationStatusEnum = pgEnum('puzzle_publication_status', puzzlePublicationStatuses);
 export const puzzleValidationStatusEnum = pgEnum('puzzle_validation_status', puzzleValidationStatuses);
 
@@ -30,7 +31,8 @@ export const puzzles = snakeCase.table('puzzles', {
   solutionHash: text().notNull(),
 
   difficulty: puzzleDifficultyEnum(),
-  solverMethod: puzzleSolverMethodEnum(),
+  generator: puzzleGeneratorEnum(),
+  solver: puzzleSolverEnum(),
   simpleSolverSweepCount: integer(),
   fourSolverIntersectionCount: integer(),
 
@@ -58,14 +60,18 @@ export const puzzles = snakeCase.table('puzzles', {
   check('row_clues_array', sql`jsonb_typeof(${t.rowClues}) = 'array'`),
   check('column_clues_array', sql`jsonb_typeof(${t.columnClues}) = 'array'`),
   check('clue_dimensions', sql`jsonb_array_length(${t.rowClues}) = ${t.height} AND jsonb_array_length(${t.columnClues}) = ${t.width}`),
+  check('generator_consistency', sql`
+    ${t.type} NOT IN ('system', 'daily')
+    OR ${t.generator} IS NOT NULL
+  `),
   check('difficulty_solver_consistency', sql`
-    (${t.difficulty} IS NULL AND ${t.solverMethod} IS NULL)
+    (${t.difficulty} IS NULL AND ${t.solver} IS NULL)
     OR (
       ${t.difficulty} IS NOT NULL
-      AND ${t.solverMethod} IS NOT NULL
+      AND ${t.solver} IS NOT NULL
       AND (
-        (${t.difficulty} = 'normal' AND ${t.solverMethod} = 'simple')
-        OR (${t.difficulty} = 'hard' AND ${t.solverMethod} = 'four')
+        (${t.difficulty} = 'normal' AND ${t.solver} = 'simple')
+        OR (${t.difficulty} = 'hard' AND ${t.solver} = 'four')
       )
     )
   `),
@@ -73,14 +79,14 @@ export const puzzles = snakeCase.table('puzzles', {
   check('four_solver_intersection_count_nonnegative', sql`${t.fourSolverIntersectionCount} >= 0`),
   check('published_puzzle_valid', sql`${t.publicationStatus} <> 'published' OR ${t.validationStatus} = 'valid'`),
   check('solver_sweep_intersection_consistency', sql`
-    ${t.solverMethod} IS NULL
+    ${t.solver} IS NULL
     OR (
-      ${t.solverMethod} = 'simple'
+      ${t.solver} = 'simple'
       AND ${t.simpleSolverSweepCount} > 0
       AND ${t.fourSolverIntersectionCount} = 0
     )
     OR (
-      ${t.solverMethod} = 'four'
+      ${t.solver} = 'four'
       AND ${t.simpleSolverSweepCount} >= 0
       AND ${t.fourSolverIntersectionCount} > 0
     )
@@ -89,14 +95,14 @@ export const puzzles = snakeCase.table('puzzles', {
     (
       ${t.validationStatus} <> 'valid'
       AND ${t.difficulty} IS NULL
-      AND ${t.solverMethod} IS NULL
+      AND ${t.solver} IS NULL
       AND ${t.simpleSolverSweepCount} IS NULL
       AND ${t.fourSolverIntersectionCount} IS NULL
     )
     OR (
       ${t.validationStatus} = 'valid'
       AND ${t.difficulty} IS NOT NULL
-      AND ${t.solverMethod} IS NOT NULL
+      AND ${t.solver} IS NOT NULL
       AND ${t.simpleSolverSweepCount} IS NOT NULL
       AND ${t.fourSolverIntersectionCount} IS NOT NULL
     )
