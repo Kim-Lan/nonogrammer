@@ -14,12 +14,12 @@ CREATE TABLE "puzzles" (
 	"column_clues" jsonb NOT NULL,
 	"solution_bits" text NOT NULL,
 	"solution_hash" text NOT NULL,
+	"filled_cell_count" smallint GENERATED ALWAYS AS (length(replace("solution_bits", '0', ''))) STORED,
 	"difficulty" "puzzle_difficulty",
 	"generator" "puzzle_generator",
 	"solver" "puzzle_solver",
 	"simple_solver_sweep_count" integer,
 	"four_solver_intersection_count" integer,
-	"filled_cell_count" smallint GENERATED ALWAYS AS (length(replace("solution_bits", '0', ''))) STORED,
 	"publication_status" "puzzle_publication_status" DEFAULT 'draft'::"puzzle_publication_status" NOT NULL,
 	"validation_status" "puzzle_validation_status" DEFAULT 'pending'::"puzzle_validation_status" NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
@@ -32,7 +32,16 @@ CREATE TABLE "puzzles" (
 	CONSTRAINT "binary_solution" CHECK ("solution_bits" ~ '^[01]+$'),
 	CONSTRAINT "row_clues_array" CHECK (jsonb_typeof("row_clues") = 'array'),
 	CONSTRAINT "column_clues_array" CHECK (jsonb_typeof("column_clues") = 'array'),
-	CONSTRAINT "clue_dimensions" CHECK (jsonb_array_length("row_clues") = "height" AND jsonb_array_length("column_clues") = "width"),
+	CONSTRAINT "clue_dimensions" CHECK (
+    CASE
+      WHEN jsonb_typeof("row_clues") = 'array'
+        AND jsonb_typeof("column_clues") = 'array'
+      THEN
+        jsonb_array_length("row_clues") = "height"
+        AND jsonb_array_length("column_clues") = "width"
+      ELSE TRUE
+    END
+  ),
 	CONSTRAINT "generator_consistency" CHECK (
     "type" NOT IN ('system', 'daily')
     OR "generator" IS NOT NULL
@@ -50,7 +59,7 @@ CREATE TABLE "puzzles" (
   ),
 	CONSTRAINT "simple_solver_sweep_count_nonnegative" CHECK ("simple_solver_sweep_count" >= 0),
 	CONSTRAINT "four_solver_intersection_count_nonnegative" CHECK ("four_solver_intersection_count" >= 0),
-	CONSTRAINT "published_puzzle_valid" CHECK ("publication_status" <> 'published' OR "validation_status" = 'valid'),
+	CONSTRAINT "published_puzzle_validity" CHECK ("publication_status" <> 'published' OR "validation_status" = 'valid'),
 	CONSTRAINT "solver_sweep_intersection_consistency" CHECK (
     "solver" IS NULL
     OR (
@@ -84,6 +93,7 @@ CREATE TABLE "puzzles" (
 --> statement-breakpoint
 CREATE UNIQUE INDEX "puzzles_slug_unique" ON "puzzles" (lower("slug"));--> statement-breakpoint
 CREATE UNIQUE INDEX "puzzles_system_puzzle_solution_unique" ON "puzzles" ("height","width","solution_hash") WHERE "type" = 'system';--> statement-breakpoint
+CREATE UNIQUE INDEX "puzzles_daily_puzzle_solution_unique" ON "puzzles" ("height","width","solution_hash") WHERE "type" = 'daily';--> statement-breakpoint
 CREATE INDEX "puzzles_selection_index" ON "puzzles" ("height","width","difficulty","id") WHERE 
     "type" = 'system' AND "publication_status" = 'published'
   ;

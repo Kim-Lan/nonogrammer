@@ -30,15 +30,15 @@ export const puzzles = snakeCase.table('puzzles', {
   solutionBits: text().notNull(),
   solutionHash: text().notNull(),
 
+  filledCellCount: smallint().generatedAlwaysAs(
+    sql`length(replace("solution_bits", '0', ''))`,
+  ),
+
   difficulty: puzzleDifficultyEnum(),
   generator: puzzleGeneratorEnum(),
   solver: puzzleSolverEnum(),
   simpleSolverSweepCount: integer(),
   fourSolverIntersectionCount: integer(),
-
-  filledCellCount: smallint().generatedAlwaysAs(
-    sql`length(replace("solution_bits", '0', ''))`,
-  ),
 
   publicationStatus: puzzlePublicationStatusEnum().default('draft').notNull(),
   validationStatus: puzzleValidationStatusEnum().default('pending').notNull(),
@@ -48,6 +48,7 @@ export const puzzles = snakeCase.table('puzzles', {
 }, t => [
   uniqueIndex('puzzles_slug_unique').on(sql`lower(${t.slug})`),
   uniqueIndex('puzzles_system_puzzle_solution_unique').on(t.height, t.width, t.solutionHash).where(sql`${t.type} = 'system'`),
+  uniqueIndex('puzzles_daily_puzzle_solution_unique').on(t.height, t.width, t.solutionHash).where(sql`${t.type} = 'daily'`),
   index('puzzles_selection_index').on(t.height, t.width, t.difficulty, t.id).where(sql`
     ${t.type} = 'system' AND ${t.publicationStatus} = 'published'
   `),
@@ -59,7 +60,16 @@ export const puzzles = snakeCase.table('puzzles', {
   check('binary_solution', sql`${t.solutionBits} ~ '^[01]+$'`),
   check('row_clues_array', sql`jsonb_typeof(${t.rowClues}) = 'array'`),
   check('column_clues_array', sql`jsonb_typeof(${t.columnClues}) = 'array'`),
-  check('clue_dimensions', sql`jsonb_array_length(${t.rowClues}) = ${t.height} AND jsonb_array_length(${t.columnClues}) = ${t.width}`),
+  check('clue_dimensions', sql`
+    CASE
+      WHEN jsonb_typeof(${t.rowClues}) = 'array'
+        AND jsonb_typeof(${t.columnClues}) = 'array'
+      THEN
+        jsonb_array_length(${t.rowClues}) = ${t.height}
+        AND jsonb_array_length(${t.columnClues}) = ${t.width}
+      ELSE TRUE
+    END
+  `),
   check('generator_consistency', sql`
     ${t.type} NOT IN ('system', 'daily')
     OR ${t.generator} IS NOT NULL
@@ -77,7 +87,7 @@ export const puzzles = snakeCase.table('puzzles', {
   `),
   check('simple_solver_sweep_count_nonnegative', sql`${t.simpleSolverSweepCount} >= 0`),
   check('four_solver_intersection_count_nonnegative', sql`${t.fourSolverIntersectionCount} >= 0`),
-  check('published_puzzle_valid', sql`${t.publicationStatus} <> 'published' OR ${t.validationStatus} = 'valid'`),
+  check('published_puzzle_validity', sql`${t.publicationStatus} <> 'published' OR ${t.validationStatus} = 'valid'`),
   check('solver_sweep_intersection_consistency', sql`
     ${t.solver} IS NULL
     OR (

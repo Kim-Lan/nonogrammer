@@ -4,10 +4,10 @@ import { PostgreSqlContainer } from '@testcontainers/postgresql';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { Pool } from 'pg';
-import * as schema from '../../../server/database/schema';
+import { relations } from '../../server/database/relations';
 
 export type TestDatabase = {
-  db: NodePgDatabase<typeof schema>;
+  db: NodePgDatabase<typeof relations>;
   container: StartedPostgreSqlContainer;
   pool: Pool;
   cleanup: () => Promise<void>;
@@ -22,7 +22,7 @@ export async function startTestDatabase(): Promise<TestDatabase> {
 
   const db = drizzle({
     client: pool,
-    schema,
+    relations,
   });
 
   try {

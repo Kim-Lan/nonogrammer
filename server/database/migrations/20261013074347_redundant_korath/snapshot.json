@@ -1,7 +1,7 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "655aaf01-5b04-4459-9eb1-d96754aa0f24",
+  "id": "cca7cde1-b1b2-4bbd-a162-141c4ab10af4",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
@@ -196,6 +196,22 @@
       "table": "puzzles"
     },
     {
+      "type": "smallint",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": {
+        "as": "length(replace(\"solution_bits\", '0', ''))",
+        "type": "stored"
+      },
+      "identity": null,
+      "name": "filled_cell_count",
+      "entityType": "columns",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
       "type": "puzzle_difficulty",
       "typeSchema": "public",
       "notNull": false,
@@ -256,22 +272,6 @@
       "generated": null,
       "identity": null,
       "name": "four_solver_intersection_count",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "puzzles"
-    },
-    {
-      "type": "smallint",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": {
-        "as": "length(replace(\"solution_bits\", '0', ''))",
-        "type": "stored"
-      },
-      "identity": null,
-      "name": "filled_cell_count",
       "entityType": "columns",
       "schema": "public",
       "table": "puzzles"
@@ -402,6 +402,41 @@
           "opclass": null
         },
         {
+          "value": "solution_hash",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        }
+      ],
+      "isUnique": true,
+      "where": "\"type\" = 'daily'",
+      "with": "",
+      "method": "btree",
+      "concurrently": false,
+      "name": "puzzles_daily_puzzle_solution_unique",
+      "entityType": "indexes",
+      "schema": "public",
+      "table": "puzzles"
+    },
+    {
+      "nameExplicit": true,
+      "columns": [
+        {
+          "value": "height",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
+          "value": "width",
+          "isExpression": false,
+          "asc": true,
+          "nullsFirst": false,
+          "opclass": null
+        },
+        {
           "value": "difficulty",
           "isExpression": false,
           "asc": true,
@@ -493,7 +528,7 @@
       "table": "puzzles"
     },
     {
-      "value": "jsonb_array_length(\"row_clues\") = \"height\" AND jsonb_array_length(\"column_clues\") = \"width\"",
+      "value": "\n    CASE\n      WHEN jsonb_typeof(\"row_clues\") = 'array'\n        AND jsonb_typeof(\"column_clues\") = 'array'\n      THEN\n        jsonb_array_length(\"row_clues\") = \"height\"\n        AND jsonb_array_length(\"column_clues\") = \"width\"\n      ELSE TRUE\n    END\n  ",
       "name": "clue_dimensions",
       "entityType": "checks",
       "schema": "public",
@@ -529,7 +564,7 @@
     },
     {
       "value": "\"publication_status\" <> 'published' OR \"validation_status\" = 'valid'",
-      "name": "published_puzzle_valid",
+      "name": "published_puzzle_validity",
       "entityType": "checks",
       "schema": "public",
       "table": "puzzles"
