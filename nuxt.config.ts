@@ -7,7 +7,7 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxt/a11y',
     '@nuxt/test-utils',
-    '@nuxtjs/better-auth',
+    // '@nuxtjs/better-auth',
     '@nuxtjs/i18n',
   ],
 
@@ -27,13 +27,13 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2026-06-30',
 
-  nitro: {
-    cloudflare: {
-      wrangler: {
-        previews: {},
-      },
-    },
-  },
+  // nitro: {
+  //   cloudflare: {
+  //     wrangler: {
+  //       previews: {},
+  //     },
+  //   },
+  // },
 
   eslint: {
     config: {
