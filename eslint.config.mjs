@@ -19,6 +19,7 @@ export default withNuxt(
       'antfu/no-top-level-await': ['off'],
       'node/prefer-global/process': ['off'],
       'node/no-process-env': ['error'],
+      'antfu/consistent-list-newline': 'off',
     },
   }),
   betterTailwindcss.configs['correctness-error'],

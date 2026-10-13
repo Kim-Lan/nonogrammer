@@ -8,15 +8,26 @@ export default defineConfig({
       {
         test: {
           name: 'unit',
-          include: ['tests/unit/*.{test,spec}.ts'],
+          include: ['test/unit/**/*.test.ts'],
           environment: 'node',
+        },
+      },
+      {
+        test: {
+          name: 'integration',
+          include: ['test/integration/**/*.test.ts'],
+          environment: 'node',
+          testTimeout: 60_000,
+          hookTimeout: 60_000,
         },
       },
       await defineVitestProject({
         test: {
           name: 'nuxt',
-          include: ['tests/nuxt/*.{test,spec}.ts'],
+          include: ['test/nuxt/**/*.test.ts'],
           environment: 'nuxt',
+          testTimeout: 60_000,
+          hookTimeout: 60_000,
           environmentOptions: {
             nuxt: {
               rootDir: fileURLToPath(new URL('.', import.meta.url)),
