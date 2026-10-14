@@ -14,11 +14,11 @@ export type PuzzleValidationStatus = typeof puzzleValidationStatuses[number];
 export type PuzzleClues = number[][];
 
 export type PublicPuzzle = {
-  id: number;
   slug: string;
   height: number;
   width: number;
   rowClues: PuzzleClues;
   columnClues: PuzzleClues;
+  solutionHash: string;
   difficulty: PuzzleDifficulty | null;
 };
