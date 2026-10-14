@@ -12,7 +12,5 @@ export type EnvSchema = z.infer<typeof EnvSchema>;
 
 tryParseEnv(EnvSchema);
 
-export function getEnv(): EnvSchema {
-  // eslint-disable-next-line node/no-process-env
-  return EnvSchema.parse(process.env);
-}
+// eslint-disable-next-line node/no-process-env
+export default EnvSchema.parse(process.env);
