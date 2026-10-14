@@ -9,6 +9,7 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "preview": "nuxt preview",
+    "preinstall": "node -e \"console.log('DATABASE_URL:', Boolean(process.env.DATABASE_URL)); console.log('DATABASE_URL_UNPOOLED:', Boolean(process.env.DATABASE_URL_UNPOOLED))\"",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
