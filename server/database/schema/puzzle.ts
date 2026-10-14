@@ -1,8 +1,8 @@
 import type { PuzzleClues } from '../../../shared/types/puzzle';
-import { randomBytes } from 'node:crypto';
 import { sql } from 'drizzle-orm';
 import { check, index, integer, jsonb, pgEnum, smallint, snakeCase, text, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
 import { puzzleDifficulties, puzzleGenerators, puzzlePublicationStatuses, puzzleSolvers, puzzleTypes, puzzleValidationStatuses } from '../../../shared/types/puzzle';
+import { generatePuzzleSlug } from '../../utils/puzzle-utils.ts';
 
 export const puzzleTypeEnum = pgEnum('puzzle_type', puzzleTypes);
 export const puzzleGeneratorEnum = pgEnum('puzzle_generator', puzzleGenerators);
@@ -10,10 +10,6 @@ export const puzzleDifficultyEnum = pgEnum('puzzle_difficulty', puzzleDifficulti
 export const puzzleSolverEnum = pgEnum('puzzle_solver', puzzleSolvers);
 export const puzzlePublicationStatusEnum = pgEnum('puzzle_publication_status', puzzlePublicationStatuses);
 export const puzzleValidationStatusEnum = pgEnum('puzzle_validation_status', puzzleValidationStatuses);
-
-function generatePuzzleSlug(): string {
-  return randomBytes(12).toString('hex');
-}
 
 export const puzzles = snakeCase.table('puzzles', {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
