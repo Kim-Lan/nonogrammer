@@ -3,7 +3,5 @@
   "name": "nonogrammer",
   "compatibility_date": "2026-10-10",
   "compatibility_flags": ["nodejs_compat"],
-  "previews": {
-    "enabled": true
-  }
+  "previews": {}
 }
