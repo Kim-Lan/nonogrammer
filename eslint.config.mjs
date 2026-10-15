@@ -33,5 +33,8 @@ export default withNuxt(
         ],
       },
     },
+    rules: {
+      'better-tailwindcss/no-unknown-classes': 'off',
+    },
   },
 );
