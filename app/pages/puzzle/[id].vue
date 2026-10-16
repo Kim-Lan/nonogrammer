@@ -1,5 +1,5 @@
 <template>
   <UContainer class="flex justify-center pt-8">
-    <PuzzleComponent />
+    <PuzzleContainer />
   </UContainer>
 </template>
