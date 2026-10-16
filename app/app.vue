@@ -1,4 +1,6 @@
-<script setup>
+<script lang="ts" setup>
+import type { NavigationMenuItem } from '@nuxt/ui';
+
 useHead({
   meta: [
     { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -11,17 +13,25 @@ useHead({
   },
 });
 
-const title = 'Nuxt Starter Template';
-const description = 'A production-ready starter template powered by Nuxt UI. Build beautiful, accessible, and performant applications in minutes, not hours.';
+const title = 'Nonogrammer';
+const description = 'A website to play Nonograms, the grid logic puzzle game, online.';
 
 useSeoMeta({
   title,
   description,
   ogTitle: title,
   ogDescription: description,
-  ogImage: 'https://ui.nuxt.com/assets/templates/nuxt/starter-light.png',
+  ogImage: '',
   twitterCard: 'summary_large_image',
 });
+
+const route = useRoute();
+
+const navItems = computed<NavigationMenuItem[]>(() => [{
+  label: 'Play',
+  to: '/puzzle',
+  active: route.path.startsWith('/puzzle'),
+}]);
 </script>
 
 <template>
@@ -32,42 +42,47 @@ useSeoMeta({
           to="/"
           class="focus-visible:outline-3 outline-primary/25 rounded-md p-1 -ms-1"
         >
-          <AppLogo class="w-auto h-6 shrink-0" />
+          <AppLogo />
         </NuxtLink>
-
-        <TemplateMenu />
       </template>
 
       <template #right>
-        <UColorModeButton />
+        <UNavigationMenu :items="navItems" />
 
-        <UButton
-          to="https://github.com/nuxt-ui-templates/starter"
-          target="_blank"
-          icon="i-simple-icons-github"
-          aria-label="GitHub"
-          color="neutral"
-          variant="ghost"
-        />
+        <USeparator orientation="vertical" class="h-10 mx-1" />
+
+        <UColorModeButton />
+      </template>
+
+      <template #body>
+        <UNavigationMenu :items="navItems" orientation="vertical" class="-mx-2.5" />
       </template>
     </UHeader>
 
-    <UMain>
+    <UMain class="min-h-(--ui-main-height)">
       <NuxtPage />
     </UMain>
 
-    <USeparator icon="i-simple-icons-nuxtdotjs" />
+    <USeparator />
 
     <UFooter>
       <template #left>
         <p class="text-sm text-muted">
-          Built with Nuxt UI • © {{ new Date().getFullYear() }}
+          Developed by Kim-Lan • © {{ new Date().getFullYear() }}
         </p>
       </template>
 
       <template #right>
         <UButton
-          to="https://github.com/nuxt-ui-templates/starter"
+          to="https://ko-fi.com/kimlan"
+          target="_blank"
+          icon="i-simple-icons-kofi"
+          aria-label="Ko-fi"
+          color="neutral"
+          variant="ghost"
+        />
+        <UButton
+          to="https://github.com/Kim-Lan/nonogrammer"
           target="_blank"
           icon="i-simple-icons-github"
           aria-label="GitHub"
