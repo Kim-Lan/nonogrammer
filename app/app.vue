@@ -1,4 +1,4 @@
-<script setup>
+<script lang="ts" setup>
 useHead({
   meta: [
     { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -22,6 +22,14 @@ useSeoMeta({
   ogImage: '',
   twitterCard: 'summary_large_image',
 });
+
+const route = useRoute();
+
+const navItems = computed<NavigationMenuItem[]>(() => [{
+  label: 'Play',
+  to: '/puzzle',
+  active: route.path.startsWith('/puzzle'),
+}]);
 </script>
 
 <template>
@@ -37,20 +45,19 @@ useSeoMeta({
       </template>
 
       <template #right>
-        <UColorModeButton />
+        <UNavigationMenu :items="navItems" />
 
-        <UButton
-          to="https://github.com/Kim-Lan/nonogrammer"
-          target="_blank"
-          icon="i-simple-icons-github"
-          aria-label="GitHub"
-          color="neutral"
-          variant="ghost"
-        />
+        <USeparator orientation="vertical" class="h-10 mx-1" />
+
+        <UColorModeButton />
+      </template>
+
+      <template #body>
+        <UNavigationMenu :items="navItems" orientation="vertical" class="-mx-2.5" />
       </template>
     </UHeader>
 
-    <UMain>
+    <UMain class="min-h-(--ui-main-height)">
       <NuxtPage />
     </UMain>
 
@@ -64,6 +71,14 @@ useSeoMeta({
       </template>
 
       <template #right>
+        <UButton
+          to="https://ko-fi.com/kimlan"
+          target="_blank"
+          icon="i-simple-icons-kofi"
+          aria-label="Ko-fi"
+          color="neutral"
+          variant="ghost"
+        />
         <UButton
           to="https://github.com/Kim-Lan/nonogrammer"
           target="_blank"
