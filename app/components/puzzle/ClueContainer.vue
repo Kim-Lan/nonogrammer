@@ -7,9 +7,9 @@ const props = defineProps<{
 provide('direction', props.direction);
 provide('clues', props.clues);
 
-const height = inject('height');
-const width = inject('width');
-const cellSize = inject('cellSize');
+const height: number = inject('height') as number;
+const width: number = inject('width') as number;
+const cellSize: string = inject('cellSize') as string;
 </script>
 
 <template>

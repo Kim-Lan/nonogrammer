@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { NavigationMenuItem } from '@nuxt/ui';
+
 useHead({
   meta: [
     { name: 'viewport', content: 'width=device-width, initial-scale=1' },

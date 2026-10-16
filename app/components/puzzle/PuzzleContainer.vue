@@ -40,8 +40,10 @@ provide('height', props.height);
 provide('width', props.width);
 provide('cellSize', cellSize);
 
-const rowClues = Array.from({ length: props.height }, () => Array.from({ length: Math.floor(props.width / 2) }).fill(1));
-const columnClues = Array.from({ length: props.width }, () => Array.from({ length: Math.floor(props.height / 2) }).fill(1));
+const rowClues: number[][] = Array.from({ length: props.height },
+  () => Array.from({ length: Math.floor(props.width / 2) }).fill(1)) as number[][];
+const columnClues: number[][] = Array.from({ length: props.width },
+  () => Array.from({ length: Math.floor(props.height / 2) }).fill(1)) as number[][];
 </script>
 
 <template>
