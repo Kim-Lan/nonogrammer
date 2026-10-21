@@ -20,6 +20,7 @@ export default withNuxt(
       'node/prefer-global/process': ['off'],
       'node/no-process-env': ['error'],
       'antfu/consistent-list-newline': 'off',
+      'test/prefer-lowercase-title': 'off',
     },
   }),
   betterTailwindcss.configs['correctness-error'],
