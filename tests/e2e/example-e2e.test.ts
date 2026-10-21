@@ -1,6 +1,13 @@
-import { expect, test } from '@nuxt/test-utils/playwright';
+import { createPage, setup } from '@nuxt/test-utils/e2e';
+import { describe, expect, it } from 'vitest';
 
-test('example e2e test', async ({ page, goto }) => {
-  await goto('/', { waitUntil: 'hydration' });
-  await expect(page).toHaveTitle(/Nuxt/);
+await setup();
+
+describe('browser', () => {
+  it('runs a test', { timeout: 20000 }, async () => {
+    const page = await createPage('/');
+    const text = await page.getByRole('link', { name: 'Nonogrammer' }).textContent();
+    expect(text).toContain('Nonogrammer');
+    await page.close();
+  });
 });

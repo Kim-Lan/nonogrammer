@@ -1,29 +1,25 @@
 import type { PublicPuzzle } from '../../../../shared/types/puzzle';
 import { describe, expect, it } from 'vitest';
-import { generatePuzzleBySize } from '../../../../server/nonograms/nonograms-generator';
+import { generateNormalPuzzleBySize } from '../../../../server/nonograms/nonograms-generator';
 
 describe('nonograms generator unit test', () => {
-  it('generates system puzzles by size', () => {
-    const puzzle_5x5: PublicPuzzle = generatePuzzleBySize(5, 5);
+  it.each([
+    [5, 5],
+    [10, 10],
+    [15, 15],
+    [20, 20],
+    [25, 25],
+    [30, 30],
+  ])('generates normal %ix%i puzzle', (height, width) => {
+    const puzzle: PublicPuzzle = generateNormalPuzzleBySize(height, width);
 
-    expect(puzzle_5x5).toBeDefined();
-    expect(puzzle_5x5.slug).toBeDefined();
-    expect(puzzle_5x5.height).toBe(5);
-    expect(puzzle_5x5.width).toBe(5);
-    expect(puzzle_5x5.rowClues).toHaveLength(5);
-    expect(puzzle_5x5.columnClues).toHaveLength(5);
-    expect(puzzle_5x5.solutionHash).toBeDefined();
-    expect(puzzle_5x5.difficulty).toBeDefined();
-
-    const puzzle_30x30: PublicPuzzle = generatePuzzleBySize(30, 30);
-
-    expect(puzzle_30x30).toBeDefined();
-    expect(puzzle_30x30.slug).toBeDefined();
-    expect(puzzle_30x30.height).toBe(30);
-    expect(puzzle_30x30.width).toBe(30);
-    expect(puzzle_30x30.rowClues).toHaveLength(30);
-    expect(puzzle_30x30.columnClues).toHaveLength(30);
-    expect(puzzle_30x30.solutionHash).toBeDefined();
-    expect(puzzle_30x30.difficulty).toBeDefined();
+    expect(puzzle).toBeDefined();
+    expect(puzzle.slug).toMatch(/^[a-f0-9]{24}$/); // 12 bytes hexadecimal
+    expect(puzzle.height).toBe(height);
+    expect(puzzle.width).toBe(width);
+    expect(puzzle.rowClues).toHaveLength(height);
+    expect(puzzle.columnClues).toHaveLength(width);
+    expect(puzzle.solutionHash).toMatch(/^[a-f0-9]{64}$/); // SHA-256 hexadecimal
+    expect(puzzle.difficulty).toBe('normal');
   });
 });
