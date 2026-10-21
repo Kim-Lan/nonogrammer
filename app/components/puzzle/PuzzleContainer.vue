@@ -1,14 +1,10 @@
 <script lang="ts" setup>
-const props = defineProps({
-  height: {
-    type: Number,
-    default: 10,
-  },
-  width: {
-    type: Number,
-    default: 10,
-  },
-});
+const props = defineProps<{
+  height: number;
+  width: number;
+  rowClues: number[][];
+  columnClues: number[][];
+}>();
 
 const cellSize = computed(() => {
   if (props.width === 5) {
@@ -40,27 +36,27 @@ provide('height', props.height);
 provide('width', props.width);
 provide('cellSize', cellSize);
 
-const rowClues: number[][] = Array.from({ length: props.height },
-  () => Array.from({ length: Math.floor(props.width / 2) }).fill(1)) as number[][];
-const columnClues: number[][] = Array.from({ length: props.width },
-  () => Array.from({ length: Math.floor(props.height / 2) }).fill(1)) as number[][];
+// const rowClues: number[][] = Array.from({ length: props.height },
+//   () => Array.from({ length: Math.floor(props.width / 2) }).fill(1)) as number[][];
+// const columnClues: number[][] = Array.from({ length: props.width },
+//   () => Array.from({ length: Math.floor(props.height / 2) }).fill(1)) as number[][];
 </script>
 
 <template>
   <div class="puzzle-container">
     <div class="puzzle-grid">
       <PuzzleCell
-        v-for="n in props.height * props.width"
+        v-for="n in height * width"
         :key="`cell_${n - 1}`"
         :index="n - 1"
         class="puzzle-cell"
         :class="{
-          'first-row': n <= props.width,
-          'five-row': Math.ceil(n / props.height) % 5 === 0,
-          'last-row': n > (props.height * props.width) - props.width,
-          'first-column': (n - 1) % props.width === 0,
+          'first-row': n <= width,
+          'five-row': Math.ceil(n / height) % 5 === 0,
+          'last-row': n > (height * width) - width,
+          'first-column': (n - 1) % width === 0,
           'five-column': n % 5 === 0,
-          'last-column': n % props.width === 0,
+          'last-column': n % width === 0,
         }"
       />
     </div>
