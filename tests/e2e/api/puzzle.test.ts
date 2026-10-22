@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 await setup({
   server: true,
   browser: false,
+  setupTimeout: 240_000,
 });
 
 describe('GET /api/puzzle/system', () => {
@@ -72,4 +73,4 @@ describe('GET /api/puzzle/system', () => {
     expect(response).toBeDefined();
     expect(response.status).toBe(400);
   });
-}, 200_000);
+});
