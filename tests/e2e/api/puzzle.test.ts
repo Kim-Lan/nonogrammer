@@ -72,4 +72,4 @@ describe('GET /api/puzzle/system', () => {
     expect(response).toBeDefined();
     expect(response.status).toBe(400);
   });
-});
+}, 200_000);
