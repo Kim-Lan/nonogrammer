@@ -475,25 +475,42 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
     expect(puzzle.slug).toHaveLength(128);
   });
 
-  it('accepts 30x30 puzzle', async () => {
+  it.each([
+    [5, 5],
+    [10, 10],
+    [15, 15],
+    [20, 20],
+    [25, 25],
+    [30, 30],
+    [5, 30],
+    [30, 5],
+    [5, 6],
+    [6, 5],
+    [6, 6],
+    [6, 29],
+    [29, 29],
+    [29, 6],
+    [30, 29],
+    [29, 30],
+  ])('accepts %ix%i puzzle', async (height, width) => {
     const [puzzle] = await testDatabase.db
       .insert(puzzles)
       .values(makeTestPuzzle({
-        height: 30,
-        width: 30,
+        height,
+        width,
         rowClues: Array.from(
-          { length: 30 },
-          () => Array.from({ length: 15 }).fill(1),
+          { length: height },
+          () => Array.from({ length: Math.floor(height / 2) }).fill(1),
         ),
         columnClues: Array.from(
-          { length: 30 },
-          () => Array.from({ length: 15 }).fill(1),
+          { length: width },
+          () => Array.from({ length: Math.floor(width / 2) }).fill(1),
         ),
         solutionBits: Array.from(
-          { length: 30 },
+          { length: height },
           (_, row) =>
             Array.from(
-              { length: 30 },
+              { length: width },
               (_, col) => (row + col) % 2 === 0 ? '1' : '0',
             ).join(''),
         ).join(''),
@@ -502,13 +519,13 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
 
     expect(puzzle).toBeDefined();
     expect(puzzle).toMatchObject({
-      height: 30,
-      width: 30,
-      filledCellCount: 450,
+      height,
+      width,
+      filledCellCount: Math.ceil(height * width / 2),
     });
-    expect(puzzle.solutionBits).toHaveLength(900);
-    expect(puzzle.rowClues).toHaveLength(30);
-    expect(puzzle.columnClues).toHaveLength(30);
+    expect(puzzle.solutionBits).toHaveLength(height * width);
+    expect(puzzle.rowClues).toHaveLength(height);
+    expect(puzzle.columnClues).toHaveLength(width);
   });
 
   it.each([
@@ -516,6 +533,10 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
     [5, 4, 'width_range'],
     [31, 5, 'height_range'],
     [5, 31, 'width_range'],
+    [4, 15, 'height_range'],
+    [15, 4, 'width_range'],
+    [31, 15, 'height_range'],
+    [15, 31, 'width_range'],
   ] as const)(
     'rejects puzzle with dimensions %ix%i',
     async (height, width, constraint) => {
