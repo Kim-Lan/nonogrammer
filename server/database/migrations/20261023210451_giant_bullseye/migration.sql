@@ -1,7 +1,7 @@
 CREATE TYPE "puzzle_difficulty" AS ENUM('normal', 'hard');--> statement-breakpoint
-CREATE TYPE "puzzle_generator" AS ENUM('batenburg', 'tatham');--> statement-breakpoint
+CREATE TYPE "puzzle_generator" AS ENUM('batenburg-kosters', 'tatham');--> statement-breakpoint
 CREATE TYPE "puzzle_publication_status" AS ENUM('draft', 'published', 'unpublished');--> statement-breakpoint
-CREATE TYPE "puzzle_solver" AS ENUM('simple', 'four');--> statement-breakpoint
+CREATE TYPE "puzzle_solver" AS ENUM('line', 'four');--> statement-breakpoint
 CREATE TYPE "puzzle_type" AS ENUM('system', 'daily', 'community');--> statement-breakpoint
 CREATE TYPE "puzzle_validation_status" AS ENUM('pending', 'valid', 'invalid');--> statement-breakpoint
 CREATE TABLE "puzzles" (
@@ -18,7 +18,7 @@ CREATE TABLE "puzzles" (
 	"difficulty" "puzzle_difficulty",
 	"generator" "puzzle_generator",
 	"solver" "puzzle_solver",
-	"simple_solver_sweep_count" integer,
+	"line_solver_iteration_count" integer,
 	"four_solver_intersection_count" integer,
 	"publication_status" "puzzle_publication_status" DEFAULT 'draft'::"puzzle_publication_status" NOT NULL,
 	"validation_status" "puzzle_validation_status" DEFAULT 'pending'::"puzzle_validation_status" NOT NULL,
@@ -52,24 +52,24 @@ CREATE TABLE "puzzles" (
       "difficulty" IS NOT NULL
       AND "solver" IS NOT NULL
       AND (
-        ("difficulty" = 'normal' AND "solver" = 'simple')
+        ("difficulty" = 'normal' AND "solver" = 'line')
         OR ("difficulty" = 'hard' AND "solver" = 'four')
       )
     )
   ),
-	CONSTRAINT "simple_solver_sweep_count_nonnegative" CHECK ("simple_solver_sweep_count" >= 0),
+	CONSTRAINT "line_solver_iteration_count_nonnegative" CHECK ("line_solver_iteration_count" >= 0),
 	CONSTRAINT "four_solver_intersection_count_nonnegative" CHECK ("four_solver_intersection_count" >= 0),
 	CONSTRAINT "published_puzzle_validity" CHECK ("publication_status" <> 'published' OR "validation_status" = 'valid'),
-	CONSTRAINT "solver_sweep_intersection_consistency" CHECK (
+	CONSTRAINT "solver_iteration_intersection_consistency" CHECK (
     "solver" IS NULL
     OR (
-      "solver" = 'simple'
-      AND "simple_solver_sweep_count" > 0
+      "solver" = 'line'
+      AND "line_solver_iteration_count" > 0
       AND "four_solver_intersection_count" = 0
     )
     OR (
       "solver" = 'four'
-      AND "simple_solver_sweep_count" >= 0
+      AND "line_solver_iteration_count" >= 0
       AND "four_solver_intersection_count" > 0
     )
   ),
@@ -78,14 +78,14 @@ CREATE TABLE "puzzles" (
       "validation_status" <> 'valid'
       AND "difficulty" IS NULL
       AND "solver" IS NULL
-      AND "simple_solver_sweep_count" IS NULL
+      AND "line_solver_iteration_count" IS NULL
       AND "four_solver_intersection_count" IS NULL
     )
     OR (
       "validation_status" = 'valid'
       AND "difficulty" IS NOT NULL
       AND "solver" IS NOT NULL
-      AND "simple_solver_sweep_count" IS NOT NULL
+      AND "line_solver_iteration_count" IS NOT NULL
       AND "four_solver_intersection_count" IS NOT NULL
     )
   )

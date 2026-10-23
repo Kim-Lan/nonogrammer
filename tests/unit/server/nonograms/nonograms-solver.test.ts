@@ -1,9 +1,9 @@
-import type { SimpleSolveOutput } from '../../../../server/nonograms/nonograms-solver';
+import type { LineSolverOutput } from '../../../../server/nonograms/nonograms-solver';
 import type { CandidatePuzzle } from '../../../../server/types/puzzle';
 import { describe, expect, it } from 'vitest';
 
 describe('nonograms solver unit test', () => {
-  describe('simple solver', () => {
+  describe('line solver', () => {
     it('detects a puzzle with a unique solution', () => {
       const puzzle: CandidatePuzzle = {
         height: 5,
@@ -12,14 +12,14 @@ describe('nonograms solver unit test', () => {
         columnClues: [[1, 1, 1], [1, 1], [1, 1, 1], [1, 1], [1, 1, 1]],
       };
 
-      const result: SimpleSolverOutput = checkWithSimpleSolver(puzzle);
+      const result: LineSolverOutput = checkWithLineSolver(puzzle);
 
       expect(result).toBeDefined();
       expect(result).toMatchObject({
         solvable: true,
         uniqueSolution: true,
       });
-      expect(result.sweepCount).toBeGreaterThan(0);
+      expect(result.iterationCount).toBeGreaterThan(0);
       expect(result.solutionBits).toMatch(/^[01]{25}$/);
     });
 
@@ -32,14 +32,14 @@ describe('nonograms solver unit test', () => {
         solutionBits: '1010101010101010101010101',
       };
 
-      const result: SimpleSolverOutput = checkWithSimpleSolver(puzzle);
+      const result: LineSolverOutput = checkWithLineSolver(puzzle);
 
       expect(result).toBeDefined();
       expect(result).toMatchObject({
         solvable: true,
         uniqueSolution: true,
       });
-      expect(result.sweepCount).toBeGreaterThan(0);
+      expect(result.iterationCount).toBeGreaterThan(0);
       expect(result.solutionBits).toMatch(/^[01]{25}$/);
     });
 
@@ -51,14 +51,14 @@ describe('nonograms solver unit test', () => {
         columnClues: [[1, 1], [1, 1], [1, 1], [1, 1], [1, 1]],
       };
 
-      const result: SimpleSolveOutput = checkWithSimpleSolver(puzzle);
+      const result: LineSolverOutput = checkWithLineSolver(puzzle);
 
       expect(result).toBeDefined();
       expect(result).toMatchObject({
         solvable: true,
         uniqueSolution: false,
       });
-      expect(result.sweepCount).toBeGreaterThan(0);
+      expect(result.iterationCount).toBeGreaterThan(0);
       expect(result.solutionBits).toBeNull();
     });
 
@@ -71,14 +71,14 @@ describe('nonograms solver unit test', () => {
         solutionBits: '0101010100010100010110001',
       };
 
-      const result: SimpleSolveOutput = checkWithSimpleSolver(puzzle);
+      const result: LineSolverOutput = checkWithLineSolver(puzzle);
 
       expect(result).toBeDefined();
       expect(result).toMatchObject({
         solvable: true,
         uniqueSolution: false,
       });
-      expect(result.sweepCount).toBeGreaterThan(0);
+      expect(result.iterationCount).toBeGreaterThan(0);
       expect(result.solutionBits).toBeNull();
     });
 
@@ -90,14 +90,14 @@ describe('nonograms solver unit test', () => {
         columnClues: [[1, 1, 1], [1, 1], [1, 1, 1], [1, 1], [1, 1, 1]],
       };
 
-      const result: SimpleSolverOutput = checkWithSimpleSolver(puzzle);
+      const result: LineSolverOutput = checkWithLineSolver(puzzle);
 
       expect(result).toBeDefined();
       expect(result).toMatchObject({
         solvable: false,
         uniqueSolution: false,
       });
-      expect(result.sweepCount).toBeNull();
+      expect(result.iterationCount).toBeNull();
       expect(result.solutionBits).toBeNull();
     });
 
@@ -110,14 +110,14 @@ describe('nonograms solver unit test', () => {
         solutionBits: '1010101010101010101010101',
       };
 
-      const result: SimpleSolverOutput = checkWithSimpleSolver(puzzle);
+      const result: LineSolverOutput = checkWithLineSolver(puzzle);
 
       expect(result).toBeDefined();
       expect(result).toMatchObject({
         solvable: false,
         uniqueSolution: false,
       });
-      expect(result.sweepCount).toBeNull();
+      expect(result.iterationCount).toBeNull();
       expect(result.solutionBits).toBeNull();
     });
   });

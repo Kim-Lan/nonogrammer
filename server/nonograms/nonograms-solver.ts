@@ -1,25 +1,17 @@
 import type { CandidatePuzzle } from '../types/puzzle';
 
-export type SimpleSolverOutput = {
+export type LineSolverOutput = {
   solvable: boolean;
   uniqueSolution: boolean;
-  sweepCount: number | null;
+  iterationCount: number | null;
   solutionBits: string | null;
 };
 
-export function checkWithSimpleSolver(puzzle: CandidatePuzzle): SimpleSolverOutput {
+export function checkWithLineSolver(puzzle: CandidatePuzzle): LineSolverOutput {
 
 }
 
-export function horizontalSweep(grid: string[][], rowClues: number[][], columnClues: number[][]) {
-
-}
-
-export function verticalSweep(grid: string[][], rowClues: number[][], columnClues: number[][]) {
-
-}
-
-export function settleLine(line: string[], clues: number[]) {
+export function lineSolve(line: string[], clues: number[]) {
 
 }
 

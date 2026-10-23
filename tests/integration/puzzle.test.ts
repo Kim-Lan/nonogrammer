@@ -69,7 +69,7 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
       'difficulty',
       'generator',
       'solver',
-      'simple_solver_sweep_count',
+      'line_solver_iteration_count',
       'four_solver_intersection_count',
       'publication_status',
       'validation_status',
@@ -118,7 +118,7 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
       { name: 'difficulty', type: 'puzzle_difficulty', nullable: true },
       { name: 'generator', type: 'puzzle_generator', nullable: true },
       { name: 'solver', type: 'puzzle_solver', nullable: true },
-      { name: 'simple_solver_sweep_count', type: 'integer', nullable: true },
+      { name: 'line_solver_iteration_count', type: 'integer', nullable: true },
       { name: 'four_solver_intersection_count', type: 'integer', nullable: true },
       { name: 'publication_status', type: 'puzzle_publication_status', nullable: false },
       { name: 'validation_status', type: 'puzzle_validation_status', nullable: false },
@@ -147,7 +147,7 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
       filledCellCount: 13,
       difficulty: null,
       solver: null,
-      simpleSolverSweepCount: null,
+      lineSolverIterationCount: null,
       fourSolverIntersectionCount: null,
       publicationStatus: 'draft',
       validationStatus: 'pending',
@@ -162,11 +162,11 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
     expect(retrieved).toEqual(puzzle);
   });
 
-  it('adds and retrieves valid normal puzzle with simple solver metadata', async () => {
+  it('adds and retrieves valid normal puzzle with line solver metadata', async () => {
     const testPuzzle = makeTestPuzzle({
       difficulty: 'normal',
-      solver: 'simple',
-      simpleSolverSweepCount: 4,
+      solver: 'line',
+      lineSolverIterationCount: 4,
       fourSolverIntersectionCount: 0,
       validationStatus: 'valid',
     });
@@ -198,7 +198,7 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
     const testPuzzle = makeTestPuzzle({
       difficulty: 'hard',
       solver: 'four',
-      simpleSolverSweepCount: 4,
+      lineSolverIterationCount: 4,
       fourSolverIntersectionCount: 4,
       validationStatus: 'valid',
     });
@@ -702,8 +702,8 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
       .insert(puzzles)
       .values(makeTestPuzzle({
         difficulty: 'normal',
-        solver: 'simple',
-        simpleSolverSweepCount: 4,
+        solver: 'line',
+        lineSolverIterationCount: 4,
         fourSolverIntersectionCount: 0,
         publicationStatus: 'published',
         validationStatus: 'valid',
@@ -719,15 +719,15 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
     await expect(
       testDatabase.db.insert(puzzles).values(makeTestPuzzle({
         difficulty: 'normal',
-        solver: 'simple',
-        simpleSolverSweepCount: 4,
+        solver: 'line',
+        lineSolverIterationCount: 4,
         fourSolverIntersectionCount: 4,
         validationStatus: 'valid',
       })),
     ).rejects.toMatchObject({
       cause: {
         code: '23514',
-        constraint: 'solver_sweep_intersection_consistency',
+        constraint: 'solver_iteration_intersection_consistency',
       },
     });
   });
@@ -737,31 +737,31 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
       testDatabase.db.insert(puzzles).values(makeTestPuzzle({
         difficulty: 'hard',
         solver: 'four',
-        simpleSolverSweepCount: 4,
+        lineSolverIterationCount: 4,
         fourSolverIntersectionCount: 0,
         validationStatus: 'valid',
       })),
     ).rejects.toMatchObject({
       cause: {
         code: '23514',
-        constraint: 'solver_sweep_intersection_consistency',
+        constraint: 'solver_iteration_intersection_consistency',
       },
     });
   });
 
-  it('rejects puzzle with invalid sweep or intersection counts', async () => {
+  it('rejects puzzle with invalid iteration or intersection counts', async () => {
     await expect(
       testDatabase.db.insert(puzzles).values(makeTestPuzzle({
         difficulty: 'normal',
-        solver: 'simple',
-        simpleSolverSweepCount: 0,
+        solver: 'line',
+        lineSolverIterationCount: 0,
         fourSolverIntersectionCount: 0,
         validationStatus: 'valid',
       })),
     ).rejects.toMatchObject({
       cause: {
         code: '23514',
-        constraint: 'solver_sweep_intersection_consistency',
+        constraint: 'solver_iteration_intersection_consistency',
       },
     });
 
@@ -769,22 +769,22 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
       testDatabase.db.insert(puzzles).values(makeTestPuzzle({
         difficulty: 'hard',
         solver: 'four',
-        simpleSolverSweepCount: 0,
+        lineSolverIterationCount: 0,
         fourSolverIntersectionCount: 0,
         validationStatus: 'valid',
       })),
     ).rejects.toMatchObject({
       cause: {
         code: '23514',
-        constraint: 'solver_sweep_intersection_consistency',
+        constraint: 'solver_iteration_intersection_consistency',
       },
     });
 
     await expect(
       testDatabase.db.insert(puzzles).values(makeTestPuzzle({
         difficulty: 'normal',
-        solver: 'simple',
-        simpleSolverSweepCount: -1,
+        solver: 'line',
+        lineSolverIterationCount: -1,
         fourSolverIntersectionCount: 0,
         validationStatus: 'valid',
       })),
@@ -798,7 +798,7 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
       testDatabase.db.insert(puzzles).values(makeTestPuzzle({
         difficulty: 'hard',
         solver: 'four',
-        simpleSolverSweepCount: 0,
+        lineSolverIterationCount: 0,
         fourSolverIntersectionCount: -1,
         validationStatus: 'valid',
       })),
@@ -813,8 +813,8 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
     await expect(
       testDatabase.db.insert(puzzles).values(makeTestPuzzle({
         difficulty: 'hard',
-        solver: 'simple',
-        simpleSolverSweepCount: 4,
+        solver: 'line',
+        lineSolverIterationCount: 4,
         fourSolverIntersectionCount: 0,
         validationStatus: 'valid',
       })),
@@ -829,7 +829,7 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
       testDatabase.db.insert(puzzles).values(makeTestPuzzle({
         difficulty: 'normal',
         solver: 'four',
-        simpleSolverSweepCount: 4,
+        lineSolverIterationCount: 4,
         fourSolverIntersectionCount: 4,
         validationStatus: 'valid',
       })),
@@ -867,7 +867,7 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
     await expect(
       testDatabase.db.insert(puzzles).values(makeTestPuzzle({
         difficulty: 'normal',
-        solver: 'simple',
+        solver: 'line',
         validationStatus: 'valid',
       })),
     ).rejects.toMatchObject({
@@ -880,8 +880,8 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
     await expect(
       testDatabase.db.insert(puzzles).values(makeTestPuzzle({
         difficulty: 'normal',
-        solver: 'simple',
-        simpleSolverSweepCount: 4,
+        solver: 'line',
+        lineSolverIterationCount: 4,
         validationStatus: 'valid',
       })),
     ).rejects.toMatchObject({
@@ -894,7 +894,7 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
     await expect(
       testDatabase.db.insert(puzzles).values(makeTestPuzzle({
         difficulty: 'normal',
-        solver: 'simple',
+        solver: 'line',
         fourSolverIntersectionCount: 0,
         validationStatus: 'valid',
       })),
@@ -910,7 +910,7 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
     await expect(
       testDatabase.db.insert(puzzles).values(makeTestPuzzle({
         difficulty: 'normal',
-        solver: 'simple',
+        solver: 'line',
         validationStatus: 'pending',
       })),
     ).rejects.toMatchObject({
@@ -923,8 +923,8 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
     await expect(
       testDatabase.db.insert(puzzles).values(makeTestPuzzle({
         difficulty: 'normal',
-        solver: 'simple',
-        simpleSolverSweepCount: 4,
+        solver: 'line',
+        lineSolverIterationCount: 4,
         fourSolverIntersectionCount: 0,
         validationStatus: 'pending',
       })),
@@ -940,8 +940,8 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
     await expect(
       testDatabase.db.insert(puzzles).values(makeTestPuzzle({
         difficulty: 'normal',
-        solver: 'simple',
-        simpleSolverSweepCount: 4,
+        solver: 'line',
+        lineSolverIterationCount: 4,
         fourSolverIntersectionCount: 0,
         validationStatus: 'invalid',
       })),
@@ -955,7 +955,7 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
     await expect(
       testDatabase.db.insert(puzzles).values(makeTestPuzzle({
         difficulty: 'normal',
-        solver: 'simple',
+        solver: 'line',
         validationStatus: 'invalid',
       })),
     ).rejects.toMatchObject({
@@ -982,8 +982,8 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
       .set({
         validationStatus: 'valid',
         difficulty: 'normal',
-        solver: 'simple',
-        simpleSolverSweepCount: 4,
+        solver: 'line',
+        lineSolverIterationCount: 4,
         fourSolverIntersectionCount: 0,
       })
       .where(eq(puzzles.id, puzzle.id))
@@ -993,8 +993,8 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
       id: puzzle.id,
       validationStatus: 'valid',
       difficulty: 'normal',
-      solver: 'simple',
-      simpleSolverSweepCount: 4,
+      solver: 'line',
+      lineSolverIterationCount: 4,
       fourSolverIntersectionCount: 0,
     });
 
@@ -1091,8 +1091,8 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
       .values(makeTestPuzzle({
         validationStatus: 'valid',
         difficulty: 'normal',
-        solver: 'simple',
-        simpleSolverSweepCount: 4,
+        solver: 'line',
+        lineSolverIterationCount: 4,
         fourSolverIntersectionCount: 0,
       }))
       .returning();
@@ -1130,8 +1130,8 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
         publicationStatus: 'published',
         validationStatus: 'valid',
         difficulty: 'normal',
-        solver: 'simple',
-        simpleSolverSweepCount: 4,
+        solver: 'line',
+        lineSolverIterationCount: 4,
         fourSolverIntersectionCount: 0,
       }))
       .returning();
@@ -1147,7 +1147,7 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
           validationStatus: 'pending',
           difficulty: null,
           solver: null,
-          simpleSolverSweepCount: null,
+          lineSolverIterationCount: null,
           fourSolverIntersectionCount: null,
         })
         .where(eq(puzzles.id, puzzle.id)),
@@ -1174,8 +1174,8 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
         publicationStatus: 'published',
         validationStatus: 'valid',
         difficulty: 'normal',
-        solver: 'simple',
-        simpleSolverSweepCount: 4,
+        solver: 'line',
+        lineSolverIterationCount: 4,
         fourSolverIntersectionCount: 0,
       }))
       .returning();
@@ -1191,7 +1191,7 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
         validationStatus: 'pending',
         difficulty: null,
         solver: null,
-        simpleSolverSweepCount: null,
+        lineSolverIterationCount: null,
         fourSolverIntersectionCount: null,
       })
       .where(eq(puzzles.id, puzzle.id))
@@ -1203,7 +1203,7 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
       validationStatus: 'pending',
       difficulty: null,
       solver: null,
-      simpleSolverSweepCount: null,
+      lineSolverIterationCount: null,
       fourSolverIntersectionCount: null,
     });
 
@@ -1282,8 +1282,8 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
       testDatabase.db.insert(puzzles).values(
         makeTestPuzzle({
           difficulty: 'extreme' as NewPuzzle['difficulty'],
-          solver: 'simple',
-          simpleSolverSweepCount: 4,
+          solver: 'line',
+          lineSolverIterationCount: 4,
           fourSolverIntersectionCount: 0,
           validationStatus: 'valid',
         }),

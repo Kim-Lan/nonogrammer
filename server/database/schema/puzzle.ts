@@ -33,7 +33,7 @@ export const puzzles = snakeCase.table('puzzles', {
   difficulty: puzzleDifficultyEnum(),
   generator: puzzleGeneratorEnum(),
   solver: puzzleSolverEnum(),
-  simpleSolverSweepCount: integer(),
+  lineSolverIterationCount: integer(),
   fourSolverIntersectionCount: integer(),
 
   publicationStatus: puzzlePublicationStatusEnum().default('draft').notNull(),
@@ -76,24 +76,24 @@ export const puzzles = snakeCase.table('puzzles', {
       ${t.difficulty} IS NOT NULL
       AND ${t.solver} IS NOT NULL
       AND (
-        (${t.difficulty} = 'normal' AND ${t.solver} = 'simple')
+        (${t.difficulty} = 'normal' AND ${t.solver} = 'line')
         OR (${t.difficulty} = 'hard' AND ${t.solver} = 'four')
       )
     )
   `),
-  check('simple_solver_sweep_count_nonnegative', sql`${t.simpleSolverSweepCount} >= 0`),
+  check('line_solver_iteration_count_nonnegative', sql`${t.lineSolverIterationCount} >= 0`),
   check('four_solver_intersection_count_nonnegative', sql`${t.fourSolverIntersectionCount} >= 0`),
   check('published_puzzle_validity', sql`${t.publicationStatus} <> 'published' OR ${t.validationStatus} = 'valid'`),
-  check('solver_sweep_intersection_consistency', sql`
+  check('solver_iteration_intersection_consistency', sql`
     ${t.solver} IS NULL
     OR (
-      ${t.solver} = 'simple'
-      AND ${t.simpleSolverSweepCount} > 0
+      ${t.solver} = 'line'
+      AND ${t.lineSolverIterationCount} > 0
       AND ${t.fourSolverIntersectionCount} = 0
     )
     OR (
       ${t.solver} = 'four'
-      AND ${t.simpleSolverSweepCount} >= 0
+      AND ${t.lineSolverIterationCount} >= 0
       AND ${t.fourSolverIntersectionCount} > 0
     )
   `),
@@ -102,14 +102,14 @@ export const puzzles = snakeCase.table('puzzles', {
       ${t.validationStatus} <> 'valid'
       AND ${t.difficulty} IS NULL
       AND ${t.solver} IS NULL
-      AND ${t.simpleSolverSweepCount} IS NULL
+      AND ${t.lineSolverIterationCount} IS NULL
       AND ${t.fourSolverIntersectionCount} IS NULL
     )
     OR (
       ${t.validationStatus} = 'valid'
       AND ${t.difficulty} IS NOT NULL
       AND ${t.solver} IS NOT NULL
-      AND ${t.simpleSolverSweepCount} IS NOT NULL
+      AND ${t.lineSolverIterationCount} IS NOT NULL
       AND ${t.fourSolverIntersectionCount} IS NOT NULL
     )
   `),

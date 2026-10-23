@@ -1,7 +1,7 @@
 export const puzzleTypes = ['system', 'daily', 'community'] as const;
-export const puzzleGenerators = ['batenburg', 'tatham'] as const;
+export const puzzleGenerators = ['batenburg-kosters', 'tatham'] as const;
 export const puzzleDifficulties = ['normal', 'hard'] as const;
-export const puzzleSolvers = ['simple', 'four'] as const;
+export const puzzleSolvers = ['line', 'four'] as const;
 export const puzzlePublicationStatuses = ['draft', 'published', 'unpublished'] as const;
 export const puzzleValidationStatuses = ['pending', 'valid', 'invalid'] as const;
 
