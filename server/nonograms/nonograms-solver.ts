@@ -1,20 +1,12 @@
-import type { CandidatePuzzle } from '../types/puzzle';
+import type { CandidatePuzzle, PuzzleSolver } from '../types/puzzle';
 
-export type LineSolverOutput = {
+export type SolverOutput = {
   solvable: boolean;
   uniqueSolution: boolean;
-  iterationCount: number | null;
+  solver: PuzzleSolver;
   solutionBits: string | null;
 };
 
-export function checkWithLineSolver(puzzle: CandidatePuzzle): LineSolverOutput {
-
-}
-
-export function lineSolve(line: string[], clues: number[]) {
-
-}
-
-export function isSolved(grid: string[][], rowClues: number[][], columnClues: number[][]) {
+export function checkWithSolver(puzzle: CandidatePuzzle): SolverOutput {
 
 }
