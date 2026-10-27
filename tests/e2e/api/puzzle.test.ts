@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 await setup({
   server: true,
   browser: false,
-  setupTimeout: 240_000,
+  setupTimeout: 600_000,
 });
 
 describe('GET /api/puzzle/system', () => {

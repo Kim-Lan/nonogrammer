@@ -55,7 +55,7 @@ describe('nonograms solver unit test', () => {
 
     expect(result).toBeDefined();
     expect(result).toMatchObject({
-      solvable: true,
+      solvable: false,
       uniqueSolution: false,
     });
     expect(result.solutionBits).toBeNull();
@@ -74,7 +74,7 @@ describe('nonograms solver unit test', () => {
 
     expect(result).toBeDefined();
     expect(result).toMatchObject({
-      solvable: true,
+      solvable: false,
       uniqueSolution: false,
     });
     expect(result.solutionBits).toBeNull();

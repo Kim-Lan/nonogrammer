@@ -55,20 +55,51 @@ export function getClues(grid: string[][]): Clues {
   };
 }
 
-export function getSolutionBits(grid: string[][]): string {
+export function getSolutionBitsFromGrid(grid: string[][]): string {
   return (grid.flat()).join('');
 }
 
-export function getSolutionHash(grid: string[][]): string {
+export function getSolutionBitsFromSolverOutput(solverOutput: string): string {
+  const result = solverOutput.split('\n');
+  result.shift();
+  return result.join('').replaceAll('X', '1').replaceAll('.', '0');
+}
+
+export function getSolutionHashFromGrid(grid: string[][]): string {
   if (!isValidGrid(grid, isValidCell)) {
     throw new Error('Invalid grid');
   }
 
   const { height, width }: Dimensions = getDimensions(grid);
 
-  const solutionBits: string = getSolutionBits(grid);
+  const solutionBits: string = getSolutionBitsFromGrid(grid);
 
   return createHash('sha256')
     .update(`${height}x${width}:${solutionBits}`)
     .digest('hex');
+}
+
+export function convertPuzzleToNon(puzzle: CandidatePuzzle): string {
+  const strArray: string[] = [];
+  strArray.push(`width ${puzzle.width}`);
+  strArray.push(`height ${puzzle.height}`);
+
+  strArray.push('');
+  strArray.push('rows');
+  for (const row of puzzle.rowClues) {
+    strArray.push(row.join(','));
+  }
+
+  strArray.push('');
+  strArray.push('columns');
+  for (const column of puzzle.columnClues) {
+    strArray.push(column.join(','));
+  }
+
+  if (puzzle.solutionBits) {
+    strArray.push('');
+    strArray.push(`goal "${puzzle.solutionBits}"`);
+  }
+
+  return strArray.join('\n');
 }
