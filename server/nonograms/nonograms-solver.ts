@@ -1,3 +1,4 @@
+import type { Nullable } from '../../shared/types/puzzle';
 import type { CandidatePuzzle, PuzzleSolver } from '../types/puzzle';
 import { execSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
@@ -8,7 +9,7 @@ import { convertPuzzleToNon, getSolutionBitsFromSolverOutput } from '../utils/no
 export type SolverOutput = {
   solvable: boolean;
   uniqueSolution: boolean;
-  solver: PuzzleSolver;
+  solver: Nullable<PuzzleSolver>;
   solutionBits: string | null;
 };
 

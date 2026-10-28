@@ -2,6 +2,7 @@
 const route = useRoute();
 const height = Number(route.params.height);
 const width = Number(route.params.width);
+const difficulty = route.params.difficulty;
 
 const rowClues = ref([]);
 const columnClues = ref([]);
@@ -14,7 +15,7 @@ async function getPuzzle() {
     query: {
       height,
       width,
-      difficulty: 'normal',
+      difficulty,
     },
   });
 

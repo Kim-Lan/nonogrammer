@@ -1,3 +1,4 @@
+import type { CandidatePuzzle } from '../types/puzzle';
 import type { Dimensions } from './grid-utils';
 import { createHash } from 'node:crypto';
 import { ALLOWED_VALUES, FILLED_VALUE } from '../../shared/constants/nonograms-constants';

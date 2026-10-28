@@ -3,6 +3,8 @@ export const puzzleDifficulties = ['normal', 'hard'] as const;
 export const puzzlePublicationStatuses = ['draft', 'published', 'unpublished'] as const;
 export const puzzleValidationStatuses = ['pending', 'valid', 'invalid'] as const;
 
+export type Nullable<T> = T | null | undefined;
+
 export type PuzzleType = typeof puzzleTypes[number];
 export type PuzzleDifficulty = typeof puzzleDifficulties[number];
 export type PuzzlePublicationStatus = typeof puzzlePublicationStatuses[number];
