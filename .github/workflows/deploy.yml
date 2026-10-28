@@ -32,6 +32,9 @@ jobs:
             . "$NVM_DIR/nvm.sh"
             nvm use 24
 
+            export PNPM_HOME="$HOME/.local/share/pnpm"
+            export PATH="$PNPM_HOME:$PATH"
+
             cd ${{ secrets.APP_DIR }}
             git pull origin main
             pnpm install
