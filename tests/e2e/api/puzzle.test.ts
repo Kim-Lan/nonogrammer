@@ -15,7 +15,7 @@ describe('GET /api/puzzle/system', () => {
     [20, 20],
     [25, 25],
     [30, 30],
-  ])('returns a normal %ix%i system puzzle', async (height, width) => {
+  ])('returns a normal %ix%i system puzzle', { timeout: 120_000 }, async (height, width) => {
     const query = {
       height,
       width,

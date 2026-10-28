@@ -2,7 +2,7 @@ import { createPage, setup } from '@nuxt/test-utils/e2e';
 import { describe, expect, it } from 'vitest';
 
 await setup({
-  server: false,
+  server: true,
   browser: true,
   setupTimeout: 300_000,
 });
