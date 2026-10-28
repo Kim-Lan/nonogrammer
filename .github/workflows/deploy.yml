@@ -28,7 +28,7 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build
         run: pnpm run build
@@ -48,7 +48,7 @@ jobs:
       - name: Prepare deployment directory
         run: |
           ssh ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} \
-            "mkdir -p '${{ secrets.APP_DIR }}/.output"
+            "mkdir -p '${{ secrets.APP_DIR }}/.output'"
 
       - name: Upload build
         run: |
@@ -60,7 +60,7 @@ jobs:
 
       - name: Start or restart application
         run: |
-          ssh ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
+          ssh ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} 'bash -se' << 'EOF'
             set -e
 
             export NVM_DIR="$HOME/.nvm"
@@ -68,6 +68,6 @@ jobs:
             nvm use 24
 
             cd ${{ secrets.APP_DIR }}
-            pm2 restart nonogrammer || pm2 start ecosystem.config.cjs
+            pm2 startOrRestart ecosystem.config.cjs --update-env
             pm2 save
           EOF
