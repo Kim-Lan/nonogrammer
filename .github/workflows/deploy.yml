@@ -28,12 +28,14 @@ jobs:
       - name: Deploy
         run: |
           ssh ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
+            set -e
+
             export NVM_DIR="$HOME/.nvm"
             . "$NVM_DIR/nvm.sh"
             nvm use 24
 
             export PNPM_HOME="$HOME/.local/share/pnpm"
-            export PATH="$PNPM_HOME:$PATH"
+            export PATH="$PNPM_HOME/bin:$PATH"
 
             cd ${{ secrets.APP_DIR }}
             git pull origin main
