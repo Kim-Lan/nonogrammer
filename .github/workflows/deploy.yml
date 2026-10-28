@@ -9,11 +9,6 @@ jobs:
   deploy:
     runs-on: ${{ matrix.os }}
 
-    env:
-      NODE_ENV: production
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      DATABASE_URL_UNPOOLED: ${{ secrets.DATABASE_URL_UNPOOLED }}
-
     strategy:
       matrix:
         os: [ubuntu-latest]
