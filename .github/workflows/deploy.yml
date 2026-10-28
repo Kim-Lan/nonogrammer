@@ -18,6 +18,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Install node
+        uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm run build
+        env:
+          NITRO_PRESET: node_server
+
+      - name: Verify build
+        run: test -f .output/server/index.mjs
+
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
@@ -25,22 +45,29 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H ${{ secrets.DO_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy
+      - name: Prepare deployment directory
         run: |
-          ssh ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
+          ssh ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} \
+            "mkdir -p '${{ secrets.APP_DIR }}/.output'"
+
+      - name: Upload build
+        run: |
+          rsync -az --delete .output/ \
+            "${{ secrets.DO_USER }}@${{ secrets.DO_HOST }}:${{ secrets.APP_DIR }}/.output/"
+
+          rsync -az ecosystem.config.cjs \
+            "${{ secrets.DO_USER }}@${{ secrets.DO_HOST }}:${{ secrets.APP_DIR }}/ecosystem.config.cjs"
+
+      - name: Start or restart application
+        run: |
+          ssh ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} 'bash -se' << 'EOF'
             set -e
 
             export NVM_DIR="$HOME/.nvm"
             . "$NVM_DIR/nvm.sh"
             nvm use 24
 
-            export PNPM_HOME="$HOME/.local/share/pnpm"
-            export PATH="$PNPM_HOME/bin:$PATH"
-
             cd ${{ secrets.APP_DIR }}
-            git pull origin main
-            pnpm install
-            pnpm run build
-            pm2 restart nonogrammer || pm2 start ecosystem.config.cjs
+            pm2 startOrRestart ecosystem.config.cjs --update-env
             pm2 save
           EOF
