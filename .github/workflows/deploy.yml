@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node: [22]
+        node: [24]
 
     steps:
       - name: Checkout
@@ -28,6 +28,10 @@ jobs:
       - name: Deploy
         run: |
           ssh ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} << 'EOF'
+            export NVM_DIR="$HOME/.nvm"
+            . "$NVM_DIR/nvm.sh"
+            nvm use 24
+
             cd ${{ secrets.APP_DIR }}
             git pull origin main
             pnpm install
