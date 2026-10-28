@@ -1,7 +1,8 @@
 import type { PuzzleClues } from '../../../shared/types/puzzle';
 import { sql } from 'drizzle-orm';
 import { check, index, integer, jsonb, pgEnum, smallint, snakeCase, text, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
-import { puzzleDifficulties, puzzleGenerators, puzzlePublicationStatuses, puzzleSolvers, puzzleTypes, puzzleValidationStatuses } from '../../../shared/types/puzzle';
+import { puzzleDifficulties, puzzlePublicationStatuses, puzzleTypes, puzzleValidationStatuses } from '../../../shared/types/puzzle';
+import { puzzleGenerators, puzzleSolvers } from '../../types/puzzle';
 import { generatePuzzleSlug } from '../../utils/puzzle-utils.ts';
 
 export const puzzleTypeEnum = pgEnum('puzzle_type', puzzleTypes);
@@ -33,8 +34,6 @@ export const puzzles = snakeCase.table('puzzles', {
   difficulty: puzzleDifficultyEnum(),
   generator: puzzleGeneratorEnum(),
   solver: puzzleSolverEnum(),
-  simpleSolverSweepCount: integer(),
-  fourSolverIntersectionCount: integer(),
 
   publicationStatus: puzzlePublicationStatusEnum().default('draft').notNull(),
   validationStatus: puzzleValidationStatusEnum().default('pending').notNull(),
@@ -76,41 +75,22 @@ export const puzzles = snakeCase.table('puzzles', {
       ${t.difficulty} IS NOT NULL
       AND ${t.solver} IS NOT NULL
       AND (
-        (${t.difficulty} = 'normal' AND ${t.solver} = 'simple')
-        OR (${t.difficulty} = 'hard' AND ${t.solver} = 'four')
+        (${t.difficulty} = 'normal' AND ${t.solver} = 'line')
+        OR (${t.difficulty} = 'hard' AND ${t.solver} = 'depth-2')
       )
     )
   `),
-  check('simple_solver_sweep_count_nonnegative', sql`${t.simpleSolverSweepCount} >= 0`),
-  check('four_solver_intersection_count_nonnegative', sql`${t.fourSolverIntersectionCount} >= 0`),
   check('published_puzzle_validity', sql`${t.publicationStatus} <> 'published' OR ${t.validationStatus} = 'valid'`),
-  check('solver_sweep_intersection_consistency', sql`
-    ${t.solver} IS NULL
-    OR (
-      ${t.solver} = 'simple'
-      AND ${t.simpleSolverSweepCount} > 0
-      AND ${t.fourSolverIntersectionCount} = 0
-    )
-    OR (
-      ${t.solver} = 'four'
-      AND ${t.simpleSolverSweepCount} >= 0
-      AND ${t.fourSolverIntersectionCount} > 0
-    )
-  `),
   check('validation_solver_consistency', sql`
     (
       ${t.validationStatus} <> 'valid'
       AND ${t.difficulty} IS NULL
       AND ${t.solver} IS NULL
-      AND ${t.simpleSolverSweepCount} IS NULL
-      AND ${t.fourSolverIntersectionCount} IS NULL
     )
     OR (
       ${t.validationStatus} = 'valid'
       AND ${t.difficulty} IS NOT NULL
       AND ${t.solver} IS NOT NULL
-      AND ${t.simpleSolverSweepCount} IS NOT NULL
-      AND ${t.fourSolverIntersectionCount} IS NOT NULL
     )
   `),
 ]);

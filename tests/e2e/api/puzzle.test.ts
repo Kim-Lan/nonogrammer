@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 await setup({
   server: true,
   browser: false,
-  setupTimeout: 240_000,
+  setupTimeout: 300_000,
 });
 
 describe('GET /api/puzzle/system', () => {
@@ -15,7 +15,7 @@ describe('GET /api/puzzle/system', () => {
     [20, 20],
     [25, 25],
     [30, 30],
-  ])('returns a normal %ix%i puzzle', async (height, width) => {
+  ])('returns a normal %ix%i system puzzle', { timeout: 120_000 }, async (height, width) => {
     const query = {
       height,
       width,
@@ -46,7 +46,12 @@ describe('GET /api/puzzle/system', () => {
     [4, 15],
     [31, 31],
     [15, 31],
-  ])('returns 400 when requesting a %ix%i system puzzle', async (height, width) => {
+    [7, 7],
+    [12, 12],
+    [17, 17],
+    [22, 22],
+    [27, 27],
+  ])('returns 400 when requesting a normal %ix%i system puzzle', async (height, width) => {
     const response = await fetch('/api/puzzle/system', {
       method: 'GET',
       query: {

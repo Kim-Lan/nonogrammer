@@ -1,7 +1,7 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "cca7cde1-b1b2-4bbd-a162-141c4ab10af4",
+  "id": "ec28d82c-4189-4b5c-ab7c-36238533aac5",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
@@ -17,7 +17,7 @@
     },
     {
       "values": [
-        "batenburg",
+        "batenburg-kosters",
         "tatham"
       ],
       "name": "puzzle_generator",
@@ -36,8 +36,8 @@
     },
     {
       "values": [
-        "simple",
-        "four"
+        "line",
+        "depth-2"
       ],
       "name": "puzzle_solver",
       "entityType": "enums",
@@ -246,32 +246,6 @@
       "generated": null,
       "identity": null,
       "name": "solver",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "puzzles"
-    },
-    {
-      "type": "integer",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "simple_solver_sweep_count",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "puzzles"
-    },
-    {
-      "type": "integer",
-      "typeSchema": null,
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "four_solver_intersection_count",
       "entityType": "columns",
       "schema": "public",
       "table": "puzzles"
@@ -542,22 +516,8 @@
       "table": "puzzles"
     },
     {
-      "value": "\n    (\"difficulty\" IS NULL AND \"solver\" IS NULL)\n    OR (\n      \"difficulty\" IS NOT NULL\n      AND \"solver\" IS NOT NULL\n      AND (\n        (\"difficulty\" = 'normal' AND \"solver\" = 'simple')\n        OR (\"difficulty\" = 'hard' AND \"solver\" = 'four')\n      )\n    )\n  ",
+      "value": "\n    (\"difficulty\" IS NULL AND \"solver\" IS NULL)\n    OR (\n      \"difficulty\" IS NOT NULL\n      AND \"solver\" IS NOT NULL\n      AND (\n        (\"difficulty\" = 'normal' AND \"solver\" = 'line')\n        OR (\"difficulty\" = 'hard' AND \"solver\" = 'depth-2')\n      )\n    )\n  ",
       "name": "difficulty_solver_consistency",
-      "entityType": "checks",
-      "schema": "public",
-      "table": "puzzles"
-    },
-    {
-      "value": "\"simple_solver_sweep_count\" >= 0",
-      "name": "simple_solver_sweep_count_nonnegative",
-      "entityType": "checks",
-      "schema": "public",
-      "table": "puzzles"
-    },
-    {
-      "value": "\"four_solver_intersection_count\" >= 0",
-      "name": "four_solver_intersection_count_nonnegative",
       "entityType": "checks",
       "schema": "public",
       "table": "puzzles"
@@ -570,14 +530,7 @@
       "table": "puzzles"
     },
     {
-      "value": "\n    \"solver\" IS NULL\n    OR (\n      \"solver\" = 'simple'\n      AND \"simple_solver_sweep_count\" > 0\n      AND \"four_solver_intersection_count\" = 0\n    )\n    OR (\n      \"solver\" = 'four'\n      AND \"simple_solver_sweep_count\" >= 0\n      AND \"four_solver_intersection_count\" > 0\n    )\n  ",
-      "name": "solver_sweep_intersection_consistency",
-      "entityType": "checks",
-      "schema": "public",
-      "table": "puzzles"
-    },
-    {
-      "value": "\n    (\n      \"validation_status\" <> 'valid'\n      AND \"difficulty\" IS NULL\n      AND \"solver\" IS NULL\n      AND \"simple_solver_sweep_count\" IS NULL\n      AND \"four_solver_intersection_count\" IS NULL\n    )\n    OR (\n      \"validation_status\" = 'valid'\n      AND \"difficulty\" IS NOT NULL\n      AND \"solver\" IS NOT NULL\n      AND \"simple_solver_sweep_count\" IS NOT NULL\n      AND \"four_solver_intersection_count\" IS NOT NULL\n    )\n  ",
+      "value": "\n    (\n      \"validation_status\" <> 'valid'\n      AND \"difficulty\" IS NULL\n      AND \"solver\" IS NULL\n    )\n    OR (\n      \"validation_status\" = 'valid'\n      AND \"difficulty\" IS NOT NULL\n      AND \"solver\" IS NOT NULL\n    )\n  ",
       "name": "validation_solver_consistency",
       "entityType": "checks",
       "schema": "public",
