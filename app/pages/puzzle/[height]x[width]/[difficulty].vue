@@ -2,6 +2,7 @@
 const route = useRoute();
 const height = Number(route.params.height);
 const width = Number(route.params.width);
+const difficulty = route.params.difficulty;
 
 const rowClues = ref([]);
 const columnClues = ref([]);
@@ -14,7 +15,7 @@ async function getPuzzle() {
     query: {
       height,
       width,
-      difficulty: 'normal',
+      difficulty,
     },
   });
 
@@ -24,7 +25,7 @@ async function getPuzzle() {
 </script>
 
 <template>
-  <UContainer class="flex justify-center pt-8">
+  <UContainer class="flex justify-center">
     <PuzzleContainer :height :width :row-clues :column-clues />
   </UContainer>
 </template>

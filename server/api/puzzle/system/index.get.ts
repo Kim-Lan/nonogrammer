@@ -1,5 +1,5 @@
-import type { PublicPuzzle, PuzzleDifficulty } from '../../../../shared/types/puzzle';
-import { getSystemPuzzleBySizeAndDifficulty } from '../../../repository/PuzzleRepository';
+import type { Nullable, PublicPuzzle, PuzzleDifficulty } from '../../../../shared/types/puzzle';
+import { getSystemPuzzle } from '../../../repository/PuzzleRepository';
 
 export default defineEventHandler<{
   query: {
@@ -18,13 +18,13 @@ export default defineEventHandler<{
     });
   }
 
-  const puzzle: PublicPuzzle = getSystemPuzzleBySizeAndDifficulty(parseInt(height), parseInt(width), difficulty as PuzzleDifficulty);
+  const puzzle: Nullable<PublicPuzzle> = getSystemPuzzle(parseInt(height), parseInt(width), difficulty as PuzzleDifficulty);
 
   if (!puzzle) {
     throw createError({
       status: 500,
       statusText: 'Internal Server Error',
-      message: 'Failed to find puzzle',
+      message: 'Failed to generate puzzle',
     });
   }
 

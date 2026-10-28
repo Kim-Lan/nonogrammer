@@ -1,6 +1,6 @@
 import type { Clues } from '../../../../server/utils/nonograms-utils';
 import { describe, expect, it } from 'vitest';
-import { getBlocks, getClues, getSolutionBits, getSolutionHash } from '../../../../server/utils/nonograms-utils';
+import { getBlocks, getClues, getSolutionBitsFromGrid, getSolutionBitsFromSolverOutput, getSolutionHashFromGrid } from '../../../../server/utils/nonograms-utils';
 
 const sampleGrid = [
   ['0', '1', '1', '0', '1'],
@@ -30,16 +30,28 @@ describe('nonograms utils unit test', () => {
   });
 
   it('gets correct solution bits', () => {
-    expect(getSolutionBits(sampleGrid)).toBe('0110111000100011111000011');
+    expect(getSolutionBitsFromGrid(sampleGrid)).toBe('0110111000100011111000011');
   });
 
   it('creates a consistent solution hash', () => {
-    const hashA = getSolutionHash(sampleGrid);
-    const hashB = getSolutionHash(sampleGrid);
+    const hashA = getSolutionHashFromGrid(sampleGrid);
+    const hashB = getSolutionHashFromGrid(sampleGrid);
 
     expect(hashA).toBeDefined();
     expect(hashA).toHaveLength(64);
     expect(hashB).toHaveLength(64);
     expect(hashA).toBe(hashB);
+  });
+
+  it('gets correct solution bits from pbnsolve solver output', () => {
+    const solverOutput = 'UNIQUE LINE SOLUTION:\n'
+      + 'X.X.X\n'
+      + '.X.X.\n'
+      + 'X.X.X\n'
+      + '.X.X.\n'
+      + 'X.X.X';
+
+    const solutionBits = getSolutionBitsFromSolverOutput(solverOutput);
+    expect(solutionBits).toBe('1010101010101010101010101');
   });
 });

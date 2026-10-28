@@ -1,31 +1,23 @@
-import type { PublicPuzzle, PuzzleDifficulty } from '../../shared/types/puzzle';
+import type { Nullable, PublicPuzzle, PuzzleDifficulty } from '../../shared/types/puzzle';
 // import { and, eq, sql } from 'drizzle-orm';
 // import db from '../database';
 // import { puzzles } from '../database/schema';
-import { generateNormalPuzzleBySize } from '../nonograms/nonograms-generator';
+import { generatePuzzle } from '../nonograms/nonograms-generator';
 
 const VALID_SYSTEM_PUZZLE_SIZES = [5, 10, 15, 20, 25, 30];
 
-export function getSystemPuzzleBySizeAndDifficulty(height: number, width: number, difficulty: PuzzleDifficulty): PublicPuzzle {
-  if (difficulty !== 'normal') {
-    throw createError({
-      status: 400,
-      statusText: 'Bad Request',
-      message: 'Only normal difficulty puzzles are available currently',
-    });
-  }
-
+export function getSystemPuzzle(height: number, width: number, difficulty: PuzzleDifficulty): Nullable<PublicPuzzle> {
   if (height !== width || !VALID_SYSTEM_PUZZLE_SIZES.includes(height)) {
     throw createError({
       status: 400,
       statusText: 'Bad Request',
-      message: 'Invalid puzzle dimensions',
+      message: 'Invalid system puzzle dimensions',
     });
   }
 
-  const normalPuzzle = generateNormalPuzzleBySize(height, width);
+  const puzzle = generatePuzzle(height, width, difficulty);
 
-  return normalPuzzle;
+  return puzzle;
 
   // return await db
   //   .select({

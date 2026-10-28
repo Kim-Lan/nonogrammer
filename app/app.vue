@@ -31,6 +31,11 @@ const navItems = computed<NavigationMenuItem[]>(() => [{
   label: 'Play',
   to: '/puzzle',
   active: route.path.startsWith('/puzzle'),
+},
+{
+  label: 'Credits',
+  to: '/credits',
+  active: route.path.startsWith('/credits'),
 }]);
 </script>
 
@@ -59,7 +64,7 @@ const navItems = computed<NavigationMenuItem[]>(() => [{
       </template>
     </UHeader>
 
-    <UMain class="min-h-(--ui-main-height)">
+    <UMain class="min-h-(--ui-main-height) pt-8">
       <NuxtPage />
     </UMain>
 
