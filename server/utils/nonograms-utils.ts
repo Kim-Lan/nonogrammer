@@ -3,10 +3,16 @@ import type { CandidatePuzzle } from '../types/puzzle';
 import type { Dimensions, Grid, Line } from './grid-utils';
 import { createHash } from 'node:crypto';
 import { ALLOWED_VALUES, EMPTY_VALUE, FILLED_VALUE } from '../../shared/constants/nonograms-constants';
+import { arraySum } from './array-utils';
 import { getColumn, getDimensions, isValidGrid } from './grid-utils';
 
 export function isValidCell(value: unknown): boolean {
   return typeof value === 'string' && ALLOWED_VALUES.includes(value);
+}
+
+export function createEmptyPuzzleGrid(height: number, width: number): Grid<string> {
+  return Array.from({ length: height },
+    () => Array.from({ length: width }).fill(EMPTY_VALUE)) as Grid<string>;
 }
 
 export function getBlocks(arr: Line<string>): ClueGroup {
@@ -95,4 +101,19 @@ export function convertPuzzleToNon(puzzle: CandidatePuzzle): string {
   }
 
   return strArray.join('\n');
+}
+
+export function hasSpace(grid: Grid<string>, rowIndex: number, columnIndex: number): boolean {
+  const { height, width }: Dimensions = getDimensions(grid);
+
+  const rowSum: number = arraySum(grid[rowIndex]!);
+  const columnSum: number = arraySum(getColumn(grid, columnIndex));
+
+  if (rowSum >= (height - 1)) {
+    return false;
+  } else if (columnSum >= (width - 1)) {
+    return false;
+  }
+
+  return true;
 }

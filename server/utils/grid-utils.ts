@@ -52,3 +52,13 @@ export function getDimensions(grid: Grid<string>): Dimensions {
 
   return { height, width };
 }
+
+export function convertIndexTo2D(index: number, width: number): { rowIndex: number; columnIndex: number } {
+  const rowIndex: number = Math.floor(index / width);
+  const columnIndex: number = index % width;
+  return { rowIndex, columnIndex };
+}
+
+export function convert2DToIndex(rowIndex: number, columnIndex: number, width: number): number {
+  return rowIndex * width + columnIndex;
+}

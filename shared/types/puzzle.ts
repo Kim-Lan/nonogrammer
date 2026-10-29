@@ -15,6 +15,7 @@ export type ClueGroup = number[];
 
 export type PublicPuzzle = {
   slug: string;
+  type: PuzzleType;
   height: number;
   width: number;
   rowClues: Clues;

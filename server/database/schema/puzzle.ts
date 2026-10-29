@@ -94,6 +94,3 @@ export const puzzles = snakeCase.table('puzzles', {
     )
   `),
 ]);
-
-export type Puzzle = typeof puzzles.$inferSelect;
-export type NewPuzzle = typeof puzzles.$inferInsert;
