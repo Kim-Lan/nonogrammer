@@ -7,7 +7,7 @@ export default defineEventHandler<{
     width: string;
     difficulty: string;
   };
-}>((event) => {
+}>(async (event) => {
   const { height, width, difficulty } = getQuery(event);
 
   if (difficulty !== 'normal' && difficulty !== 'hard') {
@@ -18,13 +18,13 @@ export default defineEventHandler<{
     });
   }
 
-  const puzzle: Nullable<PublicPuzzle> = getSystemPuzzle(parseInt(height), parseInt(width), difficulty as PuzzleDifficulty);
+  const puzzle: Nullable<PublicPuzzle> = await getSystemPuzzle(parseInt(height), parseInt(width), difficulty as PuzzleDifficulty);
 
   if (!puzzle) {
     throw createError({
       status: 500,
       statusText: 'Internal Server Error',
-      message: 'Failed to generate puzzle',
+      message: 'Failed to get puzzle',
     });
   }
 

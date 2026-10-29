@@ -1,14 +1,13 @@
 import type { Nullable, PublicPuzzle, PuzzleDifficulty } from '../../shared/types/puzzle';
 import type { GeneratedPuzzle, NewPuzzle } from '../types/puzzle';
 // import { and, eq, sql } from 'drizzle-orm';
-// import db from '../database';
-// import { puzzles } from '../database/schema';
+import db from '../database';
+import { puzzles } from '../database/schema';
 import { generatePuzzle } from '../nonograms/nonograms-generator';
-import { generatePuzzleSlug } from '../utils/puzzle-utils';
 
 const VALID_SYSTEM_PUZZLE_SIZES = [5, 10, 15, 20, 25, 30];
 
-export function getSystemPuzzle(height: number, width: number, difficulty: PuzzleDifficulty): PublicPuzzle {
+export async function getSystemPuzzle(height: number, width: number, difficulty: PuzzleDifficulty): Promise<PublicPuzzle> {
   if (height !== width || !VALID_SYSTEM_PUZZLE_SIZES.includes(height)) {
     throw createError({
       status: 400,
@@ -27,11 +26,45 @@ export function getSystemPuzzle(height: number, width: number, difficulty: Puzzl
     });
   }
 
-  const puzzle: NewPuzzle = {
+  const foundPuzzle = await db.query.puzzles.findFirst({
+    where: {
+      height,
+      width,
+      solutionBits: generatedPuzzle.solutionBits,
+      difficulty,
+    },
+  });
+
+  if (foundPuzzle) {
+    return {
+      slug: foundPuzzle.slug,
+      type: foundPuzzle.type,
+      height,
+      width,
+      rowClues: foundPuzzle.rowClues,
+      columnClues: foundPuzzle.columnClues,
+      solutionHash: foundPuzzle.solutionHash,
+      difficulty,
+    };
+  }
+
+  const newPuzzle: NewPuzzle = {
     ...generatedPuzzle,
-    slug: generatePuzzleSlug(),
     type: 'system',
   };
+
+  const [puzzle] = await db
+    .insert(puzzles)
+    .values(newPuzzle)
+    .returning();
+
+  if (!puzzle) {
+    throw createError({
+      status: 500,
+      statusText: 'Internal Server Error',
+      message: 'Failed to add puzzle to database',
+    });
+  }
 
   return {
     slug: puzzle.slug!,
