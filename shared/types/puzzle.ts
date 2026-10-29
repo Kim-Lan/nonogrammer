@@ -9,14 +9,16 @@ export type PuzzleType = typeof puzzleTypes[number];
 export type PuzzleDifficulty = typeof puzzleDifficulties[number];
 export type PuzzlePublicationStatus = typeof puzzlePublicationStatuses[number];
 export type PuzzleValidationStatus = typeof puzzleValidationStatuses[number];
-export type PuzzleClues = number[][];
+
+export type Clues = ClueGroup[];
+export type ClueGroup = number[];
 
 export type PublicPuzzle = {
   slug: string;
   height: number;
   width: number;
-  rowClues: PuzzleClues;
-  columnClues: PuzzleClues;
+  rowClues: Clues;
+  columnClues: Clues;
   solutionHash: string;
   difficulty: PuzzleDifficulty | null;
 };

@@ -1,6 +1,8 @@
 export type NonEmptyArray<T> = [T, ...T[]];
 
-export type Grid<T> = NonEmptyArray<NonEmptyArray<T>>;
+export type Grid<T> = NonEmptyArray<Line<T>>;
+
+export type Line<T> = NonEmptyArray<T>;
 
 export type Dimensions = {
   height: number;
@@ -32,7 +34,7 @@ export function isValidGrid<T>(
   );
 }
 
-export function getColumn(grid: string[][], index: number): string[] {
+export function getColumn(grid: Grid<string>, index: number): Line<string> {
   if (!isGrid(grid)) {
     throw new Error('Invalid grid');
   }
@@ -41,14 +43,10 @@ export function getColumn(grid: string[][], index: number): string[] {
     throw new Error('Invalid index');
   }
 
-  return grid.map(row => row[index]!);
+  return grid.map(row => row[index]!) as Line<string>;
 }
 
-export function getDimensions(grid: string[][]): Dimensions {
-  if (!isGrid(grid)) {
-    throw new Error('Invalid grid');
-  }
-
+export function getDimensions(grid: Grid<string>): Dimensions {
   const height: number = grid.length;
   const width: number = grid[0].length;
 

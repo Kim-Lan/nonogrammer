@@ -1,23 +1,15 @@
+import type { ClueGroup, Clues } from '../../shared/types/puzzle';
 import type { CandidatePuzzle } from '../types/puzzle';
-import type { Dimensions } from './grid-utils';
+import type { Dimensions, Grid, Line } from './grid-utils';
 import { createHash } from 'node:crypto';
-import { ALLOWED_VALUES, FILLED_VALUE } from '../../shared/constants/nonograms-constants';
+import { ALLOWED_VALUES, EMPTY_VALUE, FILLED_VALUE } from '../../shared/constants/nonograms-constants';
 import { getColumn, getDimensions, isValidGrid } from './grid-utils';
-
-export type Clues = {
-  rowClues: number[][];
-  columnClues: number[][];
-};
 
 export function isValidCell(value: unknown): boolean {
   return typeof value === 'string' && ALLOWED_VALUES.includes(value);
 }
 
-export function getBlocks(arr: string[]): number[] {
-  if (!arr) {
-    throw new Error('Invalid line');
-  }
-
+export function getBlocks(arr: Line<string>): ClueGroup {
   const result: number[] = [];
 
   let current = 0;
@@ -38,14 +30,14 @@ export function getBlocks(arr: string[]): number[] {
   return result;
 }
 
-export function getClues(grid: string[][]): Clues {
+export function getClues(grid: Grid<string>): { rowClues: Clues; columnClues: Clues } {
   if (!isValidGrid(grid, isValidCell)) {
     throw new Error('Invalid grid');
   }
 
-  const rowClues: number[][] = grid.map(row => getBlocks(row));
+  const rowClues: Clues = grid.map(row => getBlocks(row));
 
-  const columnClues: number[][] = Array.from(
+  const columnClues: Clues = Array.from(
     { length: grid[0].length },
     (_, c) => getBlocks(getColumn(grid, c)),
   );
@@ -56,17 +48,17 @@ export function getClues(grid: string[][]): Clues {
   };
 }
 
-export function getSolutionBitsFromGrid(grid: string[][]): string {
+export function getSolutionBitsFromGrid(grid: Grid<string>): string {
   return (grid.flat()).join('');
 }
 
 export function getSolutionBitsFromSolverOutput(solverOutput: string): string {
   const result = solverOutput.split('\n');
   result.shift();
-  return result.join('').replaceAll('X', '1').replaceAll('.', '0');
+  return result.join('').replaceAll('X', FILLED_VALUE).replaceAll('.', EMPTY_VALUE);
 }
 
-export function getSolutionHashFromGrid(grid: string[][]): string {
+export function getSolutionHashFromGrid(grid: Grid<string>): string {
   if (!isValidGrid(grid, isValidCell)) {
     throw new Error('Invalid grid');
   }
