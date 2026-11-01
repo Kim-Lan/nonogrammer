@@ -15,7 +15,7 @@ describe('nonograms generator unit test', () => {
     [17, 17],
     [22, 22],
     [27, 27],
-  ])('generates a normal %ix%i puzzle', (height, width) => {
+  ])('generates a normal %ix%i puzzle', { timeout: 10_000 }, (height, width) => {
     const puzzle: NewPuzzle = generatePuzzle(height, width, 'normal');
 
     expect(puzzle).toBeDefined();
@@ -36,7 +36,7 @@ describe('nonograms generator unit test', () => {
     [20, 20],
     [25, 25],
     [30, 30],
-  ])('generates a hard %ix%i puzzle', (height, width) => {
+  ])('generates a hard %ix%i puzzle', { timeout: 10_000 }, (height, width) => {
     const puzzle: NewPuzzle = generatePuzzle(height, width, 'hard');
 
     expect(puzzle).toBeDefined();

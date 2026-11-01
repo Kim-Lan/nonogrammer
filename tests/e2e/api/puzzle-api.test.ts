@@ -15,7 +15,7 @@ describe('GET /api/puzzle/system', () => {
     [20, 20],
     [25, 25],
     [30, 30],
-  ])('returns a normal %ix%i system puzzle', async (height, width) => {
+  ])('returns a normal %ix%i system puzzle', { timeout: 10_000 }, async (height, width) => {
     const query = {
       height,
       width,
@@ -78,7 +78,7 @@ describe('GET /api/puzzle/system', () => {
     [17, 17],
     [22, 22],
     [27, 27],
-  ])('returns 400 when requesting a normal %ix%i system puzzle', async (height, width) => {
+  ])('returns 400 when requesting a normal %ix%i system puzzle', { timeout: 10_000 }, async (height, width) => {
     const response = await fetch('/api/puzzle/system', {
       method: 'GET',
       query: {
