@@ -1,12 +1,14 @@
 import type { Nullable, PublicPuzzle, PuzzleDifficulty } from '../../shared/types/puzzle';
+import type { GeneratedPuzzle, NewPuzzle } from '../types/puzzle';
 // import { and, eq, sql } from 'drizzle-orm';
-// import db from '../database';
-// import { puzzles } from '../database/schema';
+import { createError } from 'nuxt/server';
+import db from '../database';
+import { puzzles } from '../database/schema';
 import { generatePuzzle } from '../nonograms/nonograms-generator';
 
 const VALID_SYSTEM_PUZZLE_SIZES = [5, 10, 15, 20, 25, 30];
 
-export function getSystemPuzzle(height: number, width: number, difficulty: PuzzleDifficulty): Nullable<PublicPuzzle> {
+export async function getSystemPuzzle(height: number, width: number, difficulty: PuzzleDifficulty): Promise<PublicPuzzle> {
   if (height !== width || !VALID_SYSTEM_PUZZLE_SIZES.includes(height)) {
     throw createError({
       status: 400,
@@ -15,9 +17,69 @@ export function getSystemPuzzle(height: number, width: number, difficulty: Puzzl
     });
   }
 
-  const puzzle = generatePuzzle(height, width, difficulty);
+  const generatedPuzzle: Nullable<GeneratedPuzzle> = generatePuzzle(height, width, difficulty);
 
-  return puzzle;
+  if (!generatedPuzzle) {
+    throw createError({
+      status: 500,
+      statusText: 'Internal Server Error',
+      message: 'Failed to generate puzzle',
+    });
+  }
+
+  const foundPuzzle = await db.query.puzzles.findFirst({
+    where: {
+      type: 'system',
+      height,
+      width,
+      solutionBits: generatedPuzzle.solutionBits,
+      difficulty,
+    },
+  });
+
+  if (foundPuzzle) {
+    return {
+      slug: foundPuzzle.slug,
+      type: foundPuzzle.type,
+      height,
+      width,
+      rowClues: foundPuzzle.rowClues,
+      columnClues: foundPuzzle.columnClues,
+      solutionHash: foundPuzzle.solutionHash,
+      difficulty,
+    };
+  }
+
+  const newPuzzle: NewPuzzle = {
+    ...generatedPuzzle,
+    type: 'system',
+    publicationStatus: 'published',
+    validationStatus: 'valid',
+  };
+
+  const [puzzle] = await db
+    .insert(puzzles)
+    .values(newPuzzle)
+    .returning();
+
+  if (!puzzle) {
+    throw createError({
+      status: 500,
+      statusText: 'Internal Server Error',
+      message: 'Failed to add puzzle to database',
+    });
+  }
+
+  return {
+    slug: puzzle.slug!,
+    type: puzzle.type!,
+    height,
+    width,
+    rowClues: puzzle.rowClues,
+    columnClues: puzzle.columnClues,
+    solutionHash: puzzle.solutionHash,
+    difficulty,
+  };
 
   // return await db
   //   .select({

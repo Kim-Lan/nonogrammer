@@ -1,4 +1,4 @@
-import './lib/env';
+import './lib/env.ts';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -32,15 +32,11 @@ export default defineNuxtConfig({
     compatibilityVersion: 5,
   },
 
-  compatibilityDate: '2026-06-30',
+  experimental: {
+    nitroAutoImports: true,
+  },
 
-  // nitro: {
-  //   cloudflare: {
-  //     wrangler: {
-  //       previews: {},
-  //     },
-  //   },
-  // },
+  compatibilityDate: '2026-06-30',
 
   eslint: {
     config: {

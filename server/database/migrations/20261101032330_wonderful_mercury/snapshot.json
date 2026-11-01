@@ -1,7 +1,7 @@
 {
   "version": "8",
   "dialect": "postgres",
-  "id": "ec28d82c-4189-4b5c-ab7c-36238533aac5",
+  "id": "d0a4238a-1d64-42e0-9739-ee03b6ef2e08",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
@@ -12,15 +12,6 @@
         "hard"
       ],
       "name": "puzzle_difficulty",
-      "entityType": "enums",
-      "schema": "public"
-    },
-    {
-      "values": [
-        "batenburg-kosters",
-        "tatham"
-      ],
-      "name": "puzzle_generator",
       "entityType": "enums",
       "schema": "public"
     },
@@ -220,19 +211,6 @@
       "generated": null,
       "identity": null,
       "name": "difficulty",
-      "entityType": "columns",
-      "schema": "public",
-      "table": "puzzles"
-    },
-    {
-      "type": "puzzle_generator",
-      "typeSchema": "public",
-      "notNull": false,
-      "dimensions": 0,
-      "default": null,
-      "generated": null,
-      "identity": null,
-      "name": "generator",
       "entityType": "columns",
       "schema": "public",
       "table": "puzzles"
@@ -504,13 +482,6 @@
     {
       "value": "\n    CASE\n      WHEN jsonb_typeof(\"row_clues\") = 'array'\n        AND jsonb_typeof(\"column_clues\") = 'array'\n      THEN\n        jsonb_array_length(\"row_clues\") = \"height\"\n        AND jsonb_array_length(\"column_clues\") = \"width\"\n      ELSE TRUE\n    END\n  ",
       "name": "clue_dimensions",
-      "entityType": "checks",
-      "schema": "public",
-      "table": "puzzles"
-    },
-    {
-      "value": "\n    \"type\" NOT IN ('system', 'daily')\n    OR \"generator\" IS NOT NULL\n  ",
-      "name": "generator_consistency",
       "entityType": "checks",
       "schema": "public",
       "table": "puzzles"
