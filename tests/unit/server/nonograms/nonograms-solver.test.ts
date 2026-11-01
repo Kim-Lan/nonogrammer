@@ -16,7 +16,7 @@ describe('nonograms solver unit test', () => {
 
     expect(result).toBeDefined();
     expect(result).toMatchObject({
-      solvable: true,
+      valid: true,
       uniqueSolution: true,
       solver: 'line',
     });
@@ -36,7 +36,7 @@ describe('nonograms solver unit test', () => {
 
     expect(result).toBeDefined();
     expect(result).toMatchObject({
-      solvable: true,
+      valid: true,
       uniqueSolution: true,
       solver: 'line',
     });
@@ -55,7 +55,7 @@ describe('nonograms solver unit test', () => {
 
     expect(result).toBeDefined();
     expect(result).toMatchObject({
-      solvable: false,
+      valid: false,
       uniqueSolution: false,
     });
     expect(result.solutionBits).toBeNull();
@@ -74,13 +74,13 @@ describe('nonograms solver unit test', () => {
 
     expect(result).toBeDefined();
     expect(result).toMatchObject({
-      solvable: false,
+      valid: false,
       uniqueSolution: false,
     });
     expect(result.solutionBits).toBeNull();
   });
 
-  it('detects an unsolvable puzzle', () => {
+  it('detects an unvalid puzzle', () => {
     const puzzle: CandidatePuzzle = {
       height: 5,
       width: 5,
@@ -92,14 +92,14 @@ describe('nonograms solver unit test', () => {
 
     expect(result).toBeDefined();
     expect(result).toMatchObject({
-      solvable: false,
+      valid: false,
       uniqueSolution: false,
     });
     expect(result.solver).toBeNull();
     expect(result.solutionBits).toBeNull();
   });
 
-  it('detects an unsolvable puzzle when given an incorrect solution', () => {
+  it('detects an unvalid puzzle when given an incorrect solution', () => {
     const puzzle: CandidatePuzzle = {
       height: 5,
       width: 5,
@@ -112,7 +112,7 @@ describe('nonograms solver unit test', () => {
 
     expect(result).toBeDefined();
     expect(result).toMatchObject({
-      solvable: false,
+      valid: false,
       uniqueSolution: false,
     });
     expect(result.solver).toBeNull();

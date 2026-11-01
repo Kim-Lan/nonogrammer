@@ -1,12 +1,11 @@
-import type { PuzzleClues } from '../../../shared/types/puzzle';
+import type { Clues } from '../../../shared/types/puzzle';
 import { sql } from 'drizzle-orm';
 import { check, index, integer, jsonb, pgEnum, smallint, snakeCase, text, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
 import { puzzleDifficulties, puzzlePublicationStatuses, puzzleTypes, puzzleValidationStatuses } from '../../../shared/types/puzzle';
-import { puzzleGenerators, puzzleSolvers } from '../../types/puzzle';
+import { puzzleSolvers } from '../../types/puzzle';
 import { generatePuzzleSlug } from '../../utils/puzzle-utils.ts';
 
 export const puzzleTypeEnum = pgEnum('puzzle_type', puzzleTypes);
-export const puzzleGeneratorEnum = pgEnum('puzzle_generator', puzzleGenerators);
 export const puzzleDifficultyEnum = pgEnum('puzzle_difficulty', puzzleDifficulties);
 export const puzzleSolverEnum = pgEnum('puzzle_solver', puzzleSolvers);
 export const puzzlePublicationStatusEnum = pgEnum('puzzle_publication_status', puzzlePublicationStatuses);
@@ -21,8 +20,8 @@ export const puzzles = snakeCase.table('puzzles', {
   height: smallint().notNull(),
   width: smallint().notNull(),
 
-  rowClues: jsonb().$type<PuzzleClues>().notNull(),
-  columnClues: jsonb().$type<PuzzleClues>().notNull(),
+  rowClues: jsonb().$type<Clues>().notNull(),
+  columnClues: jsonb().$type<Clues>().notNull(),
 
   solutionBits: text().notNull(),
   solutionHash: text().notNull(),
@@ -32,7 +31,6 @@ export const puzzles = snakeCase.table('puzzles', {
   ),
 
   difficulty: puzzleDifficultyEnum(),
-  generator: puzzleGeneratorEnum(),
   solver: puzzleSolverEnum(),
 
   publicationStatus: puzzlePublicationStatusEnum().default('draft').notNull(),
@@ -65,10 +63,6 @@ export const puzzles = snakeCase.table('puzzles', {
       ELSE TRUE
     END
   `),
-  check('generator_consistency', sql`
-    ${t.type} NOT IN ('system', 'daily')
-    OR ${t.generator} IS NOT NULL
-  `),
   check('difficulty_solver_consistency', sql`
     (${t.difficulty} IS NULL AND ${t.solver} IS NULL)
     OR (
@@ -94,6 +88,3 @@ export const puzzles = snakeCase.table('puzzles', {
     )
   `),
 ]);
-
-export type Puzzle = typeof puzzles.$inferSelect;
-export type NewPuzzle = typeof puzzles.$inferInsert;

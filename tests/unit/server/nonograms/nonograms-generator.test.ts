@@ -1,4 +1,4 @@
-import type { PublicPuzzle } from '../../../../shared/types/puzzle';
+import type { NewPuzzle } from '../../../../server/database/schema';
 import { describe, expect, it } from 'vitest';
 import { generatePuzzle } from '../../../../server/nonograms/nonograms-generator';
 
@@ -15,15 +15,16 @@ describe('nonograms generator unit test', () => {
     [17, 17],
     [22, 22],
     [27, 27],
-  ])('generates a normal %ix%i puzzle', (height, width) => {
-    const puzzle: PublicPuzzle = generatePuzzle(height, width, 'normal');
+  ])('generates a normal %ix%i puzzle', { timeout: 10_000 }, (height, width) => {
+    const puzzle: NewPuzzle = generatePuzzle(height, width, 'normal');
 
     expect(puzzle).toBeDefined();
-    expect(puzzle.slug).toMatch(/^[a-f0-9]{24}$/); // 12 bytes hexadecimal
     expect(puzzle.height).toBe(height);
     expect(puzzle.width).toBe(width);
     expect(puzzle.rowClues).toHaveLength(height);
     expect(puzzle.columnClues).toHaveLength(width);
+    expect(puzzle.solutionBits).toHaveLength(height * width);
+    expect(puzzle.solutionBits).toMatch(/^[01]+$/);
     expect(puzzle.solutionHash).toMatch(/^[a-f0-9]{64}$/); // SHA-256 hexadecimal
     expect(puzzle.difficulty).toBe('normal');
   });
@@ -35,15 +36,16 @@ describe('nonograms generator unit test', () => {
     [20, 20],
     [25, 25],
     [30, 30],
-  ])('generates a hard %ix%i puzzle', (height, width) => {
-    const puzzle: PublicPuzzle = generatePuzzle(height, width, 'hard');
+  ])('generates a hard %ix%i puzzle', { timeout: 10_000 }, (height, width) => {
+    const puzzle: NewPuzzle = generatePuzzle(height, width, 'hard');
 
     expect(puzzle).toBeDefined();
-    expect(puzzle.slug).toMatch(/^[a-f0-9]{24}$/); // 12 bytes hexadecimal
     expect(puzzle.height).toBe(height);
     expect(puzzle.width).toBe(width);
     expect(puzzle.rowClues).toHaveLength(height);
     expect(puzzle.columnClues).toHaveLength(width);
+    expect(puzzle.solutionBits).toHaveLength(height * width);
+    expect(puzzle.solutionBits).toMatch(/^[01]+$/);
     expect(puzzle.solutionHash).toMatch(/^[a-f0-9]{64}$/); // SHA-256 hexadecimal
     expect(puzzle.difficulty).toBe('hard');
   });

@@ -1,10 +1,10 @@
-import type { NewPuzzle } from '../../server/database/schema';
-import type { TestDatabase } from '../helper/database';
+import type { NewPuzzle } from '../../../server/database/schema';
+import type { TestDatabase } from '../../helper/database';
 import { randomUUID } from 'node:crypto';
 import { eq, sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { puzzles } from '../../server/database/schema';
-import { dockerAvailable, startTestDatabase } from '../helper/database';
+import { puzzles } from '../../../server/database/schema';
+import { dockerAvailable, startTestDatabase } from '../../helper/database';
 
 const hasDocker = await dockerAvailable();
 
@@ -20,7 +20,6 @@ if (!hasDocker) {
 function makeTestPuzzle(overrides: Partial<NewPuzzle> = {}): NewPuzzle {
   return {
     type: 'system',
-    generator: 'tatham',
     height: 5,
     width: 5,
     rowClues: [[1], [3], [5], [3], [1]],
@@ -31,7 +30,7 @@ function makeTestPuzzle(overrides: Partial<NewPuzzle> = {}): NewPuzzle {
   };
 }
 
-describe.runIf(hasDocker)('puzzle schema integration', () => {
+describe.runIf(hasDocker)('puzzle schema integration test', () => {
   let testDatabase: TestDatabase;
 
   beforeAll(async () => {
@@ -67,7 +66,6 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
       'solution_hash',
       'filled_cell_count',
       'difficulty',
-      'generator',
       'solver',
       'publication_status',
       'validation_status',
@@ -114,7 +112,6 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
       { name: 'solution_hash', type: 'text', nullable: false },
       { name: 'filled_cell_count', type: 'smallint', nullable: true },
       { name: 'difficulty', type: 'puzzle_difficulty', nullable: true },
-      { name: 'generator', type: 'puzzle_generator', nullable: true },
       { name: 'solver', type: 'puzzle_solver', nullable: true },
       { name: 'publication_status', type: 'puzzle_publication_status', nullable: false },
       { name: 'validation_status', type: 'puzzle_validation_status', nullable: false },
@@ -606,48 +603,6 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
     });
   });
 
-  it('rejects system puzzle without generator', async () => {
-    await expect(
-      testDatabase.db.insert(puzzles).values(makeTestPuzzle({
-        type: 'system',
-        generator: null,
-      })),
-    ).rejects.toMatchObject({
-      cause: {
-        code: '23514',
-        constraint: 'generator_consistency',
-      },
-    });
-  });
-
-  it('rejects faily puzzle without generator', async () => {
-    await expect(
-      testDatabase.db.insert(puzzles).values(makeTestPuzzle({
-        type: 'daily',
-        generator: null,
-      })),
-    ).rejects.toMatchObject({
-      cause: {
-        code: '23514',
-        constraint: 'generator_consistency',
-      },
-    });
-  });
-
-  it('allows community puzzle without generator', async () => {
-    const [puzzle] = await testDatabase.db
-      .insert(puzzles)
-      .values(makeTestPuzzle({
-        type: 'community',
-        generator: null,
-      }))
-      .returning();
-
-    expect(puzzle).toBeDefined();
-    expect(puzzle.type).toBe('community');
-    expect(puzzle.generator).toBeNull();
-  });
-
   it('rejects published puzzle with pending validation', async () => {
     await expect(
       testDatabase.db.insert(puzzles).values(makeTestPuzzle({
@@ -1051,7 +1006,6 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
         INSERT INTO puzzles (
           slug,
           type,
-          generator,
           height,
           width,
           row_clues,
@@ -1063,7 +1017,6 @@ describe.runIf(hasDocker)('puzzle schema integration', () => {
         VALUES (
           'generated-column-test',
           'system',
-          'tatham',
           5,
           5,
           '[[1],[3],[5],[3],[1]]'::jsonb,

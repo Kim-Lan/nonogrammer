@@ -1,5 +1,4 @@
 CREATE TYPE "puzzle_difficulty" AS ENUM('normal', 'hard');--> statement-breakpoint
-CREATE TYPE "puzzle_generator" AS ENUM('batenburg-kosters', 'tatham');--> statement-breakpoint
 CREATE TYPE "puzzle_publication_status" AS ENUM('draft', 'published', 'unpublished');--> statement-breakpoint
 CREATE TYPE "puzzle_solver" AS ENUM('line', 'depth-2');--> statement-breakpoint
 CREATE TYPE "puzzle_type" AS ENUM('system', 'daily', 'community');--> statement-breakpoint
@@ -16,7 +15,6 @@ CREATE TABLE "puzzles" (
 	"solution_hash" text NOT NULL,
 	"filled_cell_count" smallint GENERATED ALWAYS AS (length(replace("solution_bits", '0', ''))) STORED,
 	"difficulty" "puzzle_difficulty",
-	"generator" "puzzle_generator",
 	"solver" "puzzle_solver",
 	"publication_status" "puzzle_publication_status" DEFAULT 'draft'::"puzzle_publication_status" NOT NULL,
 	"validation_status" "puzzle_validation_status" DEFAULT 'pending'::"puzzle_validation_status" NOT NULL,
@@ -39,10 +37,6 @@ CREATE TABLE "puzzles" (
         AND jsonb_array_length("column_clues") = "width"
       ELSE TRUE
     END
-  ),
-	CONSTRAINT "generator_consistency" CHECK (
-    "type" NOT IN ('system', 'daily')
-    OR "generator" IS NOT NULL
   ),
 	CONSTRAINT "difficulty_solver_consistency" CHECK (
     ("difficulty" IS NULL AND "solver" IS NULL)

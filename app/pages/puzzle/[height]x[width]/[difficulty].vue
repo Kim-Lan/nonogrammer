@@ -4,8 +4,8 @@ const height = Number(route.params.height);
 const width = Number(route.params.width);
 const difficulty = route.params.difficulty;
 
-const rowClues = ref([]);
-const columnClues = ref([]);
+const rowClues = ref<Clues>([]);
+const columnClues = ref<Clues>([]);
 
 onMounted(async () => await getPuzzle());
 
