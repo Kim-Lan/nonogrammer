@@ -64,6 +64,12 @@ export function getSolutionBitsFromSolverOutput(solverOutput: string): string {
   return result.join('').replaceAll('X', FILLED_VALUE).replaceAll('.', EMPTY_VALUE);
 }
 
+export function getSolutionHash(height: number, width: number, solutionBits: string): string {
+  return createHash('sha256')
+    .update(`${height}x${width}:${solutionBits}`)
+    .digest('hex');
+};
+
 export function getSolutionHashFromGrid(grid: Grid<string>): string {
   if (!isValidGrid(grid, isValidCell)) {
     throw new Error('Invalid grid');
@@ -73,9 +79,7 @@ export function getSolutionHashFromGrid(grid: Grid<string>): string {
 
   const solutionBits: string = getSolutionBitsFromGrid(grid);
 
-  return createHash('sha256')
-    .update(`${height}x${width}:${solutionBits}`)
-    .digest('hex');
+  return getSolutionHash(height, width, solutionBits);
 }
 
 export function convertPuzzleToNon(puzzle: CandidatePuzzle): string {

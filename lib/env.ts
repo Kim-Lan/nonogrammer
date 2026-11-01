@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import tryParseEnv from './try-parse-env';
+import tryParseEnv from './try-parse-env.ts';
 
 const EnvSchema = z.object({
   NODE_ENV: z.string(),

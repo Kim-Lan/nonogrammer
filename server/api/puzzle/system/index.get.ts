@@ -1,14 +1,13 @@
 import type { Nullable, PublicPuzzle, PuzzleDifficulty } from '../../../../shared/types/puzzle';
+import { createError, defineEventHandler, getQuery } from 'nuxt/server';
 import { getSystemPuzzle } from '../../../repository/PuzzleRepository';
 
-export default defineEventHandler<{
-  query: {
+export default defineEventHandler(async (event) => {
+  const { height, width, difficulty } = getQuery<{
     height: string;
     width: string;
     difficulty: string;
-  };
-}>(async (event) => {
-  const { height, width, difficulty } = getQuery(event);
+  }>(event);
 
   if (difficulty !== 'normal' && difficulty !== 'hard') {
     throw createError({

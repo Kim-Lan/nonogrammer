@@ -1,6 +1,7 @@
 import type { Nullable, PublicPuzzle, PuzzleDifficulty } from '../../shared/types/puzzle';
 import type { GeneratedPuzzle, NewPuzzle } from '../types/puzzle';
 // import { and, eq, sql } from 'drizzle-orm';
+import { createError } from 'nuxt/server';
 import db from '../database';
 import { puzzles } from '../database/schema';
 import { generatePuzzle } from '../nonograms/nonograms-generator';
@@ -28,6 +29,7 @@ export async function getSystemPuzzle(height: number, width: number, difficulty:
 
   const foundPuzzle = await db.query.puzzles.findFirst({
     where: {
+      type: 'system',
       height,
       width,
       solutionBits: generatedPuzzle.solutionBits,
@@ -51,6 +53,8 @@ export async function getSystemPuzzle(height: number, width: number, difficulty:
   const newPuzzle: NewPuzzle = {
     ...generatedPuzzle,
     type: 'system',
+    publicationStatus: 'published',
+    validationStatus: 'valid',
   };
 
   const [puzzle] = await db

@@ -30,7 +30,7 @@ function makeTestPuzzle(overrides: Partial<NewPuzzle> = {}): NewPuzzle {
   };
 }
 
-describe.runIf(hasDocker)('puzzle schema integration', () => {
+describe.runIf(hasDocker)('puzzle schema integration test', () => {
   let testDatabase: TestDatabase;
 
   beforeAll(async () => {
