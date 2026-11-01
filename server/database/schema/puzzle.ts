@@ -2,11 +2,10 @@ import type { Clues } from '../../../shared/types/puzzle';
 import { sql } from 'drizzle-orm';
 import { check, index, integer, jsonb, pgEnum, smallint, snakeCase, text, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
 import { puzzleDifficulties, puzzlePublicationStatuses, puzzleTypes, puzzleValidationStatuses } from '../../../shared/types/puzzle';
-import { puzzleGenerators, puzzleSolvers } from '../../types/puzzle';
+import { puzzleSolvers } from '../../types/puzzle';
 import { generatePuzzleSlug } from '../../utils/puzzle-utils.ts';
 
 export const puzzleTypeEnum = pgEnum('puzzle_type', puzzleTypes);
-export const puzzleGeneratorEnum = pgEnum('puzzle_generator', puzzleGenerators);
 export const puzzleDifficultyEnum = pgEnum('puzzle_difficulty', puzzleDifficulties);
 export const puzzleSolverEnum = pgEnum('puzzle_solver', puzzleSolvers);
 export const puzzlePublicationStatusEnum = pgEnum('puzzle_publication_status', puzzlePublicationStatuses);
@@ -32,7 +31,6 @@ export const puzzles = snakeCase.table('puzzles', {
   ),
 
   difficulty: puzzleDifficultyEnum(),
-  generator: puzzleGeneratorEnum(),
   solver: puzzleSolverEnum(),
 
   publicationStatus: puzzlePublicationStatusEnum().default('draft').notNull(),
@@ -64,10 +62,6 @@ export const puzzles = snakeCase.table('puzzles', {
         AND jsonb_array_length(${t.columnClues}) = ${t.width}
       ELSE TRUE
     END
-  `),
-  check('generator_consistency', sql`
-    ${t.type} NOT IN ('system', 'daily')
-    OR ${t.generator} IS NOT NULL
   `),
   check('difficulty_solver_consistency', sql`
     (${t.difficulty} IS NULL AND ${t.solver} IS NULL)
