@@ -1,5 +1,6 @@
 <template>
   <div>
+    <UBanner icon="material-symbols:warning-rounded" title="This site is currently under development. Expected release in Spring 2027." />
     <UPageHero
       title="Nonogrammer"
       description="A website to play Nonograms, the grid logic puzzle game, online."

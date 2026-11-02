@@ -41,7 +41,7 @@ const navItems = computed<NavigationMenuItem[]>(() => [{
 
 <template>
   <UApp>
-    <UHeader>
+    <UHeader class="static">
       <template #left>
         <NuxtLink
           to="/"
@@ -64,7 +64,7 @@ const navItems = computed<NavigationMenuItem[]>(() => [{
       </template>
     </UHeader>
 
-    <UMain class="min-h-(--ui-main-height) pt-8">
+    <UMain class="min-h-fit">
       <NuxtPage />
     </UMain>
 
