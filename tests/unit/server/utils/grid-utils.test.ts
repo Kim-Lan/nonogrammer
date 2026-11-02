@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { getColumn, getDimensions, isGrid, isValidGrid } from '../../../../server/utils/grid-utils';
+import { convert2DToIndex, convertIndexTo2D, getColumn, getDimensions, isGrid, isValidGrid } from '../../../../server/utils/grid-utils';
 import { isValidCell } from '../../../../server/utils/nonograms-utils';
 
 const sampleGrid = [
@@ -63,5 +63,27 @@ describe('grid utils unit test', () => {
       height: 5,
       width: 5,
     });
+  });
+
+  it.each([
+    [0, 5, 0, 0],
+    [1, 5, 0, 1],
+    [2, 5, 0, 2],
+    [3, 5, 0, 3],
+    [4, 5, 0, 4],
+    [5, 5, 1, 0],
+    [10, 5, 2, 0],
+    [12, 5, 2, 2],
+  ])('gets the correct 2D grid coordinate from a 1D grid index %i', (index: number, width: number, rowIndex: number, columnIndex: number) => {
+    expect(convertIndexTo2D(index, width)).toMatchObject({ rowIndex, columnIndex });
+  });
+
+  it.each([
+    [0, 0, 5, 0],
+    [0, 2, 5, 2],
+    [2, 0, 5, 10],
+    [2, 2, 5, 12],
+  ])('gets the correct 1D grid index from a 2D grid coordinate (%i, %i)', (rowIndex: number, columnIndex: number, width: number, index: number) => {
+    expect(convert2DToIndex(rowIndex, columnIndex, width)).toBe(index);
   });
 });
