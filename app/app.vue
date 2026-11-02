@@ -13,8 +13,8 @@ useHead({
   },
 });
 
-const title = 'Nonogrammer';
-const description = 'A website to play Nonograms, the grid logic puzzle game, online.';
+const title = 'nonogrammer';
+const description = 'A website to play nonograms, the grid logic puzzle game, online.';
 
 useSeoMeta({
   title,

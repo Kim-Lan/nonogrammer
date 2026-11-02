@@ -1,5 +1,5 @@
 <template>
   <h1 class="font-mono font-bold text-xl md:text-2xl">
-    Nonogrammer
+    nonogrammer
   </h1>
 </template>

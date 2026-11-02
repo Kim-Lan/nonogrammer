@@ -1,8 +1,8 @@
 <template>
   <UContainer class="py-4 lg:py-8">
-    Nonogrammer is developed by Kim-Lan and released under the AGPL-3.0 license.
+    nonogrammer is developed by Kim-Lan and released under the AGPL-3.0 license.
     <br><br>
-    On the backend, Nonogrammer uses Jan Wolter's open source
+    On the backend, nonogrammer uses Jan Wolter's open source
     <ULink href="https://webpbn.com/pbnsolve.html" target="_blank">
       pbnsolve
     </ULink>
