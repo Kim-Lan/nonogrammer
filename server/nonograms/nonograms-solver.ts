@@ -4,6 +4,7 @@ import { execSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
+import { createError } from 'nuxt/server';
 import { convertPuzzleToNon, getSolutionBitsFromSolverOutput } from '../utils/nonograms-utils';
 
 export type SolverOutput = {
@@ -21,8 +22,18 @@ export function checkWithSolver(puzzle: CandidatePuzzle): SolverOutput {
   const solverPath = path.join(__dirname, 'solver', 'pbnsolve');
 
   fs.writeFileSync(testPath, data);
-  const solverOutput = (execSync(`${solverPath} -aLEC -d2 ${testPath}`)).toString();
-  fs.unlinkSync(testPath);
+  let solverOutput = '';
+  try {
+    solverOutput = (execSync(`${solverPath} -aLEC -d2 ${testPath}`)).toString();
+  } catch {
+    throw createError({
+      status: 500,
+      statusText: 'Internal Server Error',
+      message: 'Failed to use pbnsolve to validate puzzle',
+    });
+  } finally {
+    fs.unlinkSync(testPath);
+  }
 
   const uniqueSolution = solverOutput.toLowerCase().includes('unique');
   const lineSolvable = solverOutput.toLowerCase().includes('line');

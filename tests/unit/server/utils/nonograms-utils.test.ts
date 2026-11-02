@@ -1,6 +1,17 @@
-import type { Clues } from '../../../../server/utils/nonograms-utils';
+import type { Grid } from '../../../../server/types/grid';
+import type { CandidatePuzzle } from '../../../../server/types/puzzle';
+import type { Clues } from '../../../../shared/types/puzzle';
 import { describe, expect, it } from 'vitest';
-import { getBlocks, getClues, getSolutionBitsFromGrid, getSolutionBitsFromSolverOutput, getSolutionHashFromGrid } from '../../../../server/utils/nonograms-utils';
+import {
+  convertPuzzleToNon,
+  getBlocks,
+  getClues,
+  getSolutionBitsFromGrid,
+  getSolutionBitsFromSolverOutput,
+  getSolutionHash,
+  getSolutionHashFromGrid,
+  hasSpace,
+} from '../../../../server/utils/nonograms-utils';
 
 const sampleGrid = [
   ['0', '1', '1', '0', '1'],
@@ -29,18 +40,8 @@ describe('nonograms utils unit test', () => {
     expect(clues.columnClues).toEqual([[3], [2, 1], [1, 1], [2], [1, 1, 1]]);
   });
 
-  it('gets correct solution bits', () => {
+  it('gets correct solution bits from a grid', () => {
     expect(getSolutionBitsFromGrid(sampleGrid)).toBe('0110111000100011111000011');
-  });
-
-  it('creates a consistent solution hash', () => {
-    const hashA = getSolutionHashFromGrid(sampleGrid);
-    const hashB = getSolutionHashFromGrid(sampleGrid);
-
-    expect(hashA).toBeDefined();
-    expect(hashA).toHaveLength(64);
-    expect(hashB).toHaveLength(64);
-    expect(hashA).toBe(hashB);
   });
 
   it('gets correct solution bits from pbnsolve solver output', () => {
@@ -53,5 +54,68 @@ describe('nonograms utils unit test', () => {
 
     const solutionBits = getSolutionBitsFromSolverOutput(solverOutput);
     expect(solutionBits).toBe('1010101010101010101010101');
+  });
+
+  it('creates a consistent solution hash from puzzle info', () => {
+    const solutionBits = '1010101010101010101010101';
+    const hashA = getSolutionHash(5, 5, solutionBits);
+    const hashB = getSolutionHash(5, 5, solutionBits);
+
+    expect(hashA).toBeDefined();
+    expect(hashA).toHaveLength(64);
+    expect(hashB).toHaveLength(64);
+    expect(hashA).toBe(hashB);
+  });
+
+  it('creates a consistent solution hash from a grid', () => {
+    const hashA = getSolutionHashFromGrid(sampleGrid);
+    const hashB = getSolutionHashFromGrid(sampleGrid);
+
+    expect(hashA).toBeDefined();
+    expect(hashA).toHaveLength(64);
+    expect(hashB).toHaveLength(64);
+    expect(hashA).toBe(hashB);
+  });
+
+  it('creates the correct .non file from a candidate puzzle', () => {
+    const puzzle: CandidatePuzzle = {
+      height: 5,
+      width: 5,
+      rowClues: [[1, 1, 1], [1, 1], [1, 1, 1], [1, 1], [1, 1, 1]],
+      columnClues: [[1, 1, 1], [1, 1], [1, 1, 1], [1, 1], [1, 1, 1]],
+      solutionBits: '1010101010101010101010101',
+    };
+
+    expect(convertPuzzleToNon(puzzle)).toBe(
+      'width 5\n'
+      + 'height 5\n\n'
+      + 'rows\n'
+      + '1,1,1\n'
+      + '1,1\n'
+      + '1,1,1\n'
+      + '1,1\n'
+      + '1,1,1\n\n'
+      + 'columns\n'
+      + '1,1,1\n'
+      + '1,1\n'
+      + '1,1,1\n'
+      + '1,1\n'
+      + '1,1,1\n\n'
+      + 'goal "1010101010101010101010101"',
+    );
+  });
+
+  it('correctly determines whether a row / column has space for another filled cell (preventing full lines)', () => {
+    const grid: Grid<string> = [
+      ['0', '1', '1', '1', '0'],
+      ['1', '1', '1', '1', '0'],
+      ['1', '1', '0', '0', '0'],
+      ['1', '1', '0', '0', '0'],
+      ['0', '0', '0', '0', '0'],
+    ];
+    expect(hasSpace(grid, 0, 0)).toBe(true);
+    expect(hasSpace(grid, 1, 4)).toBe(false);
+    expect(hasSpace(grid, 4, 0)).toBe(true);
+    expect(hasSpace(grid, 4, 1)).toBe(false);
   });
 });

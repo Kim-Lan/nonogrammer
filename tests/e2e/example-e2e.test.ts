@@ -10,8 +10,8 @@ await setup({
 describe('browser', () => {
   it('runs a test', { timeout: 120_000 }, async () => {
     const page = await createPage('/');
-    const text = await page.getByRole('link', { name: 'Nonogrammer' }).textContent();
-    expect(text).toContain('Nonogrammer');
+    const text = await page.getByRole('link', { name: 'nonogrammer' }).textContent();
+    expect(text).toContain('nonogrammer');
     await page.close();
   });
 });

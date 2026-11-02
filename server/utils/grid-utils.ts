@@ -1,13 +1,4 @@
-export type NonEmptyArray<T> = [T, ...T[]];
-
-export type Grid<T> = NonEmptyArray<Line<T>>;
-
-export type Line<T> = NonEmptyArray<T>;
-
-export type Dimensions = {
-  height: number;
-  width: number;
-};
+import type { Dimensions, Grid, Line } from '../types/grid';
 
 export function isGrid(value: unknown): value is Grid<unknown> {
   return (
