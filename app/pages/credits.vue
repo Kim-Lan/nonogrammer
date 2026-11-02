@@ -1,5 +1,5 @@
 <template>
-  <UContainer>
+  <UContainer class="py-4 lg:py-8">
     Nonogrammer is developed by Kim-Lan and released under the AGPL-3.0 license.
     <br><br>
     On the backend, Nonogrammer uses Jan Wolter's open source
