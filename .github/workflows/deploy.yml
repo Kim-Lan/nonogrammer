@@ -63,7 +63,7 @@ jobs:
           rsync -az ecosystem.config.cjs \
             "${{ secrets.DO_USER }}@${{ secrets.DO_HOST }}:${{ secrets.APP_DIR }}/ecosystem.config.cjs"
 
-      - name: Start or restart application
+      - name: Start or reload application
         run: |
           ssh ${{ secrets.DO_USER }}@${{ secrets.DO_HOST }} 'bash -se' << 'EOF'
             set -e
@@ -73,6 +73,6 @@ jobs:
             nvm use 24
 
             cd ${{ secrets.APP_DIR }}
-            pm2 startOrRestart ecosystem.config.cjs --update-env
+            pm2 startOrReload ecosystem.config.cjs --update-env
             pm2 save
           EOF
