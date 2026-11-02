@@ -4,7 +4,9 @@ module.exports = {
       name: 'nonogrammer',
       port: '3002',
       exec_mode: 'cluster',
-      instances: 'max',
+      instances: '1',
+      listen_timeout: 15000,
+      kill_timeout: 10000,
       cwd: '/var/www/nonogrammer.com/',
       script: './.output/server/index.mjs',
       env: {
