@@ -25,7 +25,7 @@ async function getPuzzle() {
 </script>
 
 <template>
-  <UContainer class="flex justify-center">
+  <UContainer class="flex justify-center py-4 lg:py-8">
     <PuzzleContainer :height :width :row-clues :column-clues />
   </UContainer>
 </template>
