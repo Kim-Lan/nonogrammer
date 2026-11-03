@@ -1,12 +1,9 @@
-import { createPage, setup } from '@nuxt/test-utils/e2e';
+import { createPage } from '@nuxt/test-utils/e2e';
 import { describe, expect, it } from 'vitest';
+import { setupE2E } from '../setup';
 
 describe('homepage e2e test', async () => {
-  await setup({
-    server: true,
-    browser: true,
-    setupTimeout: 240_000,
-  });
+  await setupE2E();
 
   it('navigates to the homepage', async () => {
     const page = await createPage('/');

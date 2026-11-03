@@ -1,12 +1,9 @@
-import { $fetch, fetch, setup } from '@nuxt/test-utils/e2e';
+import { $fetch, fetch } from '@nuxt/test-utils/e2e';
 import { describe, expect, it } from 'vitest';
+import { setupE2E } from '../setup';
 
 describe('GET /api/puzzle/system', async () => {
-  await setup({
-    server: true,
-    browser: false,
-    setupTimeout: 240_000,
-  });
+  await setupE2E();
 
   it.each([
     [5, 5],
@@ -33,7 +30,7 @@ describe('GET /api/puzzle/system', async () => {
     expect(response.rowClues).toHaveLength(height);
     expect(response.columnClues).toHaveLength(width);
     expect(response.solutionHash).toMatch(/^[a-f0-9]{64}$/); // SHA-256 hexadecimal
-  }, 10_000);
+  });
 
   it.each([
     [5, 5],
@@ -60,7 +57,7 @@ describe('GET /api/puzzle/system', async () => {
     expect(response.rowClues).toHaveLength(height);
     expect(response.columnClues).toHaveLength(width);
     expect(response.solutionHash).toMatch(/^[a-f0-9]{64}$/); // SHA-256 hexadecimal
-  }, 10_000);
+  });
 
   it.each([
     [5, 10],

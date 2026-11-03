@@ -1,12 +1,9 @@
-import { createPage, setup } from '@nuxt/test-utils/e2e';
+import { createPage } from '@nuxt/test-utils/e2e';
 import { describe, expect, it } from 'vitest';
+import { setupE2E } from '../setup';
 
 describe('puzzle index page e2e test', async () => {
-  await setup({
-    server: true,
-    browser: true,
-    setupTimeout: 240_000,
-  });
+  await setupE2E();
 
   it.each([
     ['normal', '5x5'],
@@ -21,23 +18,27 @@ describe('puzzle index page e2e test', async () => {
     ['hard', '20x20'],
     ['hard', '25x25'],
     ['hard', '30x30'],
-  ])('navigates to the selected puzzle page: %s %s', async (difficulty: string, size: string) => {
+  ])('navigates to the selected puzzle page from the puzzle index: %s %s', async (difficulty: string, size: string) => {
     const page = await createPage('/puzzle');
 
-    // Select puzzle difficulty
-    await page.getByRole('combobox', { name: 'Puzzle Difficulty' }).click();
-    await page.getByRole('option', { name: difficulty, exact: true }).click();
+    try {
+      // Select puzzle difficulty
+      await page.getByRole('combobox', { name: 'Puzzle Difficulty' }).click();
+      await page.getByRole('option', { name: difficulty, exact: true }).click();
 
-    // Select puzzle size
-    await page.getByRole('combobox', { name: 'Puzzle Size' }).click();
-    await page.getByRole('option', { name: size, exact: true }).click();
+      // Select puzzle size
+      await page.getByRole('combobox', { name: 'Puzzle Size' }).click();
+      await page.getByRole('option', { name: size, exact: true }).click();
 
-    // Navigate to puzzle
-    await page.getByRole('button', { name: 'Go to Puzzle' }).click();
+      // Navigate to puzzle
+      await page.getByRole('button', { name: 'Go to Puzzle' }).click();
 
-    // Verify navigation
-    const expectedPath = `/puzzle/${difficulty}/${size}`;
-    await page.waitForURL(`**${expectedPath}`);
-    expect(new URL(page.url()).pathname).toBe(expectedPath);
+      // Verify navigation
+      const expectedPath = `/puzzle/${difficulty}/${size}`;
+      await page.waitForURL(`**${expectedPath}`);
+      expect(new URL(page.url()).pathname).toBe(expectedPath);
+    } finally {
+      await page.close();
+    }
   });
 });
