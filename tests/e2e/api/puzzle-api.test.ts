@@ -1,13 +1,13 @@
 import { $fetch, fetch, setup } from '@nuxt/test-utils/e2e';
 import { describe, expect, it } from 'vitest';
 
-await setup({
-  server: true,
-  browser: false,
-  setupTimeout: 300_000,
-});
-
 describe('GET /api/puzzle/system', () => {
+  await setup({
+    server: true,
+    browser: false,
+    setupTimeout: 240_000,
+  });
+
   it.each([
     [5, 5],
     [10, 10],
