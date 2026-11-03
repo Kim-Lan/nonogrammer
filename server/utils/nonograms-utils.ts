@@ -1,6 +1,6 @@
 import type { ClueGroup, Clues } from '../../shared/types/puzzle';
+import type { Dimensions, Grid, Line } from '../types/grid';
 import type { CandidatePuzzle } from '../types/puzzle';
-import type { Dimensions, Grid, Line } from './grid-utils';
 import { createHash } from 'node:crypto';
 import { ALLOWED_VALUES, EMPTY_VALUE, FILLED_VALUE } from '../../shared/constants/nonograms-constants';
 import { arraySum } from './array-utils';
@@ -110,8 +110,8 @@ export function convertPuzzleToNon(puzzle: CandidatePuzzle): string {
 export function hasSpace(grid: Grid<string>, rowIndex: number, columnIndex: number): boolean {
   const { height, width }: Dimensions = getDimensions(grid);
 
-  const rowSum: number = arraySum(grid[rowIndex]!);
-  const columnSum: number = arraySum(getColumn(grid, columnIndex));
+  const rowSum: number = arraySum(Array.from(grid[rowIndex]!, Number));
+  const columnSum: number = arraySum(Array.from(getColumn(grid, columnIndex), Number));
 
   if (rowSum >= (height - 1)) {
     return false;
