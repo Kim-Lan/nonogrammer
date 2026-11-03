@@ -15,7 +15,7 @@ describe('GET /api/puzzle/system', async () => {
     [20, 20],
     [25, 25],
     [30, 30],
-  ])('returns a normal %ix%i system puzzle', { timeout: 10_000 }, async (height, width) => {
+  ])('returns a normal %ix%i system puzzle', async (height, width) => {
     const query = {
       height,
       width,
@@ -33,7 +33,7 @@ describe('GET /api/puzzle/system', async () => {
     expect(response.rowClues).toHaveLength(height);
     expect(response.columnClues).toHaveLength(width);
     expect(response.solutionHash).toMatch(/^[a-f0-9]{64}$/); // SHA-256 hexadecimal
-  });
+  }, 10_000);
 
   it.each([
     [5, 5],
@@ -60,7 +60,7 @@ describe('GET /api/puzzle/system', async () => {
     expect(response.rowClues).toHaveLength(height);
     expect(response.columnClues).toHaveLength(width);
     expect(response.solutionHash).toMatch(/^[a-f0-9]{64}$/); // SHA-256 hexadecimal
-  });
+  }, 10_000);
 
   it.each([
     [5, 10],

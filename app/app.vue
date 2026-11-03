@@ -27,21 +27,73 @@ useSeoMeta({
 
 const route = useRoute();
 
-const navItems = computed<NavigationMenuItem[]>(() => [{
-  label: 'Play',
-  to: '/puzzle',
-  active: route.path.startsWith('/puzzle'),
-},
-{
-  label: 'Credits',
-  to: '/credits',
-  active: route.path.startsWith('/credits'),
-}]);
+const navItems = computed<NavigationMenuItem[]>(() => [
+  {
+    label: 'Play',
+    to: '/puzzle',
+    active: route.path.startsWith('/puzzle'),
+    children: [
+      {
+        label: 'normal 5x5',
+        to: '/puzzle/5x5/normal',
+      },
+      {
+        label: 'hard 5x5',
+        to: '/puzzle/5x5/hard',
+      },
+      {
+        label: 'normal 10x10',
+        to: '/puzzle/10x10/normal',
+      },
+      {
+        label: 'hard 10x10',
+        to: '/puzzle/10x10/hard',
+      },
+      {
+        label: 'normal 15x15',
+        to: '/puzzle/15x15/normal',
+      },
+      {
+        label: 'hard 15x15',
+        to: '/puzzle/15x15/hard',
+      },
+      {
+        label: 'normal 20x20',
+        to: '/puzzle/20x20/normal',
+      },
+      {
+        label: 'hard 20x20',
+        to: '/puzzle/20x20/hard',
+      },
+      {
+        label: 'normal 25x25',
+        to: '/puzzle/25x25/normal',
+      },
+      {
+        label: 'hard 25x25',
+        to: '/puzzle/25x25/hard',
+      },
+      {
+        label: 'normal 30x30',
+        to: '/puzzle/30x30/normal',
+      },
+      {
+        label: 'hard 30x30',
+        to: '/puzzle/30x30/hard',
+      },
+    ],
+  },
+  {
+    label: 'Credits',
+    to: '/credits',
+    active: route.path.startsWith('/credits'),
+  },
+]);
 </script>
 
 <template>
   <UApp>
-    <UHeader class="static">
+    <UHeader class="relative z-50">
       <template #left>
         <NuxtLink
           to="/"
@@ -52,15 +104,21 @@ const navItems = computed<NavigationMenuItem[]>(() => [{
       </template>
 
       <template #right>
-        <UNavigationMenu :items="navItems" />
+        <UNavigationMenu
+          :items="navItems"
+          class="hidden lg:flex w-80 justify-end"
+        />
 
-        <USeparator orientation="vertical" class="h-10 mx-1" />
+        <USeparator orientation="vertical" class="hidden lg:block h-10 mx-1" />
 
         <UColorModeButton />
       </template>
 
       <template #body>
-        <UNavigationMenu :items="navItems" orientation="vertical" class="-mx-2.5" />
+        <UNavigationMenu
+          :items="navItems"
+          orientation="vertical"
+        />
       </template>
     </UHeader>
 
