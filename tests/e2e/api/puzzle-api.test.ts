@@ -1,13 +1,10 @@
-import { $fetch, fetch, setup } from '@nuxt/test-utils/e2e';
+import { $fetch, fetch } from '@nuxt/test-utils/e2e';
 import { describe, expect, it } from 'vitest';
+import { setupE2E } from '../setup';
 
-await setup({
-  server: true,
-  browser: false,
-  setupTimeout: 300_000,
-});
+describe('GET /api/puzzle/system', async () => {
+  await setupE2E();
 
-describe('GET /api/puzzle/system', () => {
   it.each([
     [5, 5],
     [10, 10],
@@ -15,7 +12,7 @@ describe('GET /api/puzzle/system', () => {
     [20, 20],
     [25, 25],
     [30, 30],
-  ])('returns a normal %ix%i system puzzle', { timeout: 10_000 }, async (height, width) => {
+  ])('returns a normal %ix%i system puzzle', async (height, width) => {
     const query = {
       height,
       width,

@@ -35,11 +35,6 @@ const fontSize = computed(() => {
 provide('height', props.height);
 provide('width', props.width);
 provide('cellSize', cellSize);
-
-// const rowClues: number[][] = Array.from({ length: props.height },
-//   () => Array.from({ length: Math.floor(props.width / 2) }).fill(1)) as number[][];
-// const columnClues: number[][] = Array.from({ length: props.width },
-//   () => Array.from({ length: Math.floor(props.height / 2) }).fill(1)) as number[][];
 </script>
 
 <template>
@@ -93,7 +88,6 @@ provide('cellSize', cellSize);
   .puzzle-cell {
     box-sizing: border-box;
     background-color: white;
-    position: relative;
 
     &:not(.last-row) {
       border-bottom: v-bind(thinBorder);
