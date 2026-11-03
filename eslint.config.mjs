@@ -21,6 +21,7 @@ export default withNuxt(
       'node/no-process-env': ['error'],
       'antfu/consistent-list-newline': 'off',
       'test/prefer-lowercase-title': 'off',
+      'vue/no-multiple-template-root': 'off',
     },
   }),
   betterTailwindcss.configs['correctness-error'],
