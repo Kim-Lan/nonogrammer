@@ -22,6 +22,7 @@ export default withNuxt(
       'antfu/consistent-list-newline': 'off',
       'test/prefer-lowercase-title': 'off',
       'vue/no-multiple-template-root': 'off',
+      'vue/html-self-closing': 'off',
     },
   }),
   betterTailwindcss.configs['correctness-error'],
