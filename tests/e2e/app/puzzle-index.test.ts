@@ -23,8 +23,9 @@ describe('puzzle index page e2e test', async () => {
 
     try {
       // Select puzzle difficulty
+      const capitalizedDifficulty = difficulty.charAt(0).toUpperCase() + difficulty.substring(1);
       await page.getByRole('combobox', { name: 'Puzzle Difficulty' }).click();
-      await page.getByRole('option', { name: difficulty, exact: true }).click();
+      await page.getByRole('option', { name: capitalizedDifficulty, exact: true }).click();
 
       // Select puzzle size
       await page.getByRole('combobox', { name: 'Puzzle Size' }).click();
