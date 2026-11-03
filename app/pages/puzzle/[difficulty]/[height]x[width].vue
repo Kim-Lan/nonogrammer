@@ -1,8 +1,12 @@
 <script setup lang="ts">
 const route = useRoute();
-const height = Number(route.params.height);
-const width = Number(route.params.width);
-const difficulty = route.params.difficulty;
+const height: number = Number(route.params.height);
+const width: number = Number(route.params.width);
+const difficulty: PuzzleDifficulty = route.params.difficulty;
+
+const capitalizedDifficulty = computed(() => {
+  return difficulty.charAt(0).toUpperCase() + difficulty.substring(1);
+});
 
 const rowClues = ref<Clues>([]);
 const columnClues = ref<Clues>([]);
@@ -25,7 +29,10 @@ async function getPuzzle() {
 </script>
 
 <template>
-  <UContainer class="flex justify-center py-4 lg:py-8">
+  <UContainer class="flex flex-col items-center py-4 md:py-6 lg:py-8 gap-4 md:gap-6 lg:gap-8">
+    <h2 class="text-3xl font-bold">
+      {{ capitalizedDifficulty }} {{ height }}x{{ width }}
+    </h2>
     <PuzzleContainer :height :width :row-clues :column-clues />
   </UContainer>
 </template>

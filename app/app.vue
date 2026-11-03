@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import type { NavigationMenuItem } from '@nuxt/ui';
-
 useHead({
   meta: [
     { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -27,61 +25,73 @@ useSeoMeta({
 
 const route = useRoute();
 
+const playItems = [
+  {
+    label: 'Normal',
+    children: [
+      {
+        label: '5x5',
+        to: '/puzzle/normal/5x5',
+      },
+      {
+        label: '10x10',
+        to: '/puzzle/normal/10x10',
+      },
+      {
+        label: '15x15',
+        to: '/puzzle/normal/15x15',
+      },
+      {
+        label: '20x20',
+        to: '/puzzle/normal/20x20',
+      },
+      {
+        label: '25x25',
+        to: '/puzzle/normal/25x25',
+      },
+      {
+        label: '30x30',
+        to: '/puzzle/normal/30x30',
+      },
+    ],
+  },
+  {
+    label: 'Hard',
+    children: [
+      {
+        label: '5x5',
+        to: '/puzzle/hard/5x5',
+      },
+      {
+        label: '10x10',
+        to: '/puzzle/hard/10x10',
+      },
+      {
+        label: '15x15',
+        to: '/puzzle/hard/15x15',
+      },
+      {
+        label: '20x20',
+        to: '/puzzle/hard/20x20',
+      },
+      {
+        label: '25x25',
+        to: '/puzzle/hard/25x25',
+      },
+      {
+        label: '30x30',
+        to: '/puzzle/hard/30x30',
+      },
+    ],
+  },
+];
+
 const navItems = computed<NavigationMenuItem[]>(() => [
   {
     label: 'Play',
-    to: '/puzzle',
-    active: route.path.startsWith('/puzzle'),
-    children: [
-      {
-        label: 'normal 5x5',
-        to: '/puzzle/5x5/normal',
-      },
-      {
-        label: 'hard 5x5',
-        to: '/puzzle/5x5/hard',
-      },
-      {
-        label: 'normal 10x10',
-        to: '/puzzle/10x10/normal',
-      },
-      {
-        label: 'hard 10x10',
-        to: '/puzzle/10x10/hard',
-      },
-      {
-        label: 'normal 15x15',
-        to: '/puzzle/15x15/normal',
-      },
-      {
-        label: 'hard 15x15',
-        to: '/puzzle/15x15/hard',
-      },
-      {
-        label: 'normal 20x20',
-        to: '/puzzle/20x20/normal',
-      },
-      {
-        label: 'hard 20x20',
-        to: '/puzzle/20x20/hard',
-      },
-      {
-        label: 'normal 25x25',
-        to: '/puzzle/25x25/normal',
-      },
-      {
-        label: 'hard 25x25',
-        to: '/puzzle/25x25/hard',
-      },
-      {
-        label: 'normal 30x30',
-        to: '/puzzle/30x30/normal',
-      },
-      {
-        label: 'hard 30x30',
-        to: '/puzzle/30x30/hard',
-      },
-    ],
+    slot: 'play',
+    type: 'trigger',
+    children: playItems,
   },
   {
     label: 'Credits',
@@ -93,7 +103,7 @@ const navItems = computed<NavigationMenuItem[]>(() => [
 
 <template>
   <UApp>
-    <UHeader class="relative z-50">
+    <UHeader class="relative z-60">
       <template #left>
         <NuxtLink
           to="/"
@@ -106,8 +116,64 @@ const navItems = computed<NavigationMenuItem[]>(() => [
       <template #right>
         <UNavigationMenu
           :items="navItems"
-          class="hidden lg:flex w-80 justify-end"
-        />
+          content-orientation="vertical"
+          class="hidden lg:flex justify-end"
+          :ui="{
+            list: 'gap-1',
+            link: 'hover:before:bg-elevated data-[state=open]:before:bg-elevated',
+            content: 'w-32 overflow-visible',
+            viewport: 'overflow-visible',
+          }"
+        >
+          <template #play-content>
+            <div class="flex flex-col p-1 gap-1">
+              <UPopover
+                v-for="item in playItems"
+                :key="item.label"
+                mode="hover"
+                :portal="false"
+                :content="{
+                  side: 'right',
+                  align: 'start',
+                  sideOffset: 0,
+                }"
+              >
+                <template #default="{ open }">
+                  <UButton
+                    :label="item.label"
+                    trailing-icon="i-lucide-chevron-right"
+                    color="neutral"
+                    variant="ghost"
+                    block
+                    :ui="{
+                      base: [
+                        'justify-between rounded-md px-3 py-2 font-medium',
+                        open && 'bg-elevated text-highlighted',
+                      ],
+                    }"
+                  />
+                </template>
+
+                <template #content>
+                  <div class="flex min-w-24 flex-col p-1 gap-1">
+                    <UButton
+                      v-for="child in item.children"
+                      :key="child.to"
+                      :label="child.label"
+                      :to="child.to"
+                      color="neutral"
+                      variant="ghost"
+                      block
+                      :ui="{
+                        base: 'justify-start rounded-md px-3 py-2 font-medium hover:bg-elevated hover:text-highlighted',
+                      }"
+                    />
+                  </div>
+                </template>
+              </UPopover>
+            </div>
+          </template>
+        </UNavigationMenu>
 
         <USeparator orientation="vertical" class="hidden lg:block h-10 mx-1" />
 
