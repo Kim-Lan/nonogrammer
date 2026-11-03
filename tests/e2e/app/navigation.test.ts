@@ -113,8 +113,8 @@ describe('navigation e2e test', async () => {
         height: 720,
       });
 
-      // Open the Play navigation dropdown
-      await page.getByRole('button', { name: 'Credits', exact: true }).click();
+      // Click Credits
+      await page.getByRole('link', { name: 'Credits', exact: true }).click();
 
       // Verify navigation
       await page.waitForURL(`**/credits`);
@@ -141,7 +141,7 @@ describe('navigation e2e test', async () => {
       const mobileMenu = page.locator('[data-slot="body"]');
 
       // Click Credits
-      await mobileMenu.getByRole('button', { name: 'Credits', exact: true }).click();
+      await mobileMenu.getByRole('link', { name: 'Credits', exact: true }).click();
 
       // Verify navigation
       await page.waitForURL(`**/credits`);
