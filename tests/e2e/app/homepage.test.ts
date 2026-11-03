@@ -1,7 +1,7 @@
 import { createPage, setup } from '@nuxt/test-utils/e2e';
 import { describe, expect, it } from 'vitest';
 
-describe('homepage e2e test', () => {
+describe('homepage e2e test', async () => {
   await setup({
     server: true,
     browser: true,

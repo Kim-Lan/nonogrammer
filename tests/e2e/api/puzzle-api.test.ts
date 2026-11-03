@@ -1,7 +1,7 @@
 import { $fetch, fetch, setup } from '@nuxt/test-utils/e2e';
 import { describe, expect, it } from 'vitest';
 
-describe('GET /api/puzzle/system', () => {
+describe('GET /api/puzzle/system', async () => {
   await setup({
     server: true,
     browser: false,
