@@ -2,7 +2,7 @@
 const route = useRoute();
 const height: number = Number(route.params.height);
 const width: number = Number(route.params.width);
-const difficulty: PuzzleDifficulty = route.params.difficulty;
+const difficulty: string = route.params.difficulty;
 
 const capitalizedDifficulty = computed(() => {
   return difficulty.charAt(0).toUpperCase() + difficulty.substring(1);
