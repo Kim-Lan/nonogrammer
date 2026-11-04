@@ -28,8 +28,8 @@ async function navigateToPuzzle() {
 <template>
   <UBanner v-if="errorMessage" :title="errorMessage" />
   <UContainer class="flex flex-col items-center gap-4 md:gap-6 lg:gap-8 py-4 md:py-6 lg:py-8">
-    <h2 class="text-3xl font-bold">
-      Choose Your Puzzle
+    <h2 class="text-3xl font-mono font-bold">
+      Choose Puzzle
     </h2>
     <UContainer class="flex flex-col md:flex-row gap-4 items-center md:justify-center md:items-end">
       <UFormField label="Puzzle Difficulty">

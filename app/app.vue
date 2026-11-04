@@ -101,6 +101,10 @@ const navItems = computed<NavigationMenuItem[]>(() => [
     active: route.path.startsWith('/credits'),
   },
 ]);
+
+function isPathActive(path: string): boolean {
+  return route.path === path;
+}
 </script>
 
 <template>
@@ -163,11 +167,15 @@ const navItems = computed<NavigationMenuItem[]>(() => [
                       :key="child.to"
                       :label="child.label"
                       :to="child.to"
+                      :active="isPathActive(child.to)"
                       color="neutral"
+                      active-color="primary"
                       variant="ghost"
+                      active-class="bg-elevated"
                       block
                       :ui="{
-                        base: 'justify-start rounded-md px-3 py-2 font-medium hover:bg-elevated hover:text-highlighted',
+                        base: `justify-start rounded-md px-3 py-2 font-medium hover:bg-elevated
+                          ${isPathActive(child.to) ? 'hover:text-primary' : 'hover:text-highlighted'}`,
                       }"
                     />
                   </div>
@@ -186,6 +194,11 @@ const navItems = computed<NavigationMenuItem[]>(() => [
         <UNavigationMenu
           :items="navItems"
           orientation="vertical"
+          :ui="{
+            list: 'flex flex-col gap-2',
+            link: 'text-base',
+            childList: 'mt-2 space-y-2',
+          }"
         />
       </template>
     </UHeader>
@@ -196,7 +209,13 @@ const navItems = computed<NavigationMenuItem[]>(() => [
 
     <USeparator />
 
-    <UFooter>
+    <UFooter
+      :ui="{
+        container: 'py-4',
+        left: 'mt-1 lg:mt-0',
+        center: 'mt-1 lg:mt-0',
+      }"
+    >
       <template #left>
         <p class="text-sm text-muted">
           Developed by Kim-Lan • © {{ new Date().getFullYear() }}
