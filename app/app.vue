@@ -209,7 +209,13 @@ function isPathActive(path: string): boolean {
 
     <USeparator />
 
-    <UFooter>
+    <UFooter
+      :ui="{
+        container: 'py-4',
+        left: 'mt-1 lg:mt-0',
+        center: 'mt-1 lg:mt-0',
+      }"
+    >
       <template #left>
         <p class="text-sm text-muted">
           Developed by Kim-Lan • © {{ new Date().getFullYear() }}
