@@ -3,7 +3,6 @@ import type { Dimensions, Grid, Line } from '../types/grid';
 import type { CandidatePuzzle } from '../types/puzzle';
 import { createHash } from 'node:crypto';
 import { ALLOWED_VALUES, EMPTY_VALUE, FILLED_VALUE } from '../../shared/constants/nonograms-constants';
-import { arraySum } from './array-utils';
 import { getColumn, getDimensions, isValidGrid } from './grid-utils';
 
 export function isValidCell(value: unknown): boolean {
@@ -105,19 +104,4 @@ export function convertPuzzleToNon(puzzle: CandidatePuzzle): string {
   }
 
   return strArray.join('\n');
-}
-
-export function hasSpace(grid: Grid<string>, rowIndex: number, columnIndex: number): boolean {
-  const { height, width }: Dimensions = getDimensions(grid);
-
-  const rowSum: number = arraySum(Array.from(grid[rowIndex]!, Number));
-  const columnSum: number = arraySum(Array.from(getColumn(grid, columnIndex), Number));
-
-  if (rowSum >= (height - 1)) {
-    return false;
-  } else if (columnSum >= (width - 1)) {
-    return false;
-  }
-
-  return true;
 }
