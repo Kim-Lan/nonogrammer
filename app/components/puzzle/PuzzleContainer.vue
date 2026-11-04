@@ -38,7 +38,7 @@ provide('cellSize', cellSize);
 </script>
 
 <template>
-  <div class="puzzle-container">
+  <div class="puzzle-container w-max mx-auto pb-4 lg:pb-2">
     <div class="puzzle-grid">
       <PuzzleCell
         v-for="n in height * width"

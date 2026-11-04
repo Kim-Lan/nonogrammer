@@ -33,6 +33,8 @@ async function getPuzzle() {
     <h2 class="text-3xl font-bold">
       {{ capitalizedDifficulty }} {{ height }}x{{ width }}
     </h2>
-    <PuzzleContainer :height :width :row-clues :column-clues />
+    <div class="w-full min-w-0 overflow-x-auto">
+      <PuzzleContainer :height :width :row-clues :column-clues />
+    </div>
   </UContainer>
 </template>
