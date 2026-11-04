@@ -10,10 +10,9 @@ import {
   getSolutionBitsFromSolverOutput,
   getSolutionHash,
   getSolutionHashFromGrid,
-  hasSpace,
 } from '../../../../server/utils/nonograms-utils';
 
-const sampleGrid = [
+const sampleGrid: Grid = [
   ['0', '1', '1', '0', '1'],
   ['1', '1', '0', '0', '0'],
   ['1', '0', '0', '0', '1'],
@@ -103,19 +102,5 @@ describe('nonograms utils unit test', () => {
       + '1,1,1\n\n'
       + 'goal "1010101010101010101010101"',
     );
-  });
-
-  it('correctly determines whether a row / column has space for another filled cell (preventing full lines)', () => {
-    const grid: Grid<string> = [
-      ['0', '1', '1', '1', '0'],
-      ['1', '1', '1', '1', '0'],
-      ['1', '1', '0', '0', '0'],
-      ['1', '1', '0', '0', '0'],
-      ['0', '0', '0', '0', '0'],
-    ];
-    expect(hasSpace(grid, 0, 0)).toBe(true);
-    expect(hasSpace(grid, 1, 4)).toBe(false);
-    expect(hasSpace(grid, 4, 0)).toBe(true);
-    expect(hasSpace(grid, 4, 1)).toBe(false);
   });
 });

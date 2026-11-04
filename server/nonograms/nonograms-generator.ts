@@ -4,13 +4,13 @@ import type { CandidatePuzzle, GeneratedPuzzle } from '../types/puzzle';
 import type { SolverOutput } from './nonograms-solver';
 import random from 'random';
 import { FILLED_VALUE } from '../../shared/constants/nonograms-constants';
-import { range } from '../utils/array-utils';
+import { range, shuffle } from '../utils/array-utils';
 import { convert2DToIndex, convertIndexTo2D, getColumn } from '../utils/grid-utils';
-import { createEmptyPuzzleGrid, getClues, getSolutionBitsFromGrid, getSolutionHashFromGrid, hasSpace } from '../utils/nonograms-utils';
+import { createEmptyPuzzleGrid, getClues, getSolutionBitsFromGrid, getSolutionHashFromGrid } from '../utils/nonograms-utils';
 import { checkWithSolver } from './nonograms-solver';
 
 export function generatePuzzle(height: number, width: number, difficulty: PuzzleDifficulty): Nullable<GeneratedPuzzle> {
-  if (!height || !width || height <= 0 || width <= 0) {
+  if (!Number.isInteger(height) || !Number.isInteger(width) || height < 2 || width < 2) {
     throw new Error('Invalid puzzle dimensions');
   }
 
@@ -63,56 +63,107 @@ export function generatePuzzle(height: number, width: number, difficulty: Puzzle
 }
 
 export function generatePuzzleGrid(height: number, width: number): Grid<string> {
+  if (!Number.isInteger(height) || !Number.isInteger(width)) {
+    throw new TypeError('Puzzle dimensions must be integers');
+  } else if (height < 2 || width < 2) {
+    throw new Error('Puzzle dimensions must be at least 2x2');
+  }
+
   const grid: Grid<string> = createEmptyPuzzleGrid(height, width);
 
   const totalCells: number = height * width;
-  const filledCells: number = random.int(Math.ceil(0.4 * totalCells), Math.floor(0.6 * totalCells)); // fill between 40% and 60% of total cells
+  const requiredCells = Math.max(height, width);
+  const minFilledCells: number = Math.max(Math.ceil(0.4 * totalCells), requiredCells);
+  const maxFilledCells: number = Math.min(Math.floor(0.6 * totalCells), totalCells - requiredCells);
+  const filledCells: number = random.int(minFilledCells, maxFilledCells);
 
-  const indexArray: number[] = range(totalCells);
-  let count = 0;
+  const availableIndices: number[] = range(totalCells);
+  let filledCellCount = 0;
 
   function fillCell(r: number, c: number) {
-    const index: number = convert2DToIndex(r, c, width);
-    indexArray.splice(indexArray.indexOf(index), 1);
-
-    if (r < 0 || r > grid.length || c < 0 || c > grid[0].length) {
+    if (r < 0 || r >= height || c < 0 || c >= width) {
       throw new Error('Filling invalid cell');
     }
 
+    if (grid[r]![c] === FILLED_VALUE) {
+      return;
+    }
+
+    const index: number = convert2DToIndex(r, c, width);
+    const position: number = availableIndices.indexOf(index);
+
+    if (position === -1) {
+      throw new Error('Cell index not found');
+    }
+
+    availableIndices.splice(position, 1);
+
     grid[r]![c] = FILLED_VALUE;
-    count++;
+    filledCellCount++;
   }
 
-  // prevent empty rows or columns
-  // fill one cell in each row
-  for (let r = 0; r < height; r++) {
-    const c: number = random.int(0, width - 1);
+  const rowIndices: number[] = range(height);
+  const columnIndices: number[] = range(width);
+
+  shuffle(rowIndices);
+  shuffle(columnIndices);
+
+  // Guarantee every row and column has at least one filled cell
+  // and at least one empty cell
+  for (let i = 0; i < requiredCells; i++) {
+    // Fill one cell
+    const filledR = rowIndices[i % height]!;
+    const filledC = columnIndices[i % width]!;
+    fillCell(filledR, filledC);
+
+    // Reserve one cell as empty
+    const emptyR = width >= height ? rowIndices[(i + 1) % height]! : filledR;
+    const emptyC = width >= height ? filledC : columnIndices[(i + 1) % width]!;
+
+    const emptyIndex: number = convert2DToIndex(emptyR, emptyC, width);
+    const position: number = availableIndices.indexOf(emptyIndex);
+
+    if (position === -1) {
+      throw new Error('Failed to reserve empty cell');
+    }
+
+    availableIndices.splice(position, 1);
+  }
+
+  while (filledCellCount < filledCells && availableIndices.length > 0) {
+    const chosenIndex: number = random.int(0, availableIndices.length - 1);
+    const index: number = availableIndices[chosenIndex]!;
+    const { rowIndex: r, columnIndex: c }: { rowIndex: number; columnIndex: number } = convertIndexTo2D(index, width);
+
     fillCell(r, c);
   }
 
-  // check if each column has a filled cell; if not, fill one
-  for (let c = 0; c < width; c++) {
-    const column: Line<string> = getColumn(grid, c);
-    if (!column.indexOf(FILLED_VALUE)) {
-      const r: number = random.int(0, height - 1);
-      fillCell(r, c);
-    }
-  }
-
-  while (count < filledCells && indexArray.length > 0) {
-    const chosenIndex: number = random.int(0, indexArray.length - 1);
-    const index: number = indexArray[chosenIndex]!;
-    const { rowIndex: r, columnIndex: c }: { rowIndex: number; columnIndex: number } = convertIndexTo2D(index, width);
-
-    if (hasSpace(grid, r, c)) {
-      fillCell(r, c);
-    } else {
-      indexArray.splice(chosenIndex, 1); // remove possible index if there is a full row or column
-    }
-  }
-
-  if (count !== filledCells) {
+  if (filledCellCount !== filledCells) {
     throw new Error('Failed to fill puzzle');
+  }
+
+  // Check rows
+  for (const row of grid) {
+    if (!row.includes(FILLED_VALUE)) {
+      throw new Error('Generated puzzle contains an empty row');
+    }
+
+    if (row.every(cell => cell === FILLED_VALUE)) {
+      throw new Error('Generated puzzle contains a completely filled row');
+    }
+  }
+
+  // Check columns
+  for (let c = 0; c < width; c++) {
+    const column = getColumn(grid, c);
+
+    if (!column.includes(FILLED_VALUE)) {
+      throw new Error('Generated puzzle contains an empty column');
+    }
+
+    if (column.every(cell => cell === FILLED_VALUE)) {
+      throw new Error('Generated puzzle contains a completely filled column');
+    }
   }
 
   return grid;
