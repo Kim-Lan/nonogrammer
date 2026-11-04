@@ -30,7 +30,7 @@ async function getPuzzle() {
 
 <template>
   <UContainer class="flex flex-col items-center py-4 md:py-6 lg:py-8 gap-4 md:gap-6 lg:gap-8">
-    <h2 class="text-3xl font-bold">
+    <h2 class="text-3xl font-mono font-bold">
       {{ capitalizedDifficulty }} {{ height }}x{{ width }}
     </h2>
     <div class="w-full min-w-0 overflow-x-auto">

@@ -10,5 +10,11 @@ export default defineAppConfig({
         title: 'whitespace-normal text-center',
       },
     },
+    pageHero: {
+      slots: {
+        title: 'font-mono text-4xl lg:text-5xl',
+        description: 'text-md lg:text-lg',
+      },
+    },
   },
 });
