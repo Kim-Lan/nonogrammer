@@ -1,6 +1,4 @@
-export function arraySum(arr: number[]): number {
-  return arr.reduce((a, b) => a + b, 0);
-}
+import random from 'random';
 
 export function range(x: number): number[] {
   if (!Number.isInteger(x)) {
@@ -12,4 +10,12 @@ export function range(x: number): number[] {
     result.push(i);
   }
   return result;
+}
+
+// Fisher-Yates shuffle
+export function shuffle(array: number[]): void {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = random.int(0, i);
+    [array[i], array[j]] = [array[j]!, array[i]!];
+  }
 }
