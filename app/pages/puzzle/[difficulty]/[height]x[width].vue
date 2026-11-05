@@ -14,8 +14,8 @@ const columnClues = ref<Clues>([]);
 onMounted(async () => await getPuzzle());
 
 async function getPuzzle() {
-  const response = await $fetch('/api/puzzle/system', {
-    method: 'GET',
+  const response = await $fetch('/api/puzzles/system', {
+    method: 'POST',
     query: {
       height,
       width,

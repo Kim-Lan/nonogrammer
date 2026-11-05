@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { getSystemPuzzle } from '../../../../server/repository/PuzzleRepository';
+import { generateSystemPuzzle } from '../../../../server/repository/PuzzleRepository';
 import { getSolutionHash } from '../../../../server/utils/nonograms-utils';
 import { generatePuzzleSlug } from '../../../../server/utils/puzzle-utils';
 
@@ -50,7 +50,7 @@ describe('puzzle repository unit tests', async () => {
     mocks.generatePuzzle.mockReturnValue(generatedPuzzle);
     mocks.findFirst.mockResolvedValue(existingPuzzle);
 
-    const retrievedPuzzle = await getSystemPuzzle(5, 5, 'normal');
+    const retrievedPuzzle = await generateSystemPuzzle(5, 5, 'normal');
 
     expect(mocks.generatePuzzle).toHaveBeenCalledWith(5, 5, 'normal');
     expect(mocks.findFirst).toHaveBeenCalledWith({

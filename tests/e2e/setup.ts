@@ -5,6 +5,7 @@ export function setupE2E(options: Parameters<typeof setup>[0] = {}) {
     server: true,
     browser: true,
     setupTimeout: 240_000,
+    captureServerLogs: false,
     ...options,
   });
 }

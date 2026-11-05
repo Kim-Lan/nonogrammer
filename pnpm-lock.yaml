@@ -179,14 +179,14 @@ importers:
         specifier: 1.0.0-alpha.1
         version: 1.0.0-alpha.1(@nuxt/schema@4.6.2)(confbox@0.2.4)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.3)(mlly@1.8.2)(oxc-parser@0.141.0)(rolldown@1.2.15)(unplugin@3.4.0(esbuild@0.28.2)(rolldown@1.2.15)(rollup@4.63.6)(vite@8.3.5(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))(vite@8.3.5(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))
       '@nuxt/test-utils':
-        specifier: 4.3.2
-        version: 4.3.2(@playwright/test@1.63.0)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@6.0.3)))(esbuild@0.28.2)(happy-dom@20.14.5)(magicast@0.5.5)(playwright-core@1.63.0)(rolldown@1.2.15)(rollup@4.63.6)(typescript@6.0.3)(vite@8.3.5(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.0.3)
+        specifier: 4.3.4
+        version: 4.3.4(@nuxt/schema@4.6.2)(@oxc-project/types@0.155.0)(@playwright/test@1.63.0)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@6.0.3)))(confbox@0.2.4)(dotenv@17.4.2)(esbuild@0.28.2)(giget@3.3.1)(h3@1.15.11)(happy-dom@20.14.5)(jiti@2.7.0)(mlly@1.8.2)(nuxt@4.6.2(605f521380ff28bddd858a959b21754b))(oxc-parser@0.141.0)(playwright-core@1.63.0)(rolldown@1.2.15)(rollup@4.63.6)(vite@8.3.5(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.0.3)(vue@3.5.44(typescript@6.0.3))
       '@nuxt/ui':
         specifier: ^4.11.2
         version: 4.11.3(87748278e845ed4c08e1e47a1cf40809)
       '@nuxtjs/better-auth':
         specifier: 0.3.6
-        version: 0.3.6(23933975b9994e4a47736c824bb78850)
+        version: 0.3.6(214adde863c375edc8dc35e3778846cc)
       '@nuxtjs/i18n':
         specifier: 10.6.0
         version: 10.6.0(@nuxt/schema@4.6.2)(db0@0.3.4(drizzle-orm@1.0.0-rc.4(@neondatabase/serverless@1.2.0)(@types/pg@8.23.1)(pg@8.23.1)(postgres@3.4.9)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.5)))(dotenv@17.4.2)(esbuild@0.28.2)(eslint@10.13.0(jiti@2.7.0)(supports-color@10.2.2))(giget@3.3.1)(ioredis@5.11.1(supports-color@10.2.2))(jiti@2.7.0)(rolldown@1.2.15)(rollup@4.63.6)(supports-color@10.2.2)(typescript@6.0.3)(vite@8.3.5(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))(vue@3.5.44(typescript@6.0.3))
@@ -1792,6 +1792,49 @@ packages:
       happy-dom:
         optional: true
       jsdom:
+        optional: true
+      playwright-core:
+        optional: true
+      vitest:
+        optional: true
+
+  '@nuxt/test-utils@4.3.4':
+    resolution: {integrity: sha512-8x0w16DDUi1/6ZivL1zuOaDt9xtACZFHMQySBirUZNIU0H0qljjB5yyajXPtlb8YCQ5l6piFJqafK/zDpDcCnA==}
+    engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0}
+    peerDependencies:
+      '@cucumber/cucumber': '>=11.0.0'
+      '@jest/globals': '>=30.0.0'
+      '@playwright/test': ^1.43.1
+      '@testing-library/vue': ^8.0.1
+      '@vitest/ui': '*'
+      '@vue/test-utils': ^2.4.2
+      h3: ^1.15.0 || ^2.0.0-0
+      happy-dom: '>=20.0.11'
+      jsdom: '>=27.4.0'
+      nuxt: ^3.21.0 || ^4.0.0 || ^5.0.0-0
+      playwright-core: ^1.43.1
+      vitest: ^4.0.2 || ^5.0.0
+      vue: ^3.5.0
+    peerDependenciesMeta:
+      '@cucumber/cucumber':
+        optional: true
+      '@jest/globals':
+        optional: true
+      '@playwright/test':
+        optional: true
+      '@testing-library/vue':
+        optional: true
+      '@vitest/ui':
+        optional: true
+      '@vue/test-utils':
+        optional: true
+      h3:
+        optional: true
+      happy-dom:
+        optional: true
+      jsdom:
+        optional: true
+      nuxt:
         optional: true
       playwright-core:
         optional: true
@@ -9394,6 +9437,57 @@ snapshots:
       - vite
       - webpack
 
+  '@nuxt/test-utils@4.3.4(@nuxt/schema@4.6.2)(@oxc-project/types@0.155.0)(@playwright/test@1.63.0)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@6.0.3)))(confbox@0.2.4)(dotenv@17.4.2)(esbuild@0.28.2)(giget@3.3.1)(h3@1.15.11)(happy-dom@20.14.5)(jiti@2.7.0)(mlly@1.8.2)(nuxt@4.6.2(605f521380ff28bddd858a959b21754b))(oxc-parser@0.141.0)(playwright-core@1.63.0)(rolldown@1.2.15)(rollup@4.63.6)(vite@8.3.5(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.0.3)(vue@3.5.44(typescript@6.0.3))':
+    dependencies:
+      '@clack/prompts': 1.8.1
+      '@nuxt/devtools-kit': 3.4.4(@nuxt/schema@4.6.2)(confbox@0.2.4)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.3)(mlly@1.8.2)(oxc-parser@0.141.0)(rolldown@1.2.15)(unplugin@3.4.0(esbuild@0.28.2)(rolldown@1.2.15)(rollup@4.63.6)(vite@8.3.5(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))(vite@8.3.5(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))
+      '@nuxt/kit': 4.6.2(@nuxt/schema@4.6.2)(confbox@0.2.4)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.3)(mlly@1.8.2)(oxc-parser@0.141.0)(rolldown@1.2.15)(unplugin@3.4.0(esbuild@0.28.2)(rolldown@1.2.15)(rollup@4.63.6)(vite@8.3.5(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))
+      consola: 3.4.2
+      defu: 6.1.7
+      exsolve: 1.1.3
+      fake-indexeddb: 6.2.5
+      get-port-please: 3.2.0
+      magic-string: 1.4.3
+      ofetch: 1.5.1
+      oxc-walker: 1.1.1(@oxc-project/types@0.155.0)(oxc-parser@0.141.0)(rolldown@1.2.15)
+      package-manager-detector: 1.9.0
+      pathe: 2.0.3
+      perfect-debounce: 2.1.0
+      radix3: 1.1.2
+      std-env: 4.3.0
+      tinyexec: 1.3.1
+      ufo: 1.6.4
+      unplugin: 3.4.0(esbuild@0.28.2)(rolldown@1.2.15)(rollup@4.63.6)(vite@8.3.5(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))
+      vitest-environment-nuxt: 2.0.0
+      vue: 3.5.44(typescript@6.0.3)
+    optionalDependencies:
+      '@playwright/test': 1.63.0
+      '@vue/test-utils': 2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@6.0.3))
+      h3: 1.15.11
+      happy-dom: 20.14.5
+      nuxt: 4.6.2(605f521380ff28bddd858a959b21754b)
+      playwright-core: 1.63.0
+      vitest: 5.0.3(@types/node@26.6.4)(@vitest/coverage-v8@5.0.3)(happy-dom@20.14.5)(vite@8.3.5(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))
+    transitivePeerDependencies:
+      - '@farmfe/core'
+      - '@nuxt/schema'
+      - '@oxc-project/types'
+      - '@rsbuild/core'
+      - '@rspack/core'
+      - bun-types-no-globals
+      - confbox
+      - dotenv
+      - esbuild
+      - giget
+      - jiti
+      - mlly
+      - oxc-parser
+      - rolldown
+      - rollup
+      - unloader
+      - vite
+      - webpack
+
   '@nuxt/ui@4.11.3(87748278e845ed4c08e1e47a1cf40809)':
     dependencies:
       '@floating-ui/dom': 1.8.0
@@ -9622,7 +9716,7 @@ snapshots:
       - rolldown
       - unplugin
 
-  '@nuxtjs/better-auth@0.3.6(23933975b9994e4a47736c824bb78850)':
+  '@nuxtjs/better-auth@0.3.6(214adde863c375edc8dc35e3778846cc)':
     dependencies:
       '@nuxt/devtools-kit': 3.4.4(@nuxt/schema@4.6.2)(confbox@0.2.4)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.3)(mlly@1.8.2)(oxc-parser@0.141.0)(rolldown@1.2.15)(unplugin@3.4.0(esbuild@0.28.2)(rolldown@1.2.15)(rollup@4.63.6)(vite@8.3.5(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))(vite@8.3.5(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))
       '@nuxt/kit': 4.6.2(@nuxt/schema@4.6.2)(confbox@0.2.4)(dotenv@17.4.2)(giget@3.3.1)(jiti@2.7.0)(magic-string@1.4.3)(mlly@1.8.2)(oxc-parser@0.141.0)(rolldown@1.2.15)(unplugin@3.4.0(esbuild@0.28.2)(rolldown@1.2.15)(rollup@4.63.6)(vite@8.3.5(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1)))
@@ -9642,7 +9736,7 @@ snapshots:
       ufo: 1.6.4
       zod: 4.6.5
     optionalDependencies:
-      '@nuxt/test-utils': 4.3.2(@playwright/test@1.63.0)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@6.0.3)))(esbuild@0.28.2)(happy-dom@20.14.5)(magicast@0.5.5)(playwright-core@1.63.0)(rolldown@1.2.15)(rollup@4.63.6)(typescript@6.0.3)(vite@8.3.5(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.0.3)
+      '@nuxt/test-utils': 4.3.4(@nuxt/schema@4.6.2)(@oxc-project/types@0.155.0)(@playwright/test@1.63.0)(@vue/test-utils@2.5.1(@vue/compiler-dom@3.5.44)(@vue/server-renderer@3.5.44)(vue@3.5.44(typescript@6.0.3)))(confbox@0.2.4)(dotenv@17.4.2)(esbuild@0.28.2)(giget@3.3.1)(h3@1.15.11)(happy-dom@20.14.5)(jiti@2.7.0)(mlly@1.8.2)(nuxt@4.6.2(605f521380ff28bddd858a959b21754b))(oxc-parser@0.141.0)(playwright-core@1.63.0)(rolldown@1.2.15)(rollup@4.63.6)(vite@8.3.5(@types/node@26.6.4)(esbuild@0.28.2)(jiti@2.7.0)(sass@1.105.1)(terser@5.51.2)(tsx@4.23.15)(yaml@2.9.1))(vitest@5.0.3)(vue@3.5.44(typescript@6.0.3))
     transitivePeerDependencies:
       - '@better-fetch/fetch'
       - '@cloudflare/workers-types'
