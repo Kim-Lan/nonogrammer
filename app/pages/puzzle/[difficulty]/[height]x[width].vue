@@ -10,6 +10,7 @@ const capitalizedDifficulty = computed(() => {
 
 const rowClues = ref<Clues>([]);
 const columnClues = ref<Clues>([]);
+const slug = ref<string>('');
 
 onMounted(async () => await getPuzzle());
 
@@ -25,14 +26,25 @@ async function getPuzzle() {
 
   rowClues.value = response.rowClues;
   columnClues.value = response.columnClues;
+  slug.value = response.slug;
 }
 </script>
 
 <template>
   <UContainer class="flex flex-col items-center py-4 md:py-6 lg:py-8 gap-4 md:gap-6 lg:gap-8">
-    <h2 class="text-3xl font-mono font-bold">
-      {{ capitalizedDifficulty }} {{ height }}x{{ width }}
-    </h2>
+    <UButton
+      to="/puzzle"
+      icon="boxicons:arrow-big-left-filled"
+      class="self-start"
+    >
+      Back to Puzzle Selection
+    </UButton>
+    <div class="flex flex-col items-center">
+      <h2 class="text-3xl font-mono font-bold">
+        {{ capitalizedDifficulty }} {{ height }}x{{ width }}
+      </h2>
+      <h3>Puzzle ID: {{ slug }}</h3>
+    </div>
     <div class="w-full min-w-0 overflow-x-auto">
       <PuzzleContainer :height :width :row-clues :column-clues />
     </div>

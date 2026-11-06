@@ -42,6 +42,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^9.5.1",
+    "@iconify-json/boxicons": "^1.2.0",
     "@iconify-json/material-symbols": "^1.2.96",
     "@nuxt/eslint": "^1.17.0",
     "@playwright/test": "^1.63.0",

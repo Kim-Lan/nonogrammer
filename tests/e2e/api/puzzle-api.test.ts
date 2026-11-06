@@ -5,7 +5,7 @@ import { setupE2E } from '../setup';
 await setupE2E();
 
 describe('GET /api/puzzles/[slug]', async () => {
-  it('retrieves an existing system puzzle by slug', async () => {
+  it('retrieves an existing puzzle by slug', async () => {
     // Generate a system puzzle
     const { slug, solutionHash } = await $fetch('/api/puzzles/system', {
       method: 'POST',
@@ -26,6 +26,14 @@ describe('GET /api/puzzles/[slug]', async () => {
     expect(response).toBeDefined();
     expect(response.slug).toBe(slug);
     expect(response.solutionHash).toBe(solutionHash);
+  });
+
+  it('returns 404 when puzzle slug does not exist', async () => {
+    const response = await fetch('/api/puzzles/nonexistent-puzzle-slug', {
+      method: 'GET',
+    });
+
+    expect(response.status).toBe(404);
   });
 });
 

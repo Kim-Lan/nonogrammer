@@ -92,13 +92,12 @@ const navItems = computed<NavigationMenuItem[]>(() => [
   {
     label: 'Play',
     slot: 'play',
-    type: 'trigger',
+    to: '/puzzle',
     children: playItems,
   },
   {
     label: 'Credits',
     to: '/credits',
-    active: route.path.startsWith('/credits'),
   },
 ]);
 
