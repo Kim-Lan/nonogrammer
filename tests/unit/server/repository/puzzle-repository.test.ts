@@ -83,7 +83,7 @@ describe('puzzle repository unit tests: getPuzzleBySlug', async () => {
       await expect(getPuzzleBySlug('nonexistent-puzzle-slug')).rejects.toMatchObject({
         status: 404,
         statusText: 'Not Found',
-        message: 'Puzzle not found',
+        message: 'Puzzle ID "nonexistent-puzzle-slug" not found',
       });
       expect(mocks.where).toHaveBeenCalledWith(eq(puzzles.slug, 'nonexistent-puzzle-slug'));
     } finally {
