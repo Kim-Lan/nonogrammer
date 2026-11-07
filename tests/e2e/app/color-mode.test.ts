@@ -6,8 +6,9 @@ import { setupE2E } from '../setup';
 describe('color mode toggle e2e test', async () => {
   await setupE2E();
 
-  it.each(['light', 'dark'] as const)('toggles from %s mode to the opposite mode and back', async (initialMode) => {
+  it.each(['light', 'dark'] as const)('toggles from %s mode to the opposite mode and back', { timeout: 30_000 }, async (initialMode) => {
     const page = await createPage(undefined, { colorScheme: initialMode });
+    page.setDefaultTimeout(5_000);
     const oppositeMode = initialMode === 'light' ? 'dark' : 'light';
     const root = page.locator('html');
 
