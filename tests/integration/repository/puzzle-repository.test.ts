@@ -31,7 +31,7 @@ function makeTestPuzzle(overrides: Partial<NewPuzzle> = {}): NewPuzzle {
   };
 }
 
-describe.runIf(hasDocker)('puzzle repository integration test', () => {
+describe.runIf(hasDocker)('puzzle repository integration test: generateSystemPuzzle', () => {
   let testDatabase: TestDatabase;
   let repository: typeof import('../../../server/repository/PuzzleRepository');
 
@@ -85,7 +85,7 @@ describe.runIf(hasDocker)('puzzle repository integration test', () => {
     expect(existingPuzzle).toBeDefined();
 
     // Call the actual repository
-    const result = await repository.getSystemPuzzle(
+    const result = await repository.generateSystemPuzzle(
       5, 5, 'normal',
     );
 
@@ -112,7 +112,7 @@ describe.runIf(hasDocker)('puzzle repository integration test', () => {
 
   it('creates a new puzzle when there is no duplicate', async () => {
     // Generate a new puzzle
-    const result = await repository.getSystemPuzzle(
+    const result = await repository.generateSystemPuzzle(
       5, 5, 'normal',
     );
 
@@ -160,7 +160,7 @@ describe.runIf(hasDocker)('puzzle repository integration test', () => {
       .returning();
 
     // Generate the original puzzle
-    const result = await repository.getSystemPuzzle(5, 5, 'normal');
+    const result = await repository.generateSystemPuzzle(5, 5, 'normal');
 
     // Check the other puzzle was not returned
     expect(result.id).not.toBe(otherPuzzle!.id);
@@ -176,10 +176,10 @@ describe.runIf(hasDocker)('puzzle repository integration test', () => {
 
   it('returns an existing puzzle on repeated requests', async () => {
     // First request creates the puzzle
-    const first = await repository.getSystemPuzzle(5, 5, 'normal');
+    const first = await repository.generateSystemPuzzle(5, 5, 'normal');
 
     // Second request generates the identical solution
-    const second = await repository.getSystemPuzzle(5, 5, 'normal');
+    const second = await repository.generateSystemPuzzle(5, 5, 'normal');
 
     expect(second.id).toBe(first.id);
     expect(second.slug).toBe(first.slug);

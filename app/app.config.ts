@@ -4,6 +4,11 @@ export default defineAppConfig({
       primary: 'blue',
       neutral: 'slate',
     },
+    button: {
+      slots: {
+        base: 'transition-[color,background-color,border-color,box-shadow,scale] duration-150 motion-safe:active:scale-95 disabled:active:scale-100 aria-disabled:active:scale-100 motion-reduce:transition-none',
+      },
+    },
     banner: {
       slots: {
         container: 'h-auto min-h-12 py-2',

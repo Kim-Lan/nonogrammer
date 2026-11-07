@@ -1,6 +1,8 @@
 <template>
   <UContainer class="py-4 md:py-6 lg:py-8 flex flex-col gap-4 lg:gap-6">
-    <h2 class="text-3xl font-mono font-bold">Credits</h2>
+    <h2 class="text-3xl font-mono font-bold">
+      Credits
+    </h2>
     <p>
       nonogrammer is developed by Kim-Lan and released under the AGPL-3.0 license.
       <br /><br />

@@ -11,4 +11,17 @@ describe('homepage e2e test', async () => {
     expect(text).toContain('nonogrammer');
     await page.close();
   });
+
+  it('navigates to the puzzle selection page using the homepage button', async () => {
+    const page = await createPage('/');
+
+    try {
+      await page.getByRole('main').getByRole('link', { name: 'Play', exact: true }).click();
+
+      await page.waitForURL('**/play');
+      expect(new URL(page.url()).pathname).toBe('/play');
+    } finally {
+      await page.close();
+    }
+  });
 });

@@ -2,6 +2,7 @@ import type { Clues, Nullable, PuzzleDifficulty } from '../../shared/types/puzzl
 import type { Grid } from '../types/grid';
 import type { CandidatePuzzle, GeneratedPuzzle } from '../types/puzzle';
 import type { SolverOutput } from './nonograms-solver';
+import { createError } from 'nuxt/server';
 import random from 'random';
 import { FILLED_VALUE } from '../../shared/constants/nonograms-constants';
 import { range, shuffle } from '../utils/array-utils';
@@ -11,7 +12,11 @@ import { checkWithSolver } from './nonograms-solver';
 
 export function generatePuzzle(height: number, width: number, difficulty: PuzzleDifficulty): Nullable<GeneratedPuzzle> {
   if (!Number.isInteger(height) || !Number.isInteger(width) || height < 2 || width < 2) {
-    throw new Error('Invalid puzzle dimensions');
+    throw createError({
+      status: 400,
+      statusText: 'Bad Request',
+      message: 'Invalid puzzle dimensions',
+    });
   }
 
   let puzzleGrid: Nullable<Grid<string>> = null;
@@ -64,9 +69,17 @@ export function generatePuzzle(height: number, width: number, difficulty: Puzzle
 
 export function generatePuzzleGrid(height: number, width: number): Grid<string> {
   if (!Number.isInteger(height) || !Number.isInteger(width)) {
-    throw new TypeError('Puzzle dimensions must be integers');
+    throw createError({
+      status: 400,
+      statusText: 'Bad Request',
+      message: 'Puzzle dimensions must be integers',
+    });
   } else if (height < 2 || width < 2) {
-    throw new Error('Puzzle dimensions must be at least 2x2');
+    throw createError({
+      status: 400,
+      statusText: 'Bad Request',
+      message: 'Puzzle dimensions must be at least 2x2',
+    });
   }
 
   const grid: Grid<string> = createEmptyPuzzleGrid(height, width);
@@ -82,7 +95,11 @@ export function generatePuzzleGrid(height: number, width: number): Grid<string> 
 
   function fillCell(r: number, c: number) {
     if (r < 0 || r >= height || c < 0 || c >= width) {
-      throw new Error('Filling invalid cell');
+      throw createError({
+        status: 500,
+        statusText: 'Internal Server Error',
+        message: 'Filling invalid cell',
+      });
     }
 
     if (grid[r]![c] === FILLED_VALUE) {
@@ -93,7 +110,11 @@ export function generatePuzzleGrid(height: number, width: number): Grid<string> 
     const position: number = availableIndices.indexOf(index);
 
     if (position === -1) {
-      throw new Error('Cell index not found');
+      throw createError({
+        status: 500,
+        statusText: 'Internal Server Error',
+        message: 'Cell index not found',
+      });
     }
 
     availableIndices.splice(position, 1);
@@ -124,7 +145,11 @@ export function generatePuzzleGrid(height: number, width: number): Grid<string> 
     const position: number = availableIndices.indexOf(emptyIndex);
 
     if (position === -1) {
-      throw new Error('Failed to reserve empty cell');
+      throw createError({
+        status: 500,
+        statusText: 'Internal Server Error',
+        message: 'Failed to reserve empty cell',
+      });
     }
 
     availableIndices.splice(position, 1);
@@ -139,17 +164,29 @@ export function generatePuzzleGrid(height: number, width: number): Grid<string> 
   }
 
   if (filledCellCount !== filledCells) {
-    throw new Error('Failed to fill puzzle');
+    throw createError({
+      status: 500,
+      statusText: 'Internal Server Error',
+      message: 'Failed to fill puzzle',
+    });
   }
 
   // Check rows
   for (const row of grid) {
     if (!row.includes(FILLED_VALUE)) {
-      throw new Error('Generated puzzle contains an empty row');
+      throw createError({
+        status: 500,
+        statusText: 'Internal Server Error',
+        message: 'Generated puzzle contains an empty row',
+      });
     }
 
     if (row.every(cell => cell === FILLED_VALUE)) {
-      throw new Error('Generated puzzle contains a completely filled row');
+      throw createError({
+        status: 500,
+        statusText: 'Internal Server Error',
+        message: 'Generated puzzle contains a completely filled row',
+      });
     }
   }
 
@@ -158,11 +195,19 @@ export function generatePuzzleGrid(height: number, width: number): Grid<string> 
     const column = getColumn(grid, c);
 
     if (!column.includes(FILLED_VALUE)) {
-      throw new Error('Generated puzzle contains an empty column');
+      throw createError({
+        status: 500,
+        statusText: 'Internal Server Error',
+        message: 'Generated puzzle contains an empty column',
+      });
     }
 
     if (column.every(cell => cell === FILLED_VALUE)) {
-      throw new Error('Generated puzzle contains a completely filled column');
+      throw createError({
+        status: 500,
+        statusText: 'Internal Server Error',
+        message: 'Generated puzzle contains a completely filled column',
+      });
     }
   }
 
