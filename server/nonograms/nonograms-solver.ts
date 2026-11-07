@@ -5,6 +5,7 @@ import { randomUUID } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createError } from 'nuxt/server';
+import env from '../../lib/env';
 import { convertPuzzleToNon, getSolutionBitsFromSolverOutput } from '../utils/nonograms-utils';
 
 export type SolverOutput = {
@@ -19,7 +20,10 @@ export function checkWithSolver(puzzle: CandidatePuzzle): SolverOutput {
   const data = convertPuzzleToNon(puzzle);
 
   const testPath = path.join(__dirname, 'solver', `test-${randomUUID()}.non`);
-  const solverPath = path.join(__dirname, 'solver', 'pbnsolve');
+  const localSolverPath = path.join(__dirname, 'solver', 'pbnsolve');
+
+  const solverPath = env.PBNSOLVE_PATH
+    || (fs.existsSync(localSolverPath) ? localSolverPath : 'pbnsolve');
 
   let solverOutput = '';
   try {
