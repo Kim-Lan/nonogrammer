@@ -190,7 +190,9 @@ function isPathActive(path: string): boolean {
 
         <USeparator orientation="vertical" class="hidden lg:block h-10 mx-1" />
 
-        <UColorModeButton />
+        <ClientOnly>
+          <UColorModeButton />
+        </ClientOnly>
       </template>
 
       <template #body>
