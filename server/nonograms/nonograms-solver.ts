@@ -1,10 +1,11 @@
 import type { Nullable } from '../../shared/types/puzzle';
 import type { CandidatePuzzle, PuzzleSolver } from '../types/puzzle';
-import { execSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createError } from 'nuxt/server';
+import env from '../../lib/env';
 import { convertPuzzleToNon, getSolutionBitsFromSolverOutput } from '../utils/nonograms-utils';
 
 export type SolverOutput = {
@@ -19,12 +20,31 @@ export function checkWithSolver(puzzle: CandidatePuzzle): SolverOutput {
   const data = convertPuzzleToNon(puzzle);
 
   const testPath = path.join(__dirname, 'solver', `test-${randomUUID()}.non`);
-  const solverPath = path.join(__dirname, 'solver', 'pbnsolve');
+  const localSolverPath = path.join(__dirname, 'solver', 'pbnsolve');
+
+  const solverPath = env.PBNSOLVE_PATH
+    || (fs.existsSync(localSolverPath) ? localSolverPath : 'pbnsolve');
 
   let solverOutput = '';
   try {
     fs.writeFileSync(testPath, data);
-    solverOutput = (execSync(`${solverPath} -aLEC -d2 ${testPath}`)).toString();
+
+    const result = spawnSync(solverPath, ['-aLEC', '-d2', testPath], {
+      encoding: 'utf8',
+      timeout: 30_000,
+    });
+
+    if (result.error) {
+      throw result.error;
+    }
+
+    if (result.status !== 0) {
+      throw new Error(
+        `pbnsolve exited with status ${result.status}: ${result.stderr}`,
+      );
+    }
+
+    solverOutput = result.stdout;
   } catch (error) {
     console.error('pbnsolve execution failed:', {
       error,
@@ -39,7 +59,7 @@ export function checkWithSolver(puzzle: CandidatePuzzle): SolverOutput {
       message: 'Failed to use pbnsolve to validate puzzle',
     });
   } finally {
-    fs.unlinkSync(testPath);
+    fs.rmSync(testPath, { force: true });
   }
 
   const uniqueSolution = solverOutput.toLowerCase().includes('unique');

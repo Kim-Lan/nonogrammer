@@ -6,6 +6,7 @@ const EnvSchema = z.object({
   NODE_ENV: z.string(),
   DATABASE_URL: z.string(),
   DATABASE_URL_UNPOOLED: z.string(),
+  PBNSOLVE_PATH: z.string().optional(),
 });
 
 export type EnvSchema = z.infer<typeof EnvSchema>;
