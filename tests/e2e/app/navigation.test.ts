@@ -15,8 +15,8 @@ describe('navigation e2e test', async () => {
         height: 720,
       });
 
-      // Click Play
-      await page.getByRole('link', { name: 'Play', exact: true }).click();
+      // Click Play in header
+      await page.getByRole('banner').getByRole('link', { name: 'Play', exact: true }).click();
 
       // Verify navigation
       await page.waitForURL(`**/play`);
