@@ -33,9 +33,9 @@ async function getPuzzle() {
   <UBanner v-if="errorMessage" :title="errorMessage" color="error" />
   <UContainer class="flex flex-col items-center py-4 md:py-6 lg:py-8 gap-4 md:gap-6 lg:gap-8">
     <UButton
-      to="/puzzle"
+      to="/play"
       icon="boxicons:arrow-big-left-filled"
-      class="self-start"
+      class="bg-neutral-400 hover:bg-neutral-500 active:bg-neutral-600 self-start"
     >
       Back to Puzzle Selection
     </UButton>

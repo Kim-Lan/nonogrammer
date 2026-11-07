@@ -6,6 +6,7 @@ const difficulties = ref<string[]>(['Normal', 'Hard']);
 const selectedDifficulty = ref<string>('Normal');
 
 const slug = ref<string>('');
+const slugError = ref<string>('');
 
 const isLoading = ref<boolean>(false);
 const errorMessage = ref<string>('');
@@ -14,7 +15,7 @@ async function navigateToPuzzleConfiguration() {
   isLoading.value = true;
   errorMessage.value = '';
   try {
-    await navigateTo(`/puzzle/${selectedDifficulty.value.toLowerCase()}/${selectedSize.value}`);
+    await navigateTo(`/puzzles/${selectedDifficulty.value.toLowerCase()}/${selectedSize.value}`);
   } catch (error: unknown) {
     if (isErrorWithMessage(error)) {
       errorMessage.value = error.message;
@@ -27,12 +28,25 @@ async function navigateToPuzzleConfiguration() {
 }
 
 async function navigateToPuzzleSlug() {
+  const puzzleSlug = slug.value.trim();
+  slugError.value = '';
+  if (!puzzleSlug) {
+    slugError.value = 'Please provide a puzzle ID';
+    return;
+  }
+
   isLoading.value = true;
   errorMessage.value = '';
   try {
-    await navigateTo(`/puzzle/id/${slug.value}`);
+    const encodedSlug = encodeURIComponent(puzzleSlug);
+    await $fetch(`/api/puzzles/${encodedSlug}`);
+    await navigateTo(`/puzzles/id/${encodedSlug}`);
   } catch (error: unknown) {
-    errorMessage.value = isErrorWithMessage(error) ? error.message : 'An unknown error occurred';
+    if (isErrorWithMessage(error) && 'data' in error && isErrorWithMessage(error.data)) {
+      errorMessage.value = error.data.message;
+    } else {
+      errorMessage.value = isErrorWithMessage(error) ? error.message : 'An unknown error occurred';
+    }
   } finally {
     isLoading.value = false;
   }
@@ -40,7 +54,7 @@ async function navigateToPuzzleSlug() {
 </script>
 
 <template>
-  <UBanner v-if="errorMessage" :title="errorMessage" />
+  <UBanner v-if="errorMessage" :title="errorMessage" color="error" />
   <UContainer class="flex flex-col items-center gap-8 lg:gap-16 py-4 lg:py-6">
     <div class="flex flex-col items-center gap-3">
       <h2 class="text-3xl font-mono font-bold">
@@ -68,7 +82,11 @@ async function navigateToPuzzleSlug() {
         Search Puzzle
       </h2>
       <UContainer class="flex flex-col md:flex-row gap-4 items-center md:justify-center md:items-end">
-        <UFormField label="Puzzle ID">
+        <UFormField
+          label="Puzzle ID"
+          :error="slugError || undefined"
+          :ui="{ container: 'relative', error: 'md:absolute' }"
+        >
           <UInput v-model="slug" placeholder="Puzzle ID" size="lg" class="w-64 h-9" />
         </UFormField>
         <UButton

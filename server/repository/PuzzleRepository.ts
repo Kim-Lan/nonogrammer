@@ -75,11 +75,10 @@ export async function getPuzzleBySlug(slug: string): Promise<PublicPuzzle> {
     .limit(1);
 
   if (!puzzle) {
-    console.error('Puzzle not found');
     throw createError({
       status: 404,
       statusText: 'Not Found',
-      message: 'Puzzle not found',
+      message: `Puzzle ID "${slug}" not found`,
     });
   }
 

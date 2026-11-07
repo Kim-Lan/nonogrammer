@@ -5,8 +5,8 @@
     description="A website to play nonograms, the grid logic puzzle game, online."
     :links="[{
       label: 'Play',
-      to: '/puzzle',
-      trailingIcon: 'i-lucide-arrow-right',
+      to: '/play',
+      trailingIcon: 'boxicons:arrow-big-right-filled',
       size: 'xl',
     }]"
   />
