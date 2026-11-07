@@ -59,7 +59,7 @@ export function checkWithSolver(puzzle: CandidatePuzzle): SolverOutput {
       message: 'Failed to use pbnsolve to validate puzzle',
     });
   } finally {
-    fs.unlinkSync(testPath);
+    fs.rmSync(testPath, { force: true });
   }
 
   const uniqueSolution = solverOutput.toLowerCase().includes('unique');
