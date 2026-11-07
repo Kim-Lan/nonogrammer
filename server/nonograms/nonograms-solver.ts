@@ -1,6 +1,6 @@
 import type { Nullable } from '../../shared/types/puzzle';
 import type { CandidatePuzzle, PuzzleSolver } from '../types/puzzle';
-import { execSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -24,7 +24,23 @@ export function checkWithSolver(puzzle: CandidatePuzzle): SolverOutput {
   let solverOutput = '';
   try {
     fs.writeFileSync(testPath, data);
-    solverOutput = (execSync(`${solverPath} -aLEC -d2 ${testPath}`)).toString();
+
+    const result = spawnSync(solverPath, ['-aLEC', '-d2', testPath], {
+      encoding: 'utf8',
+      timeout: 30_000,
+    });
+
+    if (result.error) {
+      throw result.error;
+    }
+
+    if (result.status !== 0) {
+      throw new Error(
+        `pbnsolve exited with status ${result.status}: ${result.stderr}`,
+      );
+    }
+
+    solverOutput = result.stdout;
   } catch (error) {
     console.error('pbnsolve execution failed:', {
       error,
