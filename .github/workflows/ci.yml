@@ -11,9 +11,9 @@ on:
 jobs:
   ci:
     runs-on: ${{ matrix.os }}
-    environment: Build
+    environment: Test
     env:
-      NODE_ENV: development
+      NODE_ENV: test
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       DATABASE_URL_UNPOOLED: ${{ secrets.DATABASE_URL_UNPOOLED }}
 

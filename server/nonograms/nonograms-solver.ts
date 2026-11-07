@@ -21,11 +21,18 @@ export function checkWithSolver(puzzle: CandidatePuzzle): SolverOutput {
   const testPath = path.join(__dirname, 'solver', `test-${randomUUID()}.non`);
   const solverPath = path.join(__dirname, 'solver', 'pbnsolve');
 
-  fs.writeFileSync(testPath, data);
   let solverOutput = '';
   try {
+    fs.writeFileSync(testPath, data);
     solverOutput = (execSync(`${solverPath} -aLEC -d2 ${testPath}`)).toString();
-  } catch {
+  } catch (error) {
+    console.error('pbnsolve execution failed:', {
+      error,
+      solverPath,
+      testPath,
+      cwd: process.cwd(),
+    });
+
     throw createError({
       status: 500,
       statusText: 'Internal Server Error',
