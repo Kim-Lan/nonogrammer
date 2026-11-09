@@ -98,6 +98,7 @@ const thickColumns = inject<ComputedRef<Set<number>>>('thickColumns')!;
   text-align: center;
   cursor: default;
   font-family: 'Sofia Sans Condensed', sans-serif;
+  font-size: calc(v-bind(cellSize) * 0.75);
   font-weight: 500;
   width: v-bind(cellSize);
 }

@@ -6,6 +6,4 @@
   --font-mono: 'Chivo Mono', monospace;
 
   --ui-header-height: 64px;
-  --ui-footer-height: 65px;
-  --ui-main-height: calc(100vh - var(--ui-header-height) - var(--ui-footer-height));
 }

@@ -8,15 +8,14 @@ const props = defineProps<{
 
 const cellSize = computed(() => {
   if (props.width === 5) {
-    return '25px';
+    return '26px';
   } else if (props.width === 10) {
-    return '22px';
+    return '24px';
   } else if (props.width === 15) {
+    return '22px';
+  } else {
     return '20px';
-  } else if (props.width === 20) {
-    return '18px';
   }
-  return '16px';
 });
 
 provide('height', props.height);
@@ -56,16 +55,24 @@ function getThickDividers(size: number): Set<number> {
   return dividers;
 }
 
-const userGrid = ref<Grid<string>>(createEmptyGrid(props.height, props.width));
+const puzzleState = ref<string[]>([]);
+
+function setCell(index: number, state: CellState) {
+  puzzleState.value[index] = state;
+}
 </script>
 
 <template>
   <div class="puzzle-container w-max mx-auto pb-4 lg:pb-2">
-    <div class="puzzle-grid">
+    <div
+      class="puzzle-grid"
+      @contextmenu.prevent
+    >
       <PuzzleCell
         v-for="n in height * width"
         :key="`cell_${n - 1}`"
         :index="n - 1"
+        :state="puzzleState[n - 1] ?? '0'"
         class="puzzle-cell"
         :class="{
           'first-row': n <= width,
@@ -75,6 +82,7 @@ const userGrid = ref<Grid<string>>(createEmptyGrid(props.height, props.width));
           'thick-column': thickColumns.has(((n - 1) % width) + 1),
           'last-column': n % width === 0,
         }"
+        @update:state="setCell(n - 1, $event)"
       />
     </div>
     <ClueContainer id="top-clues" direction="column" :clues="columnClues" />
@@ -109,6 +117,7 @@ const userGrid = ref<Grid<string>>(createEmptyGrid(props.height, props.width));
 
   .puzzle-cell {
     box-sizing: border-box;
+    position: relative;
     background-color: white;
 
     &:not(.last-row) {
@@ -131,5 +140,27 @@ const userGrid = ref<Grid<string>>(createEmptyGrid(props.height, props.width));
       background-color: var(--color-blue-100);
     }
   }
+}
+
+.filled::before {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  background-color: v-bind(gridBorder);
+  width: 100%;
+  height: 100%;
+  content: '';
+  border: 1px solid white;
+  pointer-events: none;
+}
+
+.marked::before {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  content: '\2716';
+  pointer-events: none;
 }
 </style>

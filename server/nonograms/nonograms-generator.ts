@@ -5,8 +5,9 @@ import type { SolverOutput } from './nonograms-solver';
 import { createError } from 'nuxt/server';
 import random from 'random';
 import { FILLED_VALUE } from '../../shared/constants/nonograms-constants';
+import { convertIndexTo2D } from '../../shared/utils/grid-utils';
 import { range, shuffle } from '../utils/array-utils';
-import { convert2DToIndex, convertIndexTo2D, getColumn } from '../utils/grid-utils';
+import { convert2DToIndex, getColumn } from '../utils/grid-utils';
 import { createEmptyPuzzleGrid, getClues, getSolutionBitsFromGrid, getSolutionHashFromGrid } from '../utils/nonograms-utils';
 import { checkWithSolver } from './nonograms-solver';
 
