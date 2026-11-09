@@ -1,5 +1,5 @@
+import type { Dimensions, Grid, Line } from '../../shared/types/grid';
 import type { ClueGroup, Clues } from '../../shared/types/puzzle';
-import type { Dimensions, Grid, Line } from '../types/grid';
 import type { CandidatePuzzle } from '../types/puzzle';
 import { createHash } from 'node:crypto';
 import { ALLOWED_VALUES, EMPTY_VALUE, FILLED_VALUE } from '../../shared/constants/nonograms-constants';

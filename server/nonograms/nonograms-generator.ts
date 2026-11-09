@@ -1,5 +1,5 @@
+import type { Grid } from '../../shared/types/grid';
 import type { Clues, Nullable, PuzzleDifficulty } from '../../shared/types/puzzle';
-import type { Grid } from '../types/grid';
 import type { CandidatePuzzle, GeneratedPuzzle } from '../types/puzzle';
 import type { SolverOutput } from './nonograms-solver';
 import { createError } from 'nuxt/server';

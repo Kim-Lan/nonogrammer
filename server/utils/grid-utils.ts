@@ -1,4 +1,4 @@
-import type { Dimensions, Grid, Line } from '../types/grid';
+import type { Dimensions, Grid, Line } from '../../shared/types/grid';
 
 export function isGrid(value: unknown): value is Grid<unknown> {
   return (

@@ -55,6 +55,8 @@ function getThickDividers(size: number): Set<number> {
 
   return dividers;
 }
+
+const userGrid = ref<Grid<string>>(createEmptyGrid(props.height, props.width));
 </script>
 
 <template>

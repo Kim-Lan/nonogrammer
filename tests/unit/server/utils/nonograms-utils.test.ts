@@ -1,5 +1,5 @@
-import type { Grid } from '../../../../server/types/grid';
 import type { CandidatePuzzle } from '../../../../server/types/puzzle';
+import type { Grid } from '../../../../shared/types/grid';
 import type { Clues } from '../../../../shared/types/puzzle';
 import { describe, expect, it } from 'vitest';
 import {
