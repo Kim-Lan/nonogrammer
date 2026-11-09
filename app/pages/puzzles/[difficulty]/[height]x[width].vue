@@ -43,7 +43,7 @@ async function getPuzzle() {
       <h2 class="text-3xl font-mono font-bold">
         {{ capitalizedDifficulty }} {{ height }}x{{ width }}
       </h2>
-      <PuzzleId v-if="slug" :slug="slug" />
+      <PuzzleIdContainer v-if="slug" :slug="slug" />
     </div>
     <div class="w-full min-w-0 overflow-x-auto">
       <PuzzleContainer :height :width :row-clues :column-clues />
