@@ -1,16 +1,17 @@
+import type { Grid } from '../../shared/types/grid';
 import type { Clues, Nullable, PuzzleDifficulty } from '../../shared/types/puzzle';
-import type { Grid } from '../types/grid';
 import type { CandidatePuzzle, GeneratedPuzzle } from '../types/puzzle';
 import type { SolverOutput } from './nonograms-solver';
 import { createError } from 'nuxt/server';
 import random from 'random';
 import { FILLED_VALUE } from '../../shared/constants/nonograms-constants';
+import { convertIndexTo2D } from '../../shared/utils/grid-utils';
 import { range, shuffle } from '../utils/array-utils';
-import { convert2DToIndex, convertIndexTo2D, getColumn } from '../utils/grid-utils';
+import { convert2DToIndex, getColumn } from '../utils/grid-utils';
 import { createEmptyPuzzleGrid, getClues, getSolutionBitsFromGrid, getSolutionHashFromGrid } from '../utils/nonograms-utils';
 import { checkWithSolver } from './nonograms-solver';
 
-export function generatePuzzle(height: number, width: number, difficulty: PuzzleDifficulty): Nullable<GeneratedPuzzle> {
+export function generatePuzzle(height: number, width: number, difficulty: PuzzleDifficulty): GeneratedPuzzle {
   if (!Number.isInteger(height) || !Number.isInteger(width) || height < 2 || width < 2) {
     throw createError({
       status: 400,
@@ -63,6 +64,14 @@ export function generatePuzzle(height: number, width: number, difficulty: Puzzle
 
     count++;
   } while (!done && count < 100_000);
+
+  if (!puzzleObject) {
+    throw createError({
+      status: 500,
+      statusText: 'Internal Server Error',
+      message: 'Failed to generate puzzle',
+    });
+  }
 
   return puzzleObject;
 }

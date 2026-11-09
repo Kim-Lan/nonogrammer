@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 const props = defineProps<{
   direction: 'row' | 'column';
   clues: number[][];
@@ -10,6 +10,9 @@ provide('clues', props.clues);
 const height: number = inject('height') as number;
 const width: number = inject('width') as number;
 const cellSize: string = inject('cellSize') as string;
+
+const thickRows = inject<ComputedRef<Set<number>>>('thickRows')!;
+const thickColumns = inject<ComputedRef<Set<number>>>('thickColumns')!;
 </script>
 
 <template>
@@ -25,11 +28,11 @@ const cellSize: string = inject('cellSize') as string;
       class="clue-group"
       :class="{
         'first-row': direction === 'row' && groupIndex === 0,
-        'five-row': direction === 'row' && (groupIndex + 1) % 5 === 0,
-        'last-row': direction === 'row' && (groupIndex + 1) % height === 0,
+        'thick-row': direction === 'row' && thickRows.has(groupIndex + 1),
+        'last-row': direction === 'row' && groupIndex === height - 1,
         'first-column': direction === 'column' && groupIndex === 0,
-        'five-column': direction === 'column' && (groupIndex + 1) % 5 === 0,
-        'last-column': direction === 'column' && (groupIndex + 1) % width === 0,
+        'thick-column': direction === 'column' && thickColumns.has(groupIndex + 1),
+        'last-column': direction === 'column' && groupIndex === width - 1,
       }"
     />
   </div>
@@ -58,10 +61,8 @@ const cellSize: string = inject('cellSize') as string;
       border-bottom: v-bind(thinBorder);
     }
 
-    &.five-row {
-      &:not(.last-row) {
-        border-bottom: v-bind(thickBorder);
-      }
+    &.thick-row:not(.last-row) {
+      border-bottom: v-bind(thickBorder);
     }
   }
 }
@@ -82,10 +83,8 @@ const cellSize: string = inject('cellSize') as string;
       border-right: v-bind(thinBorder);
     }
 
-    &.five-column {
-      &:not(.last-column) {
-        border-right: v-bind(thickBorder);
-      }
+    &.thick-column:not(.last-column) {
+      border-right: v-bind(thickBorder);
     }
   }
 }
@@ -99,6 +98,7 @@ const cellSize: string = inject('cellSize') as string;
   text-align: center;
   cursor: default;
   font-family: 'Sofia Sans Condensed', sans-serif;
+  font-size: calc(v-bind(cellSize) * 0.75);
   font-weight: 500;
   width: v-bind(cellSize);
 }
