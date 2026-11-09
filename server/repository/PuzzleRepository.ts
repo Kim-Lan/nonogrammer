@@ -1,4 +1,4 @@
-import type { Nullable, PublicPuzzle, PuzzleDifficulty, PuzzleType } from '../../shared/types/puzzle';
+import type { PublicPuzzle, PuzzleDifficulty, PuzzleType } from '../../shared/types/puzzle';
 import type { GeneratedPuzzle, NewPuzzle } from '../types/puzzle';
 import { and, eq, sql } from 'drizzle-orm';
 import { createError } from 'nuxt/server';
@@ -6,8 +6,6 @@ import db from '../database';
 import { puzzles } from '../database/schema';
 import { generatePuzzle } from '../nonograms/nonograms-generator';
 import { generatePuzzleSlug } from '../utils/puzzle-utils';
-
-const VALID_SYSTEM_PUZZLE_SIZES = [5, 10, 15, 20, 25, 30];
 
 export async function getPuzzle(type: PuzzleType, height?: number, width?: number, difficulty?: PuzzleDifficulty): Promise<PublicPuzzle> {
   if (type === 'system') {
@@ -86,24 +84,18 @@ export async function getPuzzleBySlug(slug: string): Promise<PublicPuzzle> {
   return puzzle;
 }
 
+const VALID_SYSTEM_PUZZLE_SIZES = [5, 10, 15, 20, 25, 30];
+
 export async function generateSystemPuzzle(height: number, width: number, difficulty: PuzzleDifficulty): Promise<PublicPuzzle> {
   if (height !== width || !VALID_SYSTEM_PUZZLE_SIZES.includes(height)) {
     throw createError({
       status: 400,
       statusText: 'Bad Request',
-      message: 'Invalid system puzzle dimensions',
+      message: 'Invalid system puzzle dimensions; only 5x5, 10x10, 15x15, 20x20, 25x25, and 30x30 are allowed',
     });
   }
 
-  const generatedPuzzle: Nullable<GeneratedPuzzle> = generatePuzzle(height, width, difficulty);
-
-  if (!generatedPuzzle) {
-    throw createError({
-      status: 500,
-      statusText: 'Internal Server Error',
-      message: 'Failed to generate puzzle',
-    });
-  }
+  const generatedPuzzle: GeneratedPuzzle = generatePuzzle(height, width, difficulty);
 
   const foundPuzzle = await db.query.puzzles.findFirst({
     where: {

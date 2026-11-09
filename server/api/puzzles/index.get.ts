@@ -1,5 +1,6 @@
 import type { PublicPuzzle, PuzzleDifficulty, PuzzleType } from '../../../shared/types/puzzle';
 import { createError, defineEventHandler, getQuery } from 'nuxt/server';
+import { puzzleDifficulties, puzzleTypes } from '../../../shared/types/puzzle';
 import { getPuzzle } from '../../repository/PuzzleRepository';
 
 export default defineEventHandler(async (event) => {
@@ -10,7 +11,7 @@ export default defineEventHandler(async (event) => {
     difficulty: string;
   }>(event);
 
-  if (!['system', 'daily', 'community'].includes(type)) {
+  if (!puzzleTypes.includes(type as PuzzleType)) {
     throw createError({
       status: 400,
       statusText: 'Bad Request',
@@ -18,7 +19,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  if (difficulty !== 'normal' && difficulty !== 'hard') {
+  if (!puzzleDifficulties.includes(difficulty as PuzzleDifficulty)) {
     throw createError({
       status: 400,
       statusText: 'Bad Request',
@@ -26,7 +27,18 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const puzzle: PublicPuzzle = await getPuzzle(type as PuzzleType, parseInt(height), parseInt(width), difficulty as PuzzleDifficulty);
+  const puzzleHeight = Number(height);
+  const puzzleWidth = Number(width);
+
+  if (!Number.isSafeInteger(puzzleHeight) || !Number.isSafeInteger(puzzleWidth)) {
+    throw createError({
+      status: 400,
+      statusText: 'Bad Request',
+      message: 'Invalid puzzle dimensions',
+    });
+  }
+
+  const puzzle: PublicPuzzle = await getPuzzle(type as PuzzleType, puzzleHeight, puzzleWidth, difficulty as PuzzleDifficulty);
 
   return puzzle;
 });

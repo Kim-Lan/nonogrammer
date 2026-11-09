@@ -3,6 +3,7 @@ const route = useRoute();
 const slug: string = route.params.slug;
 
 const puzzle = ref<Nullable<PublicPuzzle>>(null);
+
 const errorMessage = ref<string>('');
 
 const capitalizedDifficulty = computed(() => {
@@ -16,15 +17,16 @@ onMounted(async () => await getPuzzle());
 async function getPuzzle() {
   errorMessage.value = '';
   try {
-    const response = await useFetch(`/api/puzzles/${slug}`);
-    if (response.error.value) {
-      const { data, message } = response.error.value;
-      throw new Error(isErrorWithMessage(data) ? data.message : message);
-    }
-    puzzle.value = response.data.value;
+    const response = await $fetch(`/api/puzzles/${slug}`);
+    puzzle.value = response;
   } catch (error: unknown) {
     puzzle.value = null;
-    errorMessage.value = isErrorWithMessage(error) ? error.message : 'An unknown error occurred';
+
+    if (isErrorWithDataMessage(error)) {
+      errorMessage.value = error.data.message;
+    } else {
+      errorMessage.value = isErrorWithMessage(error) ? error.message : 'An unknown error occurred';
+    }
   }
 }
 </script>
@@ -43,7 +45,7 @@ async function getPuzzle() {
       <h2 v-if="puzzle" class="text-3xl font-mono font-bold">
         {{ capitalizedDifficulty }} {{ puzzle.height }}x{{ puzzle.width }}
       </h2>
-      <PuzzleId :slug="slug" />
+      <PuzzleIdContainer :slug="slug" />
     </div>
     <div v-if="puzzle" class="w-full min-w-0 overflow-x-auto">
       <PuzzleContainer :height="puzzle.height" :width="puzzle.width" :row-clues="puzzle.rowClues" :column-clues="puzzle.columnClues" />

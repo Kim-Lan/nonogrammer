@@ -1,4 +1,4 @@
-import type { Dimensions, Grid, Line } from '../types/grid';
+import type { Dimensions, Grid, Line } from '../../shared/types/grid';
 
 export function isGrid(value: unknown): value is Grid<unknown> {
   return (
@@ -42,12 +42,6 @@ export function getDimensions(grid: Grid<string>): Dimensions {
   const width: number = grid[0].length;
 
   return { height, width };
-}
-
-export function convertIndexTo2D(index: number, width: number): { rowIndex: number; columnIndex: number } {
-  const rowIndex: number = Math.floor(index / width);
-  const columnIndex: number = index % width;
-  return { rowIndex, columnIndex };
 }
 
 export function convert2DToIndex(rowIndex: number, columnIndex: number, width: number): number {

@@ -9,6 +9,8 @@ export default defineNuxtConfig({
     '@nuxt/test-utils',
     // '@nuxtjs/better-auth',
     '@nuxtjs/i18n',
+    '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt',
   ],
 
   components: [
