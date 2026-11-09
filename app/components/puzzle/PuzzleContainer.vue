@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 const props = defineProps<{
   height: number;
   width: number;
@@ -19,22 +19,42 @@ const cellSize = computed(() => {
   return '16px';
 });
 
-const fontSize = computed(() => {
-  if (props.width === 5) {
-    return '14pt';
-  } else if (props.width === 10) {
-    return '13pt';
-  } else if (props.width === 15) {
-    return '12pt';
-  } else if (props.width === 20) {
-    return '11pt';
-  }
-  return '11pt';
-});
-
 provide('height', props.height);
 provide('width', props.width);
 provide('cellSize', cellSize);
+
+const thickRows = computed(() => getThickDividers(props.height));
+const thickColumns = computed(() => getThickDividers(props.width));
+
+provide('thickRows', thickRows);
+provide('thickColumns', thickColumns);
+
+function getThickDividers(size: number): Set<number> {
+  const dividers = new Set<number>();
+
+  if (size <= 5) {
+    return dividers;
+  }
+
+  const remainder = size % 5;
+
+  let offset;
+  if (remainder === 2) {
+    offset = 1;
+  } else if (remainder === 4) {
+    offset = 2;
+  } else if (remainder === 1 && size > 6) {
+    offset = 3;
+  } else {
+    offset = 5;
+  }
+
+  for (let i = offset; i < size; i += 5) {
+    dividers.add(i);
+  }
+
+  return dividers;
+}
 </script>
 
 <template>
@@ -47,10 +67,10 @@ provide('cellSize', cellSize);
         class="puzzle-cell"
         :class="{
           'first-row': n <= width,
-          'five-row': Math.ceil(n / height) % 5 === 0,
-          'last-row': n > (height * width) - width,
+          'thick-row': thickRows.has(Math.ceil(n / width)),
+          'last-row': n > height * width - width,
           'first-column': (n - 1) % width === 0,
-          'five-column': n % 5 === 0,
+          'thick-column': thickColumns.has(((n - 1) % width) + 1),
           'last-column': n % width === 0,
         }"
       />
@@ -97,16 +117,12 @@ provide('cellSize', cellSize);
       border-right: v-bind(thinBorder);
     }
 
-    &.five-row {
-      &:not(.last-row) {
-        border-bottom: v-bind(thickBorder);
-      }
+    &.thick-row:not(.last-row) {
+      border-bottom: v-bind(thickBorder);
     }
 
-    &.five-column {
-      &:not(.last-column) {
-        border-right: v-bind(thickBorder);
-      }
+    &.thick-column:not(.last-column) {
+      border-right: v-bind(thickBorder);
     }
 
     &:hover {
