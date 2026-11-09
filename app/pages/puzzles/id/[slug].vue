@@ -22,7 +22,7 @@ async function getPuzzle() {
   } catch (error: unknown) {
     puzzle.value = null;
 
-    if ('data' in error && isErrorWithMessage(error.data)) {
+    if (isErrorWithDataMessage(error)) {
       errorMessage.value = error.data.message;
     } else {
       errorMessage.value = isErrorWithMessage(error) ? error.message : 'An unknown error occurred';

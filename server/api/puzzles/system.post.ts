@@ -1,5 +1,6 @@
 import type { PublicPuzzle, PuzzleDifficulty } from '../../../shared/types/puzzle';
 import { createError, defineEventHandler, getQuery } from 'nuxt/server';
+import { puzzleDifficulties } from '../../../shared/types/puzzle';
 import { generateSystemPuzzle } from '../../repository/PuzzleRepository';
 
 export default defineEventHandler(async (event) => {
@@ -9,7 +10,7 @@ export default defineEventHandler(async (event) => {
     difficulty: string;
   }>(event);
 
-  if (difficulty !== 'normal' && difficulty !== 'hard') {
+  if (!puzzleDifficulties.includes(difficulty as PuzzleDifficulty)) {
     throw createError({
       status: 400,
       statusText: 'Bad Request',
@@ -17,12 +18,22 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  let puzzle: PublicPuzzle;
+  const puzzleHeight = Number(height);
+  const puzzleWidth = Number(width);
 
+  if (!Number.isSafeInteger(puzzleHeight) || !Number.isSafeInteger(puzzleWidth)) {
+    throw createError({
+      status: 400,
+      statusText: 'Bad Request',
+      message: 'Invalid puzzle dimensions',
+    });
+  }
+
+  let puzzle: PublicPuzzle;
   try {
     puzzle = await generateSystemPuzzle(
-      parseInt(height),
-      parseInt(width),
+      puzzleHeight,
+      puzzleWidth,
       difficulty as PuzzleDifficulty,
     );
   } catch (error) {

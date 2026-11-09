@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { EMPTY_VALUE } from '~~/shared/constants/nonograms-constants';
+
 const props = defineProps<{
   height: number;
   width: number;
@@ -55,24 +57,42 @@ function getThickDividers(size: number): Set<number> {
   return dividers;
 }
 
-const puzzleState = ref<string[]>([]);
+const puzzleState = ref<CellState[]>([]);
+const puzzleGrid = ref<HTMLElement | null>(null);
+
+function getCell(index: number): CellState {
+  return puzzleState.value[index] ?? EMPTY_VALUE;
+}
 
 function setCell(index: number, state: CellState) {
   puzzleState.value[index] = state;
 }
+
+const { onPointerDown, onPointerMove, onPointerUp, endDrag } = usePuzzleDrag({
+  puzzleGrid,
+  getWidth: () => props.width,
+  getCell,
+  setCell,
+});
 </script>
 
 <template>
   <div class="puzzle-container w-max mx-auto pb-4 lg:pb-2">
     <div
+      ref="puzzleGrid"
       class="puzzle-grid"
+      @pointerdown="onPointerDown"
+      @pointermove="onPointerMove"
+      @pointerup="onPointerUp"
+      @pointercancel="endDrag"
+      @lostpointercapture="endDrag"
       @contextmenu.prevent
     >
       <PuzzleCell
         v-for="n in height * width"
         :key="`cell_${n - 1}`"
         :index="n - 1"
-        :state="puzzleState[n - 1] ?? '0'"
+        :state="puzzleState[n - 1] ?? EMPTY_VALUE"
         class="puzzle-cell"
         :class="{
           'first-row': n <= width,
@@ -82,7 +102,6 @@ function setCell(index: number, state: CellState) {
           'thick-column': thickColumns.has(((n - 1) % width) + 1),
           'last-column': n % width === 0,
         }"
-        @update:state="setCell(n - 1, $event)"
       />
     </div>
     <ClueContainer id="top-clues" direction="column" :clues="columnClues" />
@@ -98,12 +117,14 @@ function setCell(index: number, state: CellState) {
   display: grid;
   grid-template: auto auto auto / auto auto auto;
   line-height: calc(v-bind(cellSize) - 2px);
-  font-size: v-bind(fontSize);
   border-collapse: collapse;
   color: v-bind(gridBorder);
 }
 
 .puzzle-grid {
+  touch-action: none;
+  user-select: none;
+
   box-sizing: border-box;
   grid-area: 2 / 2;
   border-collapse: collapse;
@@ -119,6 +140,7 @@ function setCell(index: number, state: CellState) {
     box-sizing: border-box;
     position: relative;
     background-color: white;
+    font-size: calc(v-bind(cellSize) * 0.75);
 
     &:not(.last-row) {
       border-bottom: v-bind(thinBorder);

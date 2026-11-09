@@ -36,7 +36,7 @@ async function getPuzzle() {
     columnClues.value = [];
     slug.value = '';
 
-    if ('data' in error && isErrorWithMessage(error.data)) {
+    if (isErrorWithDataMessage(error)) {
       errorMessage.value = error.data.message;
     } else {
       errorMessage.value = isErrorWithMessage(error) ? error.message : 'An unknown error occurred';
