@@ -59,7 +59,7 @@ describe('POST /api/puzzles/system', async () => {
 
     expect(response).toBeDefined();
     expect(response).toMatchObject(query);
-    expect(response.slug).toMatch(/^[a-f0-9]{24}$/); // 12 bytes hexadecimal
+    expect(response.slug).toMatch(/^[a-f0-9]{12}$/); // 6 bytes hexadecimal
     expect(response.rowClues).toHaveLength(height);
     expect(response.columnClues).toHaveLength(width);
     expect(response.solutionHash).toMatch(/^[a-f0-9]{64}$/); // SHA-256 hexadecimal
@@ -86,7 +86,7 @@ describe('POST /api/puzzles/system', async () => {
 
     expect(response).toBeDefined();
     expect(response).toMatchObject(query);
-    expect(response.slug).toMatch(/^[a-f0-9]{24}$/); // 12 bytes hexadecimal
+    expect(response.slug).toMatch(/^[a-f0-9]{12}$/); // 6 bytes hexadecimal
     expect(response.rowClues).toHaveLength(height);
     expect(response.columnClues).toHaveLength(width);
     expect(response.solutionHash).toMatch(/^[a-f0-9]{64}$/); // SHA-256 hexadecimal
