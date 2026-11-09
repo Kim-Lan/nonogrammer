@@ -128,7 +128,7 @@ describe.runIf(hasDocker)('puzzle schema integration test', () => {
 
     expect(puzzle).toBeDefined();
 
-    expect(puzzle.slug).toMatch(/^[a-f0-9]{24}$/);
+    expect(puzzle.slug).toMatch(/^[a-f0-9]{12}$/);
     expect(puzzle.id).toBeGreaterThan(0);
     expect(puzzle.solutionBits).toHaveLength(25);
     expect(puzzle.rowClues).toHaveLength(5);
@@ -169,7 +169,7 @@ describe.runIf(hasDocker)('puzzle schema integration test', () => {
 
     expect(puzzle).toMatchObject(testPuzzle);
 
-    expect(puzzle.slug).toMatch(/^[a-f0-9]{24}$/);
+    expect(puzzle.slug).toMatch(/^[a-f0-9]{12}$/);
     expect(puzzle.id).toBeGreaterThan(0);
     expect(puzzle.createdAt).toBeInstanceOf(Date);
     expect(puzzle.updatedAt).toBeInstanceOf(Date);
@@ -199,7 +199,7 @@ describe.runIf(hasDocker)('puzzle schema integration test', () => {
 
     expect(puzzle).toMatchObject(testPuzzle);
 
-    expect(puzzle.slug).toMatch(/^[a-f0-9]{24}$/);
+    expect(puzzle.slug).toMatch(/^[a-f0-9]{12}$/);
     expect(puzzle.id).toBeGreaterThan(0);
     expect(puzzle.createdAt).toBeInstanceOf(Date);
     expect(puzzle.updatedAt).toBeInstanceOf(Date);
