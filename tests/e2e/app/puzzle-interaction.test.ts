@@ -12,21 +12,23 @@ describe('puzzle interaction e2e test', async () => {
       const grid = page.locator('.puzzle-grid');
       const cells = page.locator('[data-cell-index]');
       await grid.waitFor();
-      await expect(cells).toHaveCount(25);
+      expect(await cells.count()).toBe(25);
 
       const cell = (index: number) => page.locator(`[data-cell-index="${index}"]`);
+      const waitForState = (index: number, state: 'filled' | 'marked' | 'empty') =>
+        page.locator(`[data-cell-index="${index}"].${state}`).waitFor();
 
       // Cell filling
       await cell(0).click();
-      await expect(cell(0)).toHaveClass(/\bfilled\b/);
+      await waitForState(0, 'filled');
 
       // Cell marking
       await cell(1).click({ button: 'right' });
-      await expect(cell(1)).toHaveClass(/\bmarked\b/);
+      await waitForState(1, 'marked');
 
       // Cell clearing
       await cell(0).click();
-      await expect(cell(0)).toHaveClass(/\bempty\b/);
+      await waitForState(0, 'empty');
 
       // Dragging paints each cell along the row
       const start = await cell(5).boundingBox();
@@ -40,7 +42,7 @@ describe('puzzle interaction e2e test', async () => {
       await page.mouse.up();
 
       for (const index of [5, 6, 7, 8]) {
-        await expect(cell(index)).toHaveClass(/\bfilled\b/);
+        await waitForState(index, 'filled');
       }
     } finally {
       await page.close();
