@@ -5,6 +5,7 @@ import { createError } from 'nuxt/server';
 import db from '../database';
 import { puzzles } from '../database/schema';
 import { generatePuzzle } from '../nonograms/nonograms-generator';
+import { generatePuzzleSlug } from '../utils/puzzle-utils';
 
 const VALID_SYSTEM_PUZZLE_SIZES = [5, 10, 15, 20, 25, 30];
 
@@ -129,15 +130,27 @@ export async function generateSystemPuzzle(height: number, width: number, diffic
 
   const newPuzzle: NewPuzzle = {
     ...generatedPuzzle,
+    slug: generatePuzzleSlug(),
     type: 'system',
     publicationStatus: 'published',
     validationStatus: 'valid',
   };
 
-  const [puzzle] = await db
-    .insert(puzzles)
-    .values(newPuzzle)
-    .returning();
+  let puzzle;
+  while (!puzzle) {
+    try {
+      [puzzle] = await db
+        .insert(puzzles)
+        .values(newPuzzle)
+        .returning();
+    } catch (error) {
+      const databaseError = error as { code?: string; constraint?: string; cause?: { code?: string; constraint?: string } };
+      const cause = databaseError.cause ?? databaseError;
+      if (cause.code !== '23505' || cause.constraint !== 'puzzles_slug_unique') {
+        throw error;
+      }
+    }
+  }
 
   if (!puzzle) {
     throw createError({
