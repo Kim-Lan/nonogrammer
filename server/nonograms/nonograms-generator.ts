@@ -10,7 +10,7 @@ import { convert2DToIndex, convertIndexTo2D, getColumn } from '../utils/grid-uti
 import { createEmptyPuzzleGrid, getClues, getSolutionBitsFromGrid, getSolutionHashFromGrid } from '../utils/nonograms-utils';
 import { checkWithSolver } from './nonograms-solver';
 
-export function generatePuzzle(height: number, width: number, difficulty: PuzzleDifficulty): Nullable<GeneratedPuzzle> {
+export function generatePuzzle(height: number, width: number, difficulty: PuzzleDifficulty): GeneratedPuzzle {
   if (!Number.isInteger(height) || !Number.isInteger(width) || height < 2 || width < 2) {
     throw createError({
       status: 400,
@@ -63,6 +63,14 @@ export function generatePuzzle(height: number, width: number, difficulty: Puzzle
 
     count++;
   } while (!done && count < 100_000);
+
+  if (!puzzleObject) {
+    throw createError({
+      status: 500,
+      statusText: 'Internal Server Error',
+      message: 'Failed to generate puzzle',
+    });
+  }
 
   return puzzleObject;
 }

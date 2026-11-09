@@ -12,25 +12,41 @@ const rowClues = ref<Clues>([]);
 const columnClues = ref<Clues>([]);
 const slug = ref<string>('');
 
+const errorMessage = ref<string>('');
+
 onMounted(async () => await getPuzzle());
 
 async function getPuzzle() {
-  const response = await $fetch('/api/puzzles/system', {
-    method: 'POST',
-    query: {
-      height,
-      width,
-      difficulty,
-    },
-  });
+  errorMessage.value = '';
+  try {
+    const response = await $fetch('/api/puzzles/system', {
+      method: 'POST',
+      query: {
+        height,
+        width,
+        difficulty,
+      },
+    });
 
-  rowClues.value = response.rowClues;
-  columnClues.value = response.columnClues;
-  slug.value = response.slug;
+    rowClues.value = response.rowClues;
+    columnClues.value = response.columnClues;
+    slug.value = response.slug;
+  } catch (error: unknown) {
+    rowClues.value = [];
+    columnClues.value = [];
+    slug.value = '';
+
+    if ('data' in error && isErrorWithMessage(error.data)) {
+      errorMessage.value = error.data.message;
+    } else {
+      errorMessage.value = isErrorWithMessage(error) ? error.message : 'An unknown error occurred';
+    }
+  }
 }
 </script>
 
 <template>
+  <UBanner v-if="errorMessage" :title="errorMessage" color="error" />
   <UContainer class="flex flex-col items-center py-4 md:py-6 lg:py-8 gap-4 md:gap-6 lg:gap-8">
     <UButton
       to="/play"

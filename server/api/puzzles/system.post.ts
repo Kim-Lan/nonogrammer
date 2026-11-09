@@ -27,11 +27,7 @@ export default defineEventHandler(async (event) => {
     );
   } catch (error) {
     console.error('Failed to generate puzzle:', error);
-    throw createError({
-      status: 500,
-      statusText: 'Internal Server Error',
-      message: 'Failed to generate puzzle',
-    });
+    throw error;
   }
 
   return puzzle;
