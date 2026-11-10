@@ -15,3 +15,11 @@ export function isErrorWithDataMessage(error: unknown): error is { data: { messa
     && isErrorWithMessage(error.data)
   );
 }
+
+export function getFetchErrorMessage(error: FetchError) {
+  if (isErrorWithDataMessage(error)) {
+    return error.data.message;
+  } else {
+    return isErrorWithMessage(error) ? error.message : 'An unknown error occurred';
+  }
+}
