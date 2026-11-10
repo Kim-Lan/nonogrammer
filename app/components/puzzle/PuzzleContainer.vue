@@ -113,12 +113,22 @@ const { onPointerDown, onPointerMove, onPointerUp, endDrag } = usePuzzleDrag({
 
 <style lang="scss">
 .puzzle-container {
+  --puzzle-foreground: var(--ui-text);
+  --puzzle-background: var(--color-white);
+  --puzzle-hover: var(--color-blue-100);
+
   box-sizing: border-box;
   display: grid;
   grid-template: auto auto auto / auto auto auto;
   line-height: calc(v-bind(cellSize) - 2px);
   border-collapse: collapse;
-  color: v-bind(gridBorder);
+  color: var(--puzzle-foreground);
+}
+
+.dark .puzzle-container {
+  --puzzle-foreground: var(--ui-bg);
+  --puzzle-background: var(--color-amber-50);
+  --puzzle-hover: var(--color-amber-200);
 }
 
 .puzzle-grid {
@@ -128,9 +138,9 @@ const { onPointerDown, onPointerMove, onPointerUp, endDrag } = usePuzzleDrag({
   box-sizing: border-box;
   grid-area: 2 / 2;
   border-collapse: collapse;
-  background-color: v-bind(gridBorder);
+  background-color: var(--puzzle-foreground);
 
-  border: v-bind(thickBorder);
+  border: 2px solid var(--puzzle-foreground);
 
   display: grid;
   grid-template-rows: repeat(v-bind('props.height'), v-bind(cellSize));
@@ -139,27 +149,27 @@ const { onPointerDown, onPointerMove, onPointerUp, endDrag } = usePuzzleDrag({
   .puzzle-cell {
     box-sizing: border-box;
     position: relative;
-    background-color: white;
+    background-color: var(--puzzle-background);
     font-size: calc(v-bind(cellSize) * 0.75);
 
     &:not(.last-row) {
-      border-bottom: v-bind(thinBorder);
+      border-bottom: 1px solid var(--puzzle-foreground);
     }
 
     &:not(.last-column) {
-      border-right: v-bind(thinBorder);
+      border-right: 1px solid var(--puzzle-foreground);
     }
 
     &.thick-row:not(.last-row) {
-      border-bottom: v-bind(thickBorder);
+      border-bottom: 2px solid var(--puzzle-foreground);
     }
 
     &.thick-column:not(.last-column) {
-      border-right: v-bind(thickBorder);
+      border-right: 2px solid var(--puzzle-foreground);
     }
 
     &:hover {
-      background-color: var(--color-blue-100);
+      background-color: var(--puzzle-hover);
     }
   }
 }
@@ -168,11 +178,11 @@ const { onPointerDown, onPointerMove, onPointerUp, endDrag } = usePuzzleDrag({
   box-sizing: border-box;
   display: block;
   position: absolute;
-  background-color: v-bind(gridBorder);
+  background-color: var(--puzzle-foreground);
   width: 100%;
   height: 100%;
   content: '';
-  border: 1px solid white;
+  border: 1px solid var(--puzzle-background);
   pointer-events: none;
 }
 
