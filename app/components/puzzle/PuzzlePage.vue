@@ -15,16 +15,22 @@ const capitalizedDifficulty = computed(() => {
     <UButton
       to="/play"
       icon="boxicons:arrow-big-left-filled"
-      class="bg-neutral-400 hover:bg-neutral-500 active:bg-neutral-600 self-start"
+      class="bg-neutral-600 hover:bg-neutral-700 active:bg-neutral-800 dark:bg-neutral-400 dark:hover:bg-neutral-300 dark:active:bg-neutral-200 self-start"
     >
       Back to Puzzle Selection
     </UButton>
+
+    <LoadingCircle v-if="!puzzle" aria-label="Loading puzzle" />
+
     <div v-if="puzzle" class="flex flex-col items-center">
       <h2 class="text-3xl font-mono font-bold">
         {{ capitalizedDifficulty }} {{ puzzle.height }}x{{ puzzle.width }}
       </h2>
       <PuzzleIdContainer :slug="puzzle.slug" />
     </div>
+
+    <PuzzleControls v-if="puzzle" />
+
     <div v-if="puzzle" class="w-full min-w-0 overflow-x-auto">
       <PuzzleContainer
         :height="puzzle.height"
