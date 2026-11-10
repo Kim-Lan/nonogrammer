@@ -1,6 +1,7 @@
 <script setup lang="ts">
 const props = defineProps<{
   puzzle: Nullable<PublicPuzzle>;
+  hasError?: boolean;
 }>();
 
 const capitalizedDifficulty = computed(() => {
@@ -20,7 +21,7 @@ const capitalizedDifficulty = computed(() => {
       Back to Puzzle Selection
     </UButton>
 
-    <LoadingCircle v-if="!puzzle" aria-label="Loading puzzle" />
+    <LoadingCircle v-if="!puzzle && !hasError" aria-label="Loading puzzle" />
 
     <div v-if="puzzle" class="flex flex-col items-center">
       <h2 class="text-3xl font-mono font-bold">

@@ -35,5 +35,5 @@ async function getPuzzle() {
 
 <template>
   <UBanner v-if="errorMessage" :title="errorMessage" color="error" />
-  <PuzzlePage :puzzle="puzzle" />
+  <PuzzlePage :puzzle="puzzle" :has-error="!!errorMessage" />
 </template>

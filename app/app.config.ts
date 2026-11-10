@@ -4,6 +4,21 @@ export default defineAppConfig({
       primary: 'blue',
       neutral: 'slate',
     },
+    formField: {
+      slots: {
+        error: 'text-error-600 dark:text-error-400',
+      },
+    },
+    input: {
+      slots: {
+        base: 'placeholder:text-toned',
+      },
+    },
+    select: {
+      slots: {
+        placeholder: 'text-toned',
+      },
+    },
     link: {
       variants: {
         active: {
