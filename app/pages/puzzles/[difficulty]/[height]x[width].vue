@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { FetchError } from 'ofetch';
+
 const route = useRoute();
 const height: number = Number(route.params.height);
 const width: number = Number(route.params.width);

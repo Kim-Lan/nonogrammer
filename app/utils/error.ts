@@ -1,3 +1,5 @@
+import type { FetchError } from 'ofetch';
+
 export function isErrorWithMessage(error: unknown): error is { message: string } {
   return (
     typeof error === 'object'

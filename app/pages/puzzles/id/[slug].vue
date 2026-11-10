@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { FetchError } from 'ofetch';
+
 const route = useRoute();
 const slug: string = route.params.slug;
 
