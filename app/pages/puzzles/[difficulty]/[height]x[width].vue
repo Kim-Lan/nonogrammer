@@ -6,13 +6,7 @@ const height: number = Number(route.params.height);
 const width: number = Number(route.params.width);
 const difficulty: string = route.params.difficulty;
 
-const capitalizedDifficulty = computed(() => {
-  return difficulty.charAt(0).toUpperCase() + difficulty.substring(1);
-});
-
-const rowClues = ref<Clues>([]);
-const columnClues = ref<Clues>([]);
-const slug = ref<string>('');
+const puzzle = ref<Nullable<PublicPuzzle>>(null);
 
 const errorMessage = ref<string>('');
 
@@ -30,13 +24,9 @@ async function getPuzzle() {
       },
     });
 
-    rowClues.value = response.rowClues;
-    columnClues.value = response.columnClues;
-    slug.value = response.slug;
+    puzzle.value = response;
   } catch (error: unknown) {
-    rowClues.value = [];
-    columnClues.value = [];
-    slug.value = '';
+    puzzle.value = null;
 
     errorMessage.value = getFetchErrorMessage(error as FetchError);
   }
@@ -45,22 +35,5 @@ async function getPuzzle() {
 
 <template>
   <UBanner v-if="errorMessage" :title="errorMessage" color="error" />
-  <UContainer class="flex flex-col items-center py-4 md:py-6 lg:py-8 gap-4 md:gap-6 lg:gap-8">
-    <UButton
-      to="/play"
-      icon="boxicons:arrow-big-left-filled"
-      class="bg-neutral-400 hover:bg-neutral-500 active:bg-neutral-600 self-start"
-    >
-      Back to Puzzle Selection
-    </UButton>
-    <div class="flex flex-col items-center">
-      <h2 class="text-3xl font-mono font-bold">
-        {{ capitalizedDifficulty }} {{ height }}x{{ width }}
-      </h2>
-      <PuzzleIdContainer v-if="slug" :slug="slug" />
-    </div>
-    <div class="w-full min-w-0 overflow-x-auto">
-      <PuzzleContainer :height :width :row-clues :column-clues />
-    </div>
-  </UContainer>
+  <PuzzlePage :puzzle="puzzle" />
 </template>
