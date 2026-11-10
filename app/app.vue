@@ -156,7 +156,7 @@ function isPathActive(path: string): boolean {
                     block
                     :ui="{
                       base: [
-                        'justify-between rounded-md px-3 py-2 font-medium text-muted',
+                        'justify-between rounded-md px-3 py-2 font-medium text-toned',
                         open && 'bg-elevated text-highlighted',
                       ],
                     }"
@@ -178,7 +178,7 @@ function isPathActive(path: string): boolean {
                       block
                       :ui="{
                         base: `justify-start rounded-md px-3 py-2 font-medium hover:bg-elevated
-                          ${isPathActive(child.to) ? 'hover:text-primary' : 'text-muted hover:text-highlighted'}`,
+                          ${isPathActive(child.to) ? 'text-primary-600 hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-400' : 'text-toned hover:text-highlighted'}`,
                       }"
                     />
                   </div>

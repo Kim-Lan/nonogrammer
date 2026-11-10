@@ -1,3 +1,5 @@
+import type { FetchError } from 'ofetch';
+
 export function isErrorWithMessage(error: unknown): error is { message: string } {
   return (
     typeof error === 'object'
@@ -14,4 +16,12 @@ export function isErrorWithDataMessage(error: unknown): error is { data: { messa
     && 'data' in error
     && isErrorWithMessage(error.data)
   );
+}
+
+export function getFetchErrorMessage(error: FetchError) {
+  if (isErrorWithDataMessage(error)) {
+    return error.data.message;
+  } else {
+    return isErrorWithMessage(error) ? error.message : 'An unknown error occurred';
+  }
 }

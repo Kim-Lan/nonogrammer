@@ -40,9 +40,10 @@ const thickColumns = inject<ComputedRef<Set<number>>>('thickColumns')!;
 
 <style lang="scss">
 .clue-container {
+  color: var(--puzzle-foreground);
   border-collapse: collapse;
-  border: v-bind(thickBorder);
-  background-color: white;
+  border: 2px solid var(--puzzle-foreground);
+  background-color: var(--puzzle-background);
   box-sizing: border-box;
   user-select: none;
 }
@@ -58,11 +59,11 @@ const thickColumns = inject<ComputedRef<Set<number>>>('thickColumns')!;
     align-items: center;
 
     &:not(.last-row) {
-      border-bottom: v-bind(thinBorder);
+      border-bottom: 1px solid var(--puzzle-foreground);
     }
 
     &.thick-row:not(.last-row) {
-      border-bottom: v-bind(thickBorder);
+      border-bottom: 2px solid var(--puzzle-foreground);
     }
   }
 }
@@ -80,11 +81,11 @@ const thickColumns = inject<ComputedRef<Set<number>>>('thickColumns')!;
     align-items: center;
 
     &:not(.last-column) {
-      border-right: v-bind(thinBorder);
+      border-right: 1px solid var(--puzzle-foreground);
     }
 
     &.thick-column:not(.last-column) {
-      border-right: v-bind(thickBorder);
+      border-right: 2px solid var(--puzzle-foreground);
     }
   }
 }
@@ -105,7 +106,7 @@ const thickColumns = inject<ComputedRef<Set<number>>>('thickColumns')!;
 
 #top-clues {
   grid-area: 1 / 2;
-  border-top: v-bind(thickBorder);
+  border-top: 2px solid var(--puzzle-foreground);
   border-bottom: 0;
 
   .clue-group {
@@ -115,7 +116,7 @@ const thickColumns = inject<ComputedRef<Set<number>>>('thickColumns')!;
 
 #bottom-clues {
   grid-area: 3 / 2;
-  border-bottom: v-bind(thickBorder);
+  border-bottom: 2px solid var(--puzzle-foreground);
   border-top: 0;
 
   .clue-group {
@@ -125,7 +126,7 @@ const thickColumns = inject<ComputedRef<Set<number>>>('thickColumns')!;
 
 #left-clues {
   grid-area: 2 / 1;
-  border-left: v-bind(thickBorder);
+  border-left: 2px solid var(--puzzle-foreground);
   border-right: 0;
 
   .clue-group {
@@ -135,7 +136,7 @@ const thickColumns = inject<ComputedRef<Set<number>>>('thickColumns')!;
 
 #right-clues {
   grid-area: 2 / 3;
-  border-right: v-bind(thickBorder);
+  border-right: 2px solid var(--puzzle-foreground);
   border-left: 0;
 
   .clue-group {
