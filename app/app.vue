@@ -227,6 +227,15 @@ function isPathActive(path: string): boolean {
         </p>
       </template>
 
+      <template #default>
+        <NuxtLink
+          to="/ai"
+          class="text-sm text-muted"
+        >
+          AI Disclosure / Policy
+        </NuxtLink>
+      </template>
+
       <template #right>
         <UButton
           to="https://ko-fi.com/kimlan"
