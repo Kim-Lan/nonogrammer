@@ -98,7 +98,6 @@ const thickColumns = inject<ComputedRef<Set<number>>>('thickColumns')!;
 .clue-item {
   text-align: center;
   cursor: default;
-  // font-family: 'Open Sans', sans-serif;
   font-size: calc(v-bind(cellSize) * 0.65);
   font-weight: 500;
   width: v-bind(cellSize);
