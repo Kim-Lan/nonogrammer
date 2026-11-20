@@ -1,3 +1,4 @@
+import type { Grid } from '../../shared/types/grid';
 import type { PublicPuzzle, PuzzleDifficulty, PuzzleType } from '../../shared/types/puzzle';
 import type { GeneratedPuzzle, NewPuzzle } from '../types/puzzle';
 import { and, eq, sql } from 'drizzle-orm';
@@ -162,4 +163,9 @@ export async function generateSystemPuzzle(height: number, width: number, diffic
     solutionHash: puzzle.solutionHash,
     difficulty,
   };
+}
+
+export async function validatePuzzleSolution(slug: string, grid: Grid) {
+  let solved = false;
+  return solved;
 }

@@ -1,7 +1,7 @@
-import type { PublicPuzzle } from '../../../shared/types/puzzle';
+import type { PublicPuzzle } from '../../../../shared/types/puzzle';
 import { defineEventHandler, getRouterParams } from 'nuxt/server';
 import { z } from 'zod';
-import { getPuzzleBySlug } from '../../repository/PuzzleRepository';
+import { getPuzzleBySlug } from '../../../repository/PuzzleRepository';
 
 const paramsSchema = z.object({
   slug: z.string().min(1),
