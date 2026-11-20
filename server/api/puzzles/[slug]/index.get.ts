@@ -12,9 +12,9 @@ export default defineEventHandler(async (event) => {
 
   if (!result.success) {
     throw createError({
-      status: 400,
-      statusText: 'Bad Request',
-      message: 'Invalid puzzle slug',
+      status: 404,
+      statusText: 'Not Found',
+      message: 'Invalid puzzle ID',
     });
   }
 

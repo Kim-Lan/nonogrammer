@@ -1,7 +1,7 @@
 import type { Grid } from '../../../../shared/types/grid';
 import { defineEventHandler, getRouterParams } from 'nuxt/server';
 import { z } from 'zod';
-import { validatePuzzleSolution } from '../../../repository/PuzzleRepository';
+import { checkPuzzleSolution } from '../../../repository/PuzzleRepository';
 import { isGrid } from '../../../utils/grid-utils';
 
 const paramsSchema = z.object({
@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const solved: boolean = await validatePuzzleSolution(slug, grid as Grid);
+  const solved: boolean = await checkPuzzleSolution(slug, grid as Grid);
 
   return {
     solved,

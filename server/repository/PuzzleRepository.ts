@@ -12,8 +12,8 @@ export async function getPuzzle(type: PuzzleType, height?: number, width?: numbe
   if (type === 'system') {
     if (!height || !width || !difficulty) {
       throw createError({
-        status: 400,
-        statusText: 'Bad Request',
+        status: 404,
+        statusText: 'Not Found',
         message: 'Invalid system puzzle query: height, width, and difficulty are required',
       });
     }
@@ -51,8 +51,8 @@ export async function getPuzzle(type: PuzzleType, height?: number, width?: numbe
     return puzzle;
   } else {
     throw createError({
-      status: 400,
-      statusText: 'Bad Request',
+      status: 404,
+      statusText: 'Not Found',
       message: 'This puzzle type is not available right now',
     });
   }
@@ -165,7 +165,22 @@ export async function generateSystemPuzzle(height: number, width: number, diffic
   };
 }
 
-export async function validatePuzzleSolution(slug: string, grid: Grid) {
-  let solved = false;
-  return solved;
+export async function checkPuzzleSolution(slug: string, grid: Grid) {
+  const puzzle = await db.query.puzzles.findFirst({
+    where: {
+      slug,
+    },
+  });
+
+  if (!puzzle) {
+    throw createError({
+      status: 400,
+      statusText: 'Bad Request',
+      message: `No puzzle exists with ID ${slug}`,
+    });
+  }
+
+  const inputSolutionBits = getSolutionBitsFromGrid(grid);
+
+  return inputSolutionBits === puzzle.solutionBits;
 }
