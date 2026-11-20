@@ -7,7 +7,7 @@ export type UsePointerOptions = {
   setCell: (index: number, state: CellState) => void;
 };
 
-export function usePuzzleDrag({ puzzleGrid, getWidth, getCell, setCell }: UsePointerOptions) {
+export function usePointer({ puzzleGrid, getWidth, getCell, setCell }: UsePointerOptions) {
   const pointerId = ref<number | null>(null);
   const paintState = ref<CellState | null>(null);
   const isPressed = computed(() => pointerId.value !== null);

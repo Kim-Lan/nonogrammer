@@ -34,6 +34,7 @@
     "@nuxtjs/better-auth": "0.3.6",
     "@nuxtjs/i18n": "10.6.0",
     "@pinia/nuxt": "^1.0.3",
+    "@vueuse/core": "^15.0.0",
     "better-auth": "^1.7.3",
     "drizzle-orm": "1.0.0-rc.4",
     "nuxt": "^4.6.2",

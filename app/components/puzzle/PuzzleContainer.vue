@@ -68,7 +68,7 @@ function setCell(index: number, state: CellState) {
   puzzleState.value[index] = state;
 }
 
-const { onPointerDown, onPointerMove, onPointerUp, endDrag } = usePuzzleDrag({
+const { onPointerDown, onPointerMove, onPointerUp, endDrag } = usePointer({
   puzzleGrid,
   getWidth: () => props.width,
   getCell,
