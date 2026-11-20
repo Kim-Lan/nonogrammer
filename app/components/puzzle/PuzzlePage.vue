@@ -10,10 +10,10 @@ const capitalizedDifficulty = computed(() => {
   return difficulty ? difficulty.charAt(0).toUpperCase() + difficulty.substring(1) : '';
 });
 
-const timer = ref(null);
+const timer = useTemplateRef('timer');
 
 function onSubmit() {
-  timer.value.stop();
+  timer.value?.stop();
 }
 </script>
 
