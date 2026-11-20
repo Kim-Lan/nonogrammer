@@ -14,6 +14,7 @@ function stop() {
 
 <template>
   <h3
+    aria-label="timer"
     class="text-2xl font-bold font-mono"
     :class="{ 'text-success': !stopwatch.isRunning.value }"
   >
