@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import type { FetchError } from 'ofetch';
+
 const props = defineProps<{
   puzzle: Nullable<PublicPuzzle>;
-  hasError?: boolean;
+  errorMessage?: string;
 }>();
 
 const capitalizedDifficulty = computed(() => {
@@ -11,13 +13,44 @@ const capitalizedDifficulty = computed(() => {
 });
 
 const timer = useTemplateRef('timer');
+const puzzleContainer = useTemplateRef('puzzleContainer');
 
-function onSubmit() {
-  timer.value?.stop();
+const solved = ref<boolean>(false);
+
+const puzzleMessage = ref<string>('');
+const puzzleErrorMessage = ref<string>('');
+
+async function onSubmit() {
+  solved.value = await checkPuzzleSolution();
+  if (solved.value) {
+    timer.value?.stop();
+    puzzleMessage.value = `Congrats! You solved the puzzle in ${timer.value?.formattedTime()}`;
+  } else {
+    puzzleMessage.value = 'You have not solved the puzzle yet';
+  }
+}
+
+async function checkPuzzleSolution(): boolean {
+  puzzleMessage.value = '';
+  puzzleErrorMessage.value = '';
+  try {
+    const response = await $fetch(`/api/puzzles/${props.puzzle.slug}/solves`, {
+      method: 'POST',
+      body: {
+        grid: puzzleContainer.value.normalizedGrid,
+      },
+    });
+    return response.solved;
+  } catch (error: unknown) {
+    puzzleMessage.value = '';
+    puzzleErrorMessage.value = getFetchErrorMessage(error as FetchError);
+  }
+  return false;
 }
 </script>
 
 <template>
+  <UBanner v-if="errorMessage" :title="errorMessage" color="error" />
   <UContainer class="flex flex-col items-center py-4 md:py-6 lg:py-8 gap-4 md:gap-6 lg:gap-8">
     <UButton
       to="/play"
@@ -27,7 +60,7 @@ function onSubmit() {
       Back to Puzzle Selection
     </UButton>
 
-    <LoadingCircle v-if="!puzzle && !hasError" aria-label="Loading puzzle" />
+    <LoadingCircle v-if="!puzzle && !errorMessage" aria-label="Loading puzzle" />
 
     <div v-if="puzzle" class="flex flex-col items-center">
       <h2 class="text-3xl font-mono font-bold">
@@ -38,10 +71,26 @@ function onSubmit() {
 
     <PuzzleControls v-if="puzzle" @submit="onSubmit" />
 
+    <div
+      v-if="puzzleMessage"
+      class="font-bold bg-muted py-2 px-3 rounded-lg"
+      :class="{ 'text-success': solved }"
+    >
+      {{ puzzleMessage }}
+    </div>
+
+    <div
+      v-if="puzzleErrorMessage"
+      class="text-error font-bold"
+    >
+      {{ puzzleErrorMessage }}
+    </div>
+
     <PuzzleTimer v-if="puzzle" ref="timer" />
 
     <div v-if="puzzle" class="w-full min-w-0 overflow-x-auto">
       <PuzzleContainer
+        ref="puzzleContainer"
         :height="puzzle.height"
         :width="puzzle.width"
         :row-clues="puzzle.rowClues"

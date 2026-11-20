@@ -37,6 +37,7 @@
     "@vueuse/core": "^15.0.0",
     "better-auth": "^1.7.3",
     "drizzle-orm": "1.0.0-rc.4",
+    "lodash.chunk": "^4.2.0",
     "nuxt": "^4.6.2",
     "pinia": "^4.1.0",
     "pinia-plugin-persistedstate": "^4.7.1",
