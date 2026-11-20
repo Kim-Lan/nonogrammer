@@ -19,15 +19,24 @@ const solved = ref<boolean>(false);
 
 const puzzleMessage = ref<string>('');
 const puzzleErrorMessage = ref<string>('');
+const isLoading = ref<boolean>(false);
+const isSubmitLoading = ref<boolean>(false);
 
 async function onSubmit() {
+  isLoading.value = true;
+  isSubmitLoading.value = true;
+
   solved.value = await checkPuzzleSolution();
+
   if (solved.value) {
     timer.value?.stop();
     puzzleMessage.value = `Congrats! You solved the puzzle in ${timer.value?.formattedTime()}`;
   } else {
     puzzleMessage.value = 'You have not solved the puzzle yet';
   }
+
+  isLoading.value = false;
+  isSubmitLoading.value = false;
 }
 
 async function checkPuzzleSolution(): boolean {
@@ -69,7 +78,12 @@ async function checkPuzzleSolution(): boolean {
       <PuzzleIdContainer :slug="puzzle.slug" />
     </div>
 
-    <PuzzleControls v-if="puzzle" @submit="onSubmit" />
+    <PuzzleControls
+      v-if="puzzle"
+      :disabled="isLoading"
+      :is-submit-loading="isSubmitLoading"
+      @submit="onSubmit"
+    />
 
     <div
       v-if="puzzleMessage"
