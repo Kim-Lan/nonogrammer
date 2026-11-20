@@ -32,6 +32,8 @@ const capitalizedDifficulty = computed(() => {
 
     <PuzzleControls v-if="puzzle" />
 
+    <PuzzleTimer v-if="puzzle" />
+
     <div v-if="puzzle" class="w-full min-w-0 overflow-x-auto">
       <PuzzleContainer
         :height="puzzle.height"

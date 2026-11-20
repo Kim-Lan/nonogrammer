@@ -1,14 +1,14 @@
 import { useTimestamp } from '@vueuse/core';
-import { formatTime } from '~/utils/time';
 
 export function useStopwatch() {
   const { timestamp: now } = useTimestamp({ controls: true });
 
-  const startTimestamp = ref(0);
-  const endTimestamp = ref(0);
+  const startTimestamp = ref(now.value);
+  const endTimestamp = ref(now.value);
   const isRunning = ref(false);
   const elapsedTime = computed(() => isRunning.value ? (now.value - startTimestamp.value) : (endTimestamp.value - startTimestamp.value));
-  const formattedTime = computed(() => formatTime(elapsedTime));
+  const formattedTime = computed(() => formatTime(elapsedTime.value));
+  const formattedTimeWithoutMilliseconds = computed(() => formatTimeWithoutMilliseconds(elapsedTime.value));
 
   function start() {
     startTimestamp.value = now.value;
@@ -33,6 +33,7 @@ export function useStopwatch() {
     endTimestamp,
     elapsedTime,
     formattedTime,
+    formattedTimeWithoutMilliseconds,
     isRunning,
     start,
     stop,
