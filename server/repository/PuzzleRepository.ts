@@ -6,6 +6,7 @@ import { createError } from 'nuxt/server';
 import db from '../database';
 import { puzzles } from '../database/schema';
 import { generatePuzzle } from '../nonograms/nonograms-generator';
+import { getSolutionBitsFromGrid } from '../utils/nonograms-utils';
 import { generatePuzzleSlug } from '../utils/puzzle-utils';
 
 export async function getPuzzle(type: PuzzleType, height?: number, width?: number, difficulty?: PuzzleDifficulty): Promise<PublicPuzzle> {
