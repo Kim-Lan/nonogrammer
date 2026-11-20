@@ -9,6 +9,12 @@ const capitalizedDifficulty = computed(() => {
 
   return difficulty ? difficulty.charAt(0).toUpperCase() + difficulty.substring(1) : '';
 });
+
+const timer = useTemplateRef('timer');
+
+function onSubmit() {
+  timer.value?.stop();
+}
 </script>
 
 <template>
@@ -30,7 +36,9 @@ const capitalizedDifficulty = computed(() => {
       <PuzzleIdContainer :slug="puzzle.slug" />
     </div>
 
-    <PuzzleControls v-if="puzzle" />
+    <PuzzleControls v-if="puzzle" @submit="onSubmit" />
+
+    <PuzzleTimer v-if="puzzle" ref="timer" />
 
     <div v-if="puzzle" class="w-full min-w-0 overflow-x-auto">
       <PuzzleContainer

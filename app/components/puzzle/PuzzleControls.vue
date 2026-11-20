@@ -1,4 +1,7 @@
 <script setup lang="ts">
+defineEmits<{
+  (e: 'submit'): void;
+}>();
 </script>
 
 <template>
@@ -6,7 +9,9 @@
     <UButton>
       New Puzzle
     </UButton>
-    <UButton>
+    <UButton
+      @click="$emit('submit')"
+    >
       Submit
     </UButton>
   </div>
