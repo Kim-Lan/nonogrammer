@@ -76,12 +76,12 @@ const { onPointerDown, onPointerMove, onPointerUp, endDrag } = usePointer({
   setCell,
 });
 
-const normalizedGrid = computed(() => {
+const normalizedGrid: ComputedRef<Grid<string>> = computed(() => {
   const normalizedState = [];
   for (let i = 0; i < props.height * props.width; i++) {
     normalizedState[i] = puzzleState.value[i] === FILLED_VALUE ? FILLED_VALUE : EMPTY_VALUE;
   }
-  return chunk(normalizedState, props.width);
+  return chunk(normalizedState, props.width) as Grid<string>;
 });
 
 defineExpose({

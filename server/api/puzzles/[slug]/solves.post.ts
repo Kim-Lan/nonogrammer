@@ -1,11 +1,16 @@
 import type { Grid } from '../../../../shared/types/grid';
-import { defineEventHandler, getRouterParams } from 'nuxt/server';
+import { defineEventHandler, getRouterParams, readValidatedBody } from 'nuxt/server';
 import { z } from 'zod';
-import { isGrid } from '../../../../shared/utils/grid';
+import { isValidGrid } from '../../../../shared/utils/grid';
+import { isValidCell } from '../../../../shared/utils/nonograms';
 import { checkPuzzleSolution } from '../../../repository/PuzzleRepository';
 
 const paramsSchema = z.object({
   slug: z.string().min(1),
+});
+
+const bodySchema = z.object({
+  grid: z.string().array().array(),
 });
 
 export default defineEventHandler(async (event) => {
@@ -21,9 +26,9 @@ export default defineEventHandler(async (event) => {
 
   const { slug } = result.data;
 
-  const { grid } = await readBody(event);
+  const { grid } = await readValidatedBody(event, bodySchema);
 
-  if (!isGrid(grid)) {
+  if (!isValidGrid(grid, isValidCell)) {
     throw createError({
       status: 400,
       statusText: 'Bad Request',
@@ -31,7 +36,7 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  const solved: boolean = await checkPuzzleSolution(slug, grid as Grid);
+  const solved: boolean = await checkPuzzleSolution(slug, grid as Grid<string>);
 
   return {
     solved,

@@ -47,20 +47,23 @@ async function onSubmit() {
   isSubmitLoading.value = false;
 }
 
-async function checkSolutionHash(): boolean {
-  const userSolutionHash = await getSolutionHashFromGrid(puzzleContainer.value.normalizedGrid);
+async function checkSolutionHash(): Promise<boolean> {
+  if (puzzleContainer.value) {
+    const userSolutionHash = await getSolutionHashFromGrid(puzzleContainer.value.normalizedGrid);
 
-  return userSolutionHash === props.puzzle.solutionHash;
+    return userSolutionHash === props.puzzle?.solutionHash;
+  }
+  return false;
 }
 
-async function checkPuzzleSolution(): boolean {
+async function checkPuzzleSolution(): Promise<boolean> {
   puzzleMessage.value = '';
   puzzleErrorMessage.value = '';
   try {
-    const response = await $fetch(`/api/puzzles/${props.puzzle.slug}/solves`, {
+    const response = await $fetch(`/api/puzzles/${props.puzzle?.slug}/solves`, {
       method: 'POST',
       body: {
-        grid: puzzleContainer.value.normalizedGrid,
+        grid: puzzleContainer.value?.normalizedGrid,
       },
     });
     return response.solved;

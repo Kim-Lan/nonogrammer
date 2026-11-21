@@ -166,7 +166,7 @@ export async function generateSystemPuzzle(height: number, width: number, diffic
   };
 }
 
-export async function checkPuzzleSolution(slug: string, grid: Grid) {
+export async function checkPuzzleSolution(slug: string, grid: Grid<string>): Promise<boolean> {
   const puzzle = await db.query.puzzles.findFirst({
     where: {
       slug,
