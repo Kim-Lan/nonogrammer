@@ -1,7 +1,7 @@
 import type { TestDatabase } from '../../helper/database';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { puzzles } from '../../../server/database/schema';
-import { getSolutionHash } from '../../../server/utils/nonograms-utils';
+import { getSolutionHash } from '../../../server/utils/nonograms';
 import { dockerAvailable, startTestDatabase } from '../../helper/database';
 
 const hasDocker = await dockerAvailable();
