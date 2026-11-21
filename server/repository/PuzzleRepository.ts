@@ -3,11 +3,11 @@ import type { PublicPuzzle, PuzzleDifficulty, PuzzleType } from '../../shared/ty
 import type { GeneratedPuzzle, NewPuzzle } from '../types/puzzle';
 import { and, eq, sql } from 'drizzle-orm';
 import { createError } from 'nuxt/server';
+import { getSolutionBitsFromGrid } from '../../shared/utils/nonograms';
 import db from '../database';
 import { puzzles } from '../database/schema';
 import { generatePuzzle } from '../nonograms/nonograms-generator';
-import { getSolutionBitsFromGrid } from '../utils/nonograms-utils';
-import { generatePuzzleSlug } from '../utils/puzzle-utils';
+import { generatePuzzleSlug } from '../utils/puzzle';
 
 export async function getPuzzle(type: PuzzleType, height?: number, width?: number, difficulty?: PuzzleDifficulty): Promise<PublicPuzzle> {
   if (type === 'system') {

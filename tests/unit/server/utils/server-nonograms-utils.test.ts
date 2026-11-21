@@ -6,11 +6,10 @@ import {
   convertPuzzleToNon,
   getBlocks,
   getClues,
-  getSolutionBitsFromGrid,
   getSolutionBitsFromSolverOutput,
   getSolutionHash,
   getSolutionHashFromGrid,
-} from '../../../../server/utils/nonograms-utils';
+} from '../../../../server/utils/nonograms';
 
 const sampleGrid: Grid = [
   ['0', '1', '1', '0', '1'],
@@ -20,7 +19,7 @@ const sampleGrid: Grid = [
   ['0', '0', '0', '1', '1'],
 ];
 
-describe('nonograms utils unit test', () => {
+describe('server nonograms utils unit test', () => {
   it('gets correct blocks from a row or column', () => {
     const line: string[] = ['0', '1', '1', '0', '1'];
 
@@ -37,10 +36,6 @@ describe('nonograms utils unit test', () => {
     expect(clues).toBeDefined();
     expect(clues.rowClues).toEqual([[2, 1], [2], [1, 1], [4], [2]]);
     expect(clues.columnClues).toEqual([[3], [2, 1], [1, 1], [2], [1, 1, 1]]);
-  });
-
-  it('gets correct solution bits from a grid', () => {
-    expect(getSolutionBitsFromGrid(sampleGrid)).toBe('0110111000100011111000011');
   });
 
   it('gets correct solution bits from pbnsolve solver output', () => {

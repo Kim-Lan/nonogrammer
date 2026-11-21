@@ -2,8 +2,8 @@ import { eq } from 'drizzle-orm';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { puzzles } from '../../../../server/database/schema';
 import { checkPuzzleSolution, generateSystemPuzzle, getPuzzleBySlug } from '../../../../server/repository/PuzzleRepository';
-import { getSolutionHash } from '../../../../server/utils/nonograms-utils';
-import { generatePuzzleSlug } from '../../../../server/utils/puzzle-utils';
+import { getSolutionHash } from '../../../../server/utils/nonograms';
+import { generatePuzzleSlug } from '../../../../server/utils/puzzle';
 
 const mocks = vi.hoisted(() => ({
   generatePuzzle: vi.fn(),

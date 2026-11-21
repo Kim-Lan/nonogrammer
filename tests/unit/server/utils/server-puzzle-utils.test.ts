@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { generatePuzzleSlug } from '../../../../server/utils/puzzle-utils';
+import { generatePuzzleSlug } from '../../../../server/utils/puzzle';
 
 describe('puzzle utils unit test', () => {
   it('generates a valid puzzle slug', () => {

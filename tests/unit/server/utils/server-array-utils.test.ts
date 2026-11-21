@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { range, shuffle } from '../../../../server/utils/array-utils';
+import { range, shuffle } from '../../../../server/utils/array';
 
 describe('array utils unit test: range', () => {
   it('returns the correct range', () => {

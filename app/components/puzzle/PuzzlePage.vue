@@ -22,21 +22,35 @@ const puzzleErrorMessage = ref<string>('');
 const isLoading = ref<boolean>(false);
 const isSubmitLoading = ref<boolean>(false);
 
+const NOT_DONE_MESSAGE = 'You have not solved the puzzle yet';
+
 async function onSubmit() {
   isLoading.value = true;
-  isSubmitLoading.value = true;
 
-  solved.value = await checkPuzzleSolution();
+  const matchSolutionHash = await checkSolutionHash();
 
-  if (solved.value) {
-    timer.value?.stop();
-    puzzleMessage.value = `Congrats! You solved the puzzle in ${timer.value?.formattedTime()}`;
+  if (!matchSolutionHash) {
+    puzzleMessage.value = NOT_DONE_MESSAGE;
   } else {
-    puzzleMessage.value = 'You have not solved the puzzle yet';
+    isSubmitLoading.value = true;
+    solved.value = await checkPuzzleSolution();
+
+    if (solved.value) {
+      timer.value?.stop();
+      puzzleMessage.value = `Congrats! You solved the puzzle in ${timer.value?.formattedTime()}`;
+    } else {
+      puzzleMessage.value = NOT_DONE_MESSAGE;
+    }
   }
 
   isLoading.value = false;
   isSubmitLoading.value = false;
+}
+
+async function checkSolutionHash(): boolean {
+  const userSolutionHash = await getSolutionHashFromGrid(puzzleContainer.value.normalizedGrid);
+
+  return userSolutionHash === props.puzzle.solutionHash;
 }
 
 async function checkPuzzleSolution(): boolean {

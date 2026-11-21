@@ -1,13 +1,11 @@
 import type { Dimensions, Grid, Line } from '../../shared/types/grid';
-import type { CellState, ClueGroup, Clues } from '../../shared/types/puzzle';
+import type { ClueGroup, Clues } from '../../shared/types/puzzle';
 import type { CandidatePuzzle } from '../types/puzzle';
 import { createHash } from 'node:crypto';
-import { EMPTY_VALUE, FILLED_VALUE, MARKED_VALUE } from '../../shared/constants/nonograms-constants';
-import { getColumn, getDimensions, isValidGrid } from './grid-utils';
-
-export function isValidCell(value: unknown): value is CellState {
-  return value === EMPTY_VALUE || value === FILLED_VALUE || value === MARKED_VALUE;
-}
+import { EMPTY_VALUE, FILLED_VALUE } from '../../shared/constants/nonograms-constants';
+import { getDimensions, isValidGrid } from '../../shared/utils/grid';
+import { getSolutionBitsFromGrid, isValidCell } from '../../shared/utils/nonograms';
+import { getColumn } from './grid';
 
 export function createEmptyPuzzleGrid(height: number, width: number): Grid<string> {
   return Array.from({ length: height },
@@ -51,10 +49,6 @@ export function getClues(grid: Grid<string>): { rowClues: Clues; columnClues: Cl
     rowClues,
     columnClues,
   };
-}
-
-export function getSolutionBitsFromGrid(grid: Grid<string>): string {
-  return (grid.flat()).join('');
 }
 
 export function getSolutionBitsFromSolverOutput(solverOutput: string): string {

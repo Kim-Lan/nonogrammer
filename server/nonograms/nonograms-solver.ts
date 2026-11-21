@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createError } from 'nuxt/server';
 import env from '../../lib/env';
-import { convertPuzzleToNon, getSolutionBitsFromSolverOutput } from '../utils/nonograms-utils';
+import { convertPuzzleToNon, getSolutionBitsFromSolverOutput } from '../utils/nonograms';
 
 export type SolverOutput = {
   valid: boolean;

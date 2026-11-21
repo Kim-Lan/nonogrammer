@@ -1,7 +1,7 @@
 import type { NewPuzzle } from '../../../../server/database/schema';
 import { describe, expect, it } from 'vitest';
 import { generatePuzzle, generatePuzzleGrid } from '../../../../server/nonograms/nonograms-generator';
-import { getClues } from '../../../../server/utils/nonograms-utils';
+import { getClues } from '../../../../server/utils/nonograms';
 import { FILLED_VALUE } from '../../../../shared/constants/nonograms-constants';
 
 describe('nonograms generator unit test', () => {

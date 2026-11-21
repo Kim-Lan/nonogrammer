@@ -5,10 +5,11 @@ import type { SolverOutput } from './nonograms-solver';
 import { createError } from 'nuxt/server';
 import random from 'random';
 import { FILLED_VALUE } from '../../shared/constants/nonograms-constants';
-import { convertIndexTo2D } from '../../shared/utils/grid-utils';
-import { range, shuffle } from '../utils/array-utils';
-import { convert2DToIndex, getColumn } from '../utils/grid-utils';
-import { createEmptyPuzzleGrid, getClues, getSolutionBitsFromGrid, getSolutionHashFromGrid } from '../utils/nonograms-utils';
+import { convertIndexTo2D } from '../../shared/utils/grid';
+import { getSolutionBitsFromGrid } from '../../shared/utils/nonograms';
+import { range, shuffle } from '../utils/array';
+import { convert2DToIndex, getColumn } from '../utils/grid';
+import { createEmptyPuzzleGrid, getClues, getSolutionHashFromGrid } from '../utils/nonograms';
 import { checkWithSolver } from './nonograms-solver';
 
 export function generatePuzzle(height: number, width: number, difficulty: PuzzleDifficulty): GeneratedPuzzle {

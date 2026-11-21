@@ -1,8 +1,8 @@
 import type { Grid } from '../../../../shared/types/grid';
 import { defineEventHandler, getRouterParams } from 'nuxt/server';
 import { z } from 'zod';
+import { isGrid } from '../../../../shared/utils/grid';
 import { checkPuzzleSolution } from '../../../repository/PuzzleRepository';
-import { isGrid } from '../../../utils/grid-utils';
 
 const paramsSchema = z.object({
   slug: z.string().min(1),
