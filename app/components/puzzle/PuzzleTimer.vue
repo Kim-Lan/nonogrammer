@@ -5,10 +5,15 @@ onMounted(() => stopwatch.start());
 
 defineExpose({
   stop,
+  formattedTime,
 });
 
 function stop() {
   stopwatch.stop();
+}
+
+function formattedTime(): string {
+  return stopwatch.formattedTime.value;
 }
 </script>
 

@@ -3,7 +3,7 @@ import { sql } from 'drizzle-orm';
 import { check, index, integer, jsonb, pgEnum, smallint, snakeCase, text, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
 import { puzzleDifficulties, puzzlePublicationStatuses, puzzleTypes, puzzleValidationStatuses } from '../../../shared/types/puzzle';
 import { puzzleSolvers } from '../../types/puzzle';
-import { generatePuzzleSlug } from '../../utils/puzzle-utils.ts';
+import { generatePuzzleSlug } from '../../utils/puzzle.ts';
 
 export const puzzleTypeEnum = pgEnum('puzzle_type', puzzleTypes);
 export const puzzleDifficultyEnum = pgEnum('puzzle_difficulty', puzzleDifficulties);

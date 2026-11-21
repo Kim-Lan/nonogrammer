@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { EMPTY_VALUE } from '~~/shared/constants/nonograms-constants';
+import chunk from 'lodash.chunk';
+import { EMPTY_VALUE, FILLED_VALUE } from '~~/shared/constants/nonograms-constants';
 
 const props = defineProps<{
   height: number;
@@ -73,6 +74,18 @@ const { onPointerDown, onPointerMove, onPointerUp, endDrag } = usePointer({
   getWidth: () => props.width,
   getCell,
   setCell,
+});
+
+const normalizedGrid: ComputedRef<Grid<string>> = computed(() => {
+  const normalizedState = [];
+  for (let i = 0; i < props.height * props.width; i++) {
+    normalizedState[i] = puzzleState.value[i] === FILLED_VALUE ? FILLED_VALUE : EMPTY_VALUE;
+  }
+  return chunk(normalizedState, props.width) as Grid<string>;
+});
+
+defineExpose({
+  normalizedGrid,
 });
 </script>
 

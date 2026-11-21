@@ -1,9 +1,9 @@
 import { eq } from 'drizzle-orm';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { puzzles } from '../../../../server/database/schema';
-import { generateSystemPuzzle, getPuzzleBySlug } from '../../../../server/repository/PuzzleRepository';
-import { getSolutionHash } from '../../../../server/utils/nonograms-utils';
-import { generatePuzzleSlug } from '../../../../server/utils/puzzle-utils';
+import { checkPuzzleSolution, generateSystemPuzzle, getPuzzleBySlug } from '../../../../server/repository/PuzzleRepository';
+import { getSolutionHash } from '../../../../server/utils/nonograms';
+import { generatePuzzleSlug } from '../../../../server/utils/puzzle';
 
 const mocks = vi.hoisted(() => ({
   generatePuzzle: vi.fn(),
@@ -126,5 +126,38 @@ describe('puzzle repository unit tests: generateSystemPuzzle', async () => {
     });
     expect(retrievedPuzzle).toBeDefined();
     expect(retrievedPuzzle.slug).toBe(existingPuzzle.slug);
+  });
+});
+
+describe('puzzle repository unit tests: checkPuzzleSolution', async () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
+
+  it('check a submitted puzzle solution', async () => {
+    const slug = generatePuzzleSlug();
+    const puzzle = makeTestPuzzle({
+      slug,
+      type: 'system',
+      difficulty: 'normal',
+      solver: 'line',
+    });
+
+    mocks.findFirst.mockResolvedValue(puzzle);
+
+    const correctGrid = [['0', '0', '1', '0', '0'],
+      ['0', '1', '1', '1', '0'],
+      ['1', '1', '1', '1', '1'],
+      ['0', '1', '1', '1', '0'],
+      ['0', '0', '1', '0', '0']];
+
+    const incorrectGrid = [['1', '0', '0', '0', '0'],
+      ['0', '1', '1', '0', '0'],
+      ['1', '1', '1', '1', '1'],
+      ['0', '0', '1', '1', '0'],
+      ['0', '0', '1', '0', '0']];
+
+    await expect(checkPuzzleSolution(slug, correctGrid)).resolves.toBe(true);
+    await expect(checkPuzzleSolution(slug, incorrectGrid)).resolves.toBe(false);
   });
 });

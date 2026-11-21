@@ -13,16 +13,16 @@ export default defineEventHandler(async (event) => {
 
   if (!puzzleTypes.includes(type as PuzzleType)) {
     throw createError({
-      status: 400,
-      statusText: 'Bad Request',
+      status: 404,
+      statusText: 'Not Found',
       message: 'Invalid puzzle type',
     });
   }
 
   if (!puzzleDifficulties.includes(difficulty as PuzzleDifficulty)) {
     throw createError({
-      status: 400,
-      statusText: 'Bad Request',
+      status: 404,
+      statusText: 'Not Found',
       message: 'Invalid puzzle difficulty',
     });
   }
@@ -32,8 +32,8 @@ export default defineEventHandler(async (event) => {
 
   if (!Number.isSafeInteger(puzzleHeight) || !Number.isSafeInteger(puzzleWidth)) {
     throw createError({
-      status: 400,
-      statusText: 'Bad Request',
+      status: 404,
+      statusText: 'Not Found',
       message: 'Invalid puzzle dimensions',
     });
   }

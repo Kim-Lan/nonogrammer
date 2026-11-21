@@ -1,4 +1,9 @@
 <script setup lang="ts">
+defineProps<{
+  disabled: boolean;
+  isSubmitLoading: boolean;
+}>();
+
 defineEmits<{
   (e: 'submit'): void;
 }>();
@@ -6,10 +11,12 @@ defineEmits<{
 
 <template>
   <div class="flex flex-row gap-2">
-    <UButton>
+    <UButton :disabled>
       New Puzzle
     </UButton>
     <UButton
+      :disabled
+      :loading="isSubmitLoading"
       @click="$emit('submit')"
     >
       Submit

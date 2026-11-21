@@ -202,6 +202,9 @@ importers:
       drizzle-orm:
         specifier: 1.0.0-rc.4
         version: 1.0.0-rc.4(@neondatabase/serverless@1.2.0)(@types/pg@8.23.1)(pg@8.23.1)(postgres@3.4.9)(valibot@1.5.0(typescript@6.0.3))(zod@4.6.5)
+      lodash.chunk:
+        specifier: ^4.2.0
+        version: 4.2.0
       nuxt:
         specifier: ^4.6.2
         version: 4.6.2(b80410e6e3e16feb79513fcc1b80407f)
@@ -239,6 +242,9 @@ importers:
       '@testcontainers/postgresql':
         specifier: ^12.2.0
         version: 12.2.0(supports-color@10.2.2)
+      '@types/lodash.chunk':
+        specifier: ^4.2.9
+        version: 4.2.9
       '@types/pg':
         specifier: ^8.23.1
         version: 8.23.1
@@ -3033,6 +3039,12 @@ packages:
   '@types/katex@0.16.8':
     resolution: {integrity: sha512-trgaNyfU+Xh2Tc+ABIb44a5AYUpicB3uwirOioeOkNPPbmgRNtcWyDeeFRzjPZENO9Vq8gvVqfhaaXWLlevVwg==}
 
+  '@types/lodash.chunk@4.2.9':
+    resolution: {integrity: sha512-Z9VtFUSnmT0No/QymqfG9AGbfOA4O5qB/uyP89xeZBqDAsKsB4gQFTqt7d0pHjbsTwtQ4yZObQVHuKlSOhIJ5Q==}
+
+  '@types/lodash@4.17.27':
+    resolution: {integrity: sha512-VenMRv/eKNrspX9v3H4dbmjsrnCOYdYBG3kxXKk3dG6X+urBGcj2Prww3xw1U5K4FV/mE4h5GbWd0szEKf+9ew==}
+
   '@types/mdast@4.0.4':
     resolution: {integrity: sha512-kGaNbPh1k7AFzgpud/gMdvIm5xuECykRR+JnWKQno9TAXVa6WIVCGTPvYGekIDL4uwCZQSYbUxNBSb1aUo79oA==}
 
@@ -5645,6 +5657,9 @@ packages:
 
   lodash.camelcase@4.3.0:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
+
+  lodash.chunk@4.2.0:
+    resolution: {integrity: sha512-ZzydJKfUHJwHa+hF5X66zLFCBrWn5GeF28OHEr4WVWtNDXlQ/IjWKPBiikqKo2ne0+v6JgCgJ0GzJp8k8bHC7w==}
 
   lodash@4.18.1:
     resolution: {integrity: sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==}
@@ -10617,6 +10632,12 @@ snapshots:
 
   '@types/katex@0.16.8': {}
 
+  '@types/lodash.chunk@4.2.9':
+    dependencies:
+      '@types/lodash': 4.17.27
+
+  '@types/lodash@4.17.27': {}
+
   '@types/mdast@4.0.4':
     dependencies:
       '@types/unist': 3.0.3
@@ -13141,6 +13162,8 @@ snapshots:
       p-locate: 6.0.0
 
   lodash.camelcase@4.3.0: {}
+
+  lodash.chunk@4.2.0: {}
 
   lodash@4.18.1: {}
 
