@@ -10,5 +10,7 @@ export const usePuzzleConfiguration = defineStore('puzzle-configuration', () => 
   };
 },
 {
-  persist: true,
+  persist: {
+    key: 'nonogrammer-puzzle-configuration',
+  },
 });
