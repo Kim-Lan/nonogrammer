@@ -12,6 +12,16 @@ const capitalizedDifficulty = computed(() => {
   return difficulty ? difficulty.charAt(0).toUpperCase() + difficulty.substring(1) : '';
 });
 
+const puzzleConfig = usePuzzleConfiguration();
+
+onUpdated(() => {
+  if (props.puzzle) {
+    puzzleConfig.height = props.puzzle.height;
+    puzzleConfig.width = props.puzzle.width;
+    puzzleConfig.difficulty = props.puzzle.difficulty;
+  }
+});
+
 const timer = useTemplateRef('timer');
 const puzzleContainer = useTemplateRef('puzzleContainer');
 
