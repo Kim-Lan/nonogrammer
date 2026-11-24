@@ -5,6 +5,22 @@ const selectedSize = ref<string>('5x5');
 const difficulties = ref<string[]>(['Normal', 'Hard']);
 const selectedDifficulty = ref<string>('Normal');
 
+const puzzleConfig = usePuzzleConfiguration();
+
+onMounted(() => {
+  if (puzzleConfig.height === puzzleConfig.width) {
+    if ([5, 10, 15, 20, 25, 30].includes(puzzleConfig.height)) {
+      selectedSize.value = `${puzzleConfig.width}x${puzzleConfig.height}`;
+    }
+  }
+
+  if (puzzleConfig.difficulty === 'hard') {
+    selectedDifficulty.value = 'Hard';
+  } else {
+    selectedDifficulty.value = 'Normal';
+  }
+});
+
 const slug = ref<string>('');
 const slugError = ref<string>('');
 
