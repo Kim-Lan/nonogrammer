@@ -8,7 +8,6 @@ const difficulties = ref<string[]>(['Normal', 'Hard']);
 const selectedDifficulty = ref<string>(puzzleConfig.difficulty.charAt(0).toUpperCase() + puzzleConfig.difficulty.substring(1));
 
 const isLoading = ref<boolean>(false);
-
 const errorMessage = ref<string>('');
 
 const slug = ref<string>('');
@@ -68,7 +67,6 @@ async function navigateToPuzzleSlug() {
           <USelect
             v-model="selectedDifficulty"
             :items="difficulties"
-            :loading="isLoading"
             :disabled="isLoading"
             placeholder="Select difficulty"
             size="lg"
@@ -79,7 +77,6 @@ async function navigateToPuzzleSlug() {
           <USelect
             v-model="selectedSize"
             :items="sizes"
-            :loading="isLoading"
             :disabled="isLoading"
             placeholder="Select size"
             size="lg"
