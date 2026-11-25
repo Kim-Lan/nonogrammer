@@ -76,7 +76,7 @@ describe('navigation e2e test', async () => {
         height: 720,
       });
 
-      // Open the Play navigation dropdown
+      // Open the Puzzles navigation dropdown
       await page.getByRole('button', { name: 'Puzzles', exact: true }).hover();
 
       // Open the difficulty popover

@@ -1,15 +1,17 @@
 <script setup lang="ts">
+const puzzleConfig = usePuzzleConfiguration();
+
 const sizes = ref<string[]>(['5x5', '10x10', '15x15', '20x20', '25x25', '30x30']);
-const selectedSize = ref<string>('5x5');
+const selectedSize = ref<string>(`${puzzleConfig.width}x${puzzleConfig.height}`);
 
 const difficulties = ref<string[]>(['Normal', 'Hard']);
-const selectedDifficulty = ref<string>('Normal');
-
-const slug = ref<string>('');
-const slugError = ref<string>('');
+const selectedDifficulty = ref<string>(puzzleConfig.difficulty.charAt(0).toUpperCase() + puzzleConfig.difficulty.substring(1));
 
 const isLoading = ref<boolean>(false);
 const errorMessage = ref<string>('');
+
+const slug = ref<string>('');
+const slugError = ref<string>('');
 
 async function navigateToPuzzleConfiguration() {
   isLoading.value = true;
@@ -62,10 +64,24 @@ async function navigateToPuzzleSlug() {
       </h2>
       <UContainer class="flex flex-col md:flex-row gap-4 items-center md:justify-center md:items-end">
         <UFormField label="Puzzle Difficulty">
-          <USelect v-model="selectedDifficulty" :items="difficulties" placeholder="Select difficulty" size="lg" class="w-28 h-9" />
+          <USelect
+            v-model="selectedDifficulty"
+            :items="difficulties"
+            :disabled="isLoading"
+            placeholder="Select difficulty"
+            size="lg"
+            class="w-28 h-9"
+          />
         </UFormField>
         <UFormField label="Puzzle Size">
-          <USelect v-model="selectedSize" :items="sizes" placeholder="Select size" size="lg" class="w-28 h-9" />
+          <USelect
+            v-model="selectedSize"
+            :items="sizes"
+            :disabled="isLoading"
+            placeholder="Select size"
+            size="lg"
+            class="w-28 h-9"
+          />
         </UFormField>
         <UButton
           class="justify-center w-32 h-9"
