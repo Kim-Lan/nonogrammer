@@ -16,9 +16,9 @@ const puzzleConfig = usePuzzleConfiguration();
 
 onUpdated(() => {
   if (props.puzzle) {
-    puzzleConfig.height = props.puzzle.height;
-    puzzleConfig.width = props.puzzle.width;
-    puzzleConfig.difficulty = props.puzzle.difficulty;
+    puzzleConfig.height = props.puzzle.height!;
+    puzzleConfig.width = props.puzzle.width!;
+    puzzleConfig.difficulty = props.puzzle.difficulty!;
   }
 });
 
