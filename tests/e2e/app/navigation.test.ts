@@ -128,7 +128,7 @@ describe('navigation e2e test', async () => {
       // Scope interactions to the mobile #body slot.
       const mobileMenu = page.locator('[data-slot="body"]');
 
-      // Expand Play
+      // Expand Puzzles
       await mobileMenu.getByRole('button', { name: 'Puzzles', exact: true }).click();
 
       // Expand difficulty
