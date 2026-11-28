@@ -7,10 +7,13 @@ const width: number = Number(route.params.width);
 const difficulty: string = route.params.difficulty;
 
 const puzzle = ref<Nullable<PublicPuzzle>>(null);
+const { puzzleIds } = storeToRefs(usePuzzleIds());
 
 const errorMessage = ref<string>('');
 
-onMounted(async () => await getPuzzle());
+onMounted(async () => {
+  await getPuzzle();
+});
 
 async function getPuzzle() {
   errorMessage.value = '';
@@ -25,6 +28,7 @@ async function getPuzzle() {
     });
 
     puzzle.value = response;
+    puzzleIds.value[difficulty]![`${height}x${width}`] = puzzle.value.slug;
   } catch (error: unknown) {
     puzzle.value = null;
 
