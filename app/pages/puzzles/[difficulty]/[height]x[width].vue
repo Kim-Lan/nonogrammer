@@ -12,10 +12,28 @@ const { puzzleIds } = storeToRefs(usePuzzleIds());
 const errorMessage = ref<string>('');
 
 onMounted(async () => {
-  await getPuzzle();
+  const id = puzzleIds.value[difficulty]![`${height}x${width}`];
+  if (id) {
+    await getPuzzleById(id);
+  } else {
+    await getNewPuzzle();
+  }
 });
 
-async function getPuzzle() {
+async function getPuzzleById(id: string) {
+  errorMessage.value = '';
+  try {
+    const response = await $fetch(`/api/puzzles/${id}`, {
+      method: 'GET',
+    });
+    setPuzzle(response);
+  } catch (error: unknown) {
+    setPuzzle(null);
+    errorMessage.value = getFetchErrorMessage(error as FetchError);
+  }
+}
+
+async function getNewPuzzle() {
   errorMessage.value = '';
   try {
     const response = await $fetch('/api/puzzles/system', {
@@ -26,14 +44,16 @@ async function getPuzzle() {
         difficulty,
       },
     });
-
-    puzzle.value = response;
-    puzzleIds.value[difficulty]![`${height}x${width}`] = puzzle.value.slug;
+    setPuzzle(response);
   } catch (error: unknown) {
-    puzzle.value = null;
-
+    setPuzzle(null);
     errorMessage.value = getFetchErrorMessage(error as FetchError);
   }
+}
+
+function setPuzzle(publicPuzzle: Nullable<PublicPuzzle>) {
+  puzzle.value = publicPuzzle;
+  puzzleIds.value[difficulty]![`${height}x${width}`] = puzzle.value ? puzzle.value.slug : null;
 }
 </script>
 
